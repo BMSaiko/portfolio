@@ -1,0 +1,183 @@
+* {
+  padding: 0px;
+  box-sizing: border-box;
+  margin: 0px;
+}
+
+section {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  padding-top: 3em;
+  display: block;
+}
+
+p {
+  margin-top: 1em;
+  font-size: 17px;
+  text-align: justify;
+}
+
+.imgP {
+  text-align: center;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: bold;
+  color: var(--blue);
+}
+
+.subtitle {
+  font-size: 25px;
+  color: var(--blue);
+}
+.ref {
+  text-decoration: underline;
+  color: black;
+}
+
+main {
+  width: 100%;
+  background-color: white;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #ddd;
+  margin-bottom: 4%;
+}
+
+table img {
+  width: 50px;
+  height: 50px;
+}
+
+th,
+td {
+  text-align: center;
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 1200px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  section {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  table {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    table-layout: fixed;
+    word-break: break-all;
+  }
+
+  table img {
+    width: 25px;
+    height: 25px;
+  }
+
+  p {
+    margin-top: 1em;
+    font-size: 10px;
+    text-align: justify;
+  }
+
+  .imgP {
+    text-align: center;
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
+  /* 
+  nav {
+    display: none;
+    animation-name: navAnimation;
+    animation-duration: 500ms;
+    animation-fill-mode: backwards;
+  }
+  header {
+    animation: ease-in;
+  }
+  @keyframes navAnimation {
+    0% {
+      opacity: 0%;
+    }
+    25% {
+      opacity: 24%;
+    }
+
+    50% {
+      opacity: 50%;
+    }
+    75% {
+      opacity: 75%;
+    }
+    100% {
+      opacity: 100%;
+    }
+  } */
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--blue);
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--blue);
+  }
+  td,
+  th {
+    border: solid 1px var(--blackBorder);
+    padding: 5px;
+    font-size: 10px;
+  }
+  /* .navIcon {
+    display: none;
+  }
+  .navItem {
+    font-size: 12px;
+  } 
+  li {
+    padding: 0.8em 1.3em 0.8em 1.3em;
+  } 
+  aside {
+    border: solid 1px var(--blackBorder);
+    border-radius: 1px;
+    margin-left: 20px;
+  }*/
+  footer {
+    padding: 10px;
+    font-size: 12px;
+  }
+  ul {
+    flex-direction: column;
+  }
+  /* hgroup {
+    display: block;
+    padding: 0.8em 1.3em 0.8em 1.3em;
+  }*/
+}

@@ -1,0 +1,140 @@
+<OrderConfirmation>
+<OrderConfirmationHeader>
+<OrderConfirmationReference>OC-58471</OrderConfirmationReference>
+<OrderConfirmationIssuedDate>
+<Date>
+<Year>2023</Year>
+<Month>10</Month>
+<Day>06</Day>
+</Date>
+</OrderConfirmationIssuedDate>
+<SupplierParty>
+<PartyIdentifier>11PT920</PartyIdentifier>
+<NameAddress>
+<Name>Papel do Porto</Name>
+<Address1>Rua da Alegria</Address1>
+<Address2>nº1</Address2>
+<City>Porto</City>
+<PostalCode>4000-032</PostalCode>
+<Country ISOCountryCode="PT">Portugal</Country>
+</NameAddress>
+</SupplierParty>
+</OrderConfirmationHeader>
+<OrderConfirmationLineItem>
+<OrderConfirmationLineItemNumber>1</OrderConfirmationLineItemNumber>
+<Product>
+<ProductIdentifier Agency="Buyer" ProductIdentifierType="PartNumber">654782</ProductIdentifier>
+<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">P1-5297</ProductIdentifier>
+<ProductDescription>Resma Papel A4 80g 297 x 210 mm</ProductDescription>
+</Product>
+<PriceDetails>
+<PricePerUnit>
+<CurrencyValue CurrencyType="EUR">1.28</CurrencyValue>
+<Value UOM="Ream">1</Value>
+</PricePerUnit>
+</PriceDetails>
+<MonetaryAdjustment AdjustmentType="Tax">
+<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+<MonetaryAdjustmentStartAmount>
+<CurrencyValue CurrencyType="EUR">320.00</CurrencyValue>
+</MonetaryAdjustmentStartAmount>
+<TaxAdjustment TaxType="VAT">
+<TaxPercent>23</TaxPercent>
+<TaxAmount>
+<CurrencyValue CurrencyType="EUR">73.60</CurrencyValue>
+</TaxAmount>
+<TaxLocation>PT</TaxLocation>
+</TaxAdjustment>
+</MonetaryAdjustment>
+<Quantity QuantityType="Count">
+<Value UOM="Ream">250</Value>
+</Quantity>
+<InformationalQuantity QuantityType="NetWeight">
+<Value UOM="Kilogram">625</Value>
+</InformationalQuantity>
+<InformationalQuantity QuantityType="Count">
+<Value UOM="Sheet">125000</Value>
+</InformationalQuantity>
+<LineBaseAmount>
+<CurrencyValue CurrencyType="EUR">393.60</CurrencyValue>
+</LineBaseAmount>
+</OrderConfirmationLineItem>
+<OrderConfirmationLineItem>
+<OrderConfirmationLineItemNumber>2</OrderConfirmationLineItemNumber>
+<Product>
+<ProductIdentifier Agency="Buyer" ProductIdentifierType="PartNumber">994230</ProductIdentifier>
+<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">PX-7630</ProductIdentifier>
+<ProductDescription>Envolope Comercial DL 110 x 220 mm - 1 caixa de 250 unidades</ProductDescription>
+</Product>
+<PriceDetails>
+<PricePerUnit>
+<CurrencyValue CurrencyType="EUR">10</CurrencyValue>
+<Value UOM="Box">1</Value>
+</PricePerUnit>
+</PriceDetails>
+<MonetaryAdjustment AdjustmentType="Tax">
+<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+<MonetaryAdjustmentStartAmount>
+<CurrencyValue CurrencyType="EUR">50.00</CurrencyValue>
+</MonetaryAdjustmentStartAmount>
+<TaxAdjustment TaxType="VAT">
+<TaxPercent>23</TaxPercent>
+<TaxAmount>
+<CurrencyValue CurrencyType="EUR">11.50</CurrencyValue>
+</TaxAmount>
+<TaxLocation>PT</TaxLocation>
+</TaxAdjustment>
+</MonetaryAdjustment>
+<Quantity QuantityType="Count">
+<Value UOM="Box">5</Value>
+</Quantity>
+<InformationalQuantity QuantityType="NetWeight">
+<Value UOM="Kilogram">2.723</Value>
+</InformationalQuantity>
+<InformationalQuantity QuantityType="Count">
+<Value UOM="Unit">1250</Value>
+</InformationalQuantity>
+<LineBaseAmount>
+<CurrencyValue CurrencyType="EUR">61.50</CurrencyValue>
+</LineBaseAmount>
+</OrderConfirmationLineItem>
+<OrderConfirmationLineItem>
+<OrderConfirmationLineItemNumber>3</OrderConfirmationLineItemNumber>
+<Product>
+<ProductIdentifier Agency="Buyer" ProductIdentifierType="PartNumber">857423</ProductIdentifier>
+<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">PZ-1989</ProductIdentifier>
+<ProductDescription>Caneta Esferográfica BIC Azul - Pack 10</ProductDescription>
+</Product>
+<PriceDetails>
+<PricePerUnit>
+<CurrencyValue CurrencyType="EUR">2.51</CurrencyValue>
+<Value UOM="Box">1</Value>
+</PricePerUnit>
+</PriceDetails>
+<MonetaryAdjustment AdjustmentType="Tax">
+<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+<MonetaryAdjustmentStartAmount>
+<CurrencyValue CurrencyType="EUR">50.20</CurrencyValue>
+</MonetaryAdjustmentStartAmount>
+<TaxAdjustment TaxType="VAT">
+<TaxPercent>23</TaxPercent>
+<TaxAmount>
+<CurrencyValue CurrencyType="EUR">11.55</CurrencyValue>
+</TaxAmount>
+<TaxLocation>PT</TaxLocation>
+</TaxAdjustment>
+</MonetaryAdjustment>
+<Quantity QuantityType="Count">
+<Value UOM="Box">20</Value>
+</Quantity>
+<InformationalQuantity QuantityType="NetWeight">
+<Value UOM="Kilogram">3</Value>
+</InformationalQuantity>
+<InformationalQuantity QuantityType="Count">
+<Value UOM="Unit">200</Value>
+</InformationalQuantity>
+<LineBaseAmount>
+<CurrencyValue CurrencyType="EUR">61.75</CurrencyValue>
+</LineBaseAmount>
+</OrderConfirmationLineItem>
+</OrderConfirmation>

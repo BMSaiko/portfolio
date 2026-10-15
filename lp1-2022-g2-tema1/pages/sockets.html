@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="../styles/sockets/sockets.css" />
+	<link rel="stylesheet" href="../styles/styles.css" />
+	<link rel="stylesheet" href="../styles/sockets/responsive.css" />
+	<link rel="shortcut icon" href="../assets/imgs/amd.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+		integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<title>Sockets AMD</title>
+</head>
+
+<body>
+	<header>
+		<hgroup>
+			<a href="javascript:void(0);" class="icon navItem" onclick="hamburgerMenu()">
+				<i class="fa-solid fa-bars fa-xl"></i>
+			</a>
+		</hgroup>
+		<nav id="nav">
+			<ul>
+				<a href="https://www.amd.com/pt" target="_blank" class="amdA">
+					<img src="../assets/imgs/amd.png" alt="Icon da AMD" class="navIcon" />
+				</a>
+				<li><a class="navItem" href="../index.html">Inicio</a></li>
+				<li><a class="navItem" href="./history.html">Historia</a></li>
+				<li><a class="navItem" href="./arch.html">Arquitetura</a></li>
+				<li><a class="navItem" href="./amdvsintel.html">AMD e Intel</a></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<article>
+			<section>
+				<h1 class="title">O que são Sockets?</h1>
+				<p>
+					Sockets/Soquetes de um CPU é uma peça de hardware dos computadores
+					que possui um ou mais componentes mecânicos que fornecem conexões
+					elétricas e mecânicas entre o microprocessador e a placa de circuito
+					impresso (PCB no anglicismo), permitindo que se coloque ou retire a
+					Unidade central de processamento (em inglês CPU) sem a necessidade
+					de solda. Os comuns possuem clipes de retenção que aplicam uma força
+					constante que deve ser superada para a instalação do dispositivo. Se
+					há muitos pinos de contato, os soquetes ZIF são utilizados ao
+					exigirem pouca força para a inserção do componente eletrônico. Os
+					Soquetes são geralmente feitos de plástico, possuem uma alavanca ou
+					trinca para garantir a fixação do CPU e, em relação aos citados
+					componentes mecânicos, há algumas variações: os tipos LGA possuem
+					certo número de pinos de contato fixos no PCB e os processadores
+					possuem o mesmo número de entradas, pequenos pontos metálicos, para
+					que seja feita a conexão; os PGA funcionam de maneira oposta, visto
+					que os pinos de contato estão nos microprocessadores; já os BGA são
+					uma variante dos PGA e requerem solda, um trabalho mais
+					especializado e, por isso, são comercialmente pouco referidos.
+				</p>
+				<p class="imgP">
+					<img alt="socket_ex1" src="../assets/imgs/sockets_examples/socket1.png" />
+					<img alt="socket_ex2" src="../assets/imgs/sockets_examples/sockets2.png" />
+					<img alt="pinos_ex" src="../assets/imgs/sockets_examples/pinos.png" />
+				</p>
+				<p>
+					Tanto a AMD como a Intel possuem seus próprios soquetes para
+					encaixar processadores na motherboard. Por isso, quando for comprar
+					um CPU, é importante que o utilizador conheça qual é o encaixe
+					oferecido pela motherboard para não acabar por adquirir um CPU
+					incompatível. E como é óbvio também não podemos misturar componentes
+					de ambas as marcas pois também vai causar problemas de
+					compatibilidade. A AMD tem soquetes específicos para o tipo de
+					máquinas que quero construir/utilizar, nesta página pode
+					ver/verificar os sockets AMD tanto para Desktop(uso pessoal) como
+					Server(Servidores empresariais).
+				</p>
+				<p class="imgP">
+					<img style="width: 70%" alt="amd_vs_intel" src="../assets/imgs/sockets_examples/amd_vs_intel.png" />
+				</p>
+			</section>
+			<section>
+				<h1 class="subtitle">Desktop/Workstation Sockets</h1>
+				<p>
+					Estes grupo de Sockets AMD é destinado aos Desktop's. <br />Todos os
+					sockets apresentados na tabela asseguir são todos os sockets AMD
+					para desktops desde de 2000-2022.
+				</p>
+			</section>
+			<section>
+				<table class="tableStyle">
+					<thead>
+						<tr>
+							<th>Name (a.k.a.)</th>
+							<th>Year</th>
+							<th>Type</th>
+							<th>Contacts</th>
+							<th>x86 CPU Family</th>
+							<th>MC</th>
+							<th>I/O lanes</th>
+							<th>APU</th>
+							<th>FCH</th>
+							<th>Package</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/super_socket_7"
+									title="amd/packages/super socket 7">Super Socket 7</a>
+							</td>
+							<td>1998</td>
+							<td>PGA</td>
+							<td>321</td>
+							<td>5</td>
+							<td>-</td>
+							<td>FSB</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="CPGA-321.svg" src="../assets/imgs/sockets_desktop/img1.png" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikipedia.org/wiki/Slot_A" class="new"
+									title="amd/packages/slot a (page does not exist)">Slot A</a>
+							</td>
+							<td>1999</td>
+							<td>SEC</td>
+							<td>242</td>
+							<td>6</td>
+							<td>-</td>
+							<td>FSB</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikipedia.org/wiki/Socket_A" class="new"
+									title="amd/packages/socket a (page does not exist)">Socket A</a>
+							</td>
+							<td>2000</td>
+							<td>PGA</td>
+							<td>462</td>
+							<td>6</td>
+							<td>-</td>
+							<td>FSB</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-453.svg" src="../assets/imgs/sockets_desktop/img3.png" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikipedia.org/wiki/Socket_563" class="new"
+									title="amd/packages/socket 563 (page does not exist)">Socket 563</a>
+							</td>
+							<td>2003</td>
+							<td>PGA</td>
+							<td>563</td>
+							<td>6</td>
+							<td>-</td>
+							<td>FSB</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-563.svg" src="../assets/imgs/sockets_desktop/img4.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_754"
+									title="amd/packages/socket 754">Socket
+									754</a>
+							</td>
+							<td>2003</td>
+							<td>PGA</td>
+							<td>754</td>
+							<td>0Fh</td>
+							<td>72 bit DDR</td>
+							<td>16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-754.svg" src="../assets/imgs/sockets_desktop/img5.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_940"
+									title="amd/packages/socket 940">Socket
+									940</a>
+							</td>
+							<td>2003</td>
+							<td>PGA</td>
+							<td>940</td>
+							<td>0Fh</td>
+							<td>144 bit DDR</td>
+							<td>3 × 16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-940 S940.svg" src="../assets/imgs/sockets_desktop/img61.png" width="50"
+									height="50" />
+								<img alt="CPGA-940.svg" src="../assets/imgs/sockets_desktop/img62.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_939"
+									title="amd/packages/socket 939">Socket
+									939</a>
+							</td>
+							<td>2004</td>
+							<td>PGA</td>
+							<td>939</td>
+							<td>0Fh</td>
+							<td>144 bit DDR</td>
+							<td>16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-939.svg" src="../assets/imgs/sockets_desktop/img7.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am2"
+									title="amd/packages/socket am2">Socket
+									AM2</a>
+							</td>
+							<td>2006</td>
+							<td>PGA</td>
+							<td>940</td>
+							<td>NPT 0Fh</td>
+							<td>144 bit DDR2</td>
+							<td>16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-940 AM2.svg" src="../assets/imgs/sockets_desktop/img8.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_f"
+									title="amd/packages/socket f">Socket
+									Fr3</a>
+							</td>
+							<td>2006</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>NPT 0Fh</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>3 × 16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 F.svg" src="../assets/imgs/sockets_desktop/img9.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am2%2B"
+									title="amd/packages/socket am2+">Socket AM2+</a>
+								(AM2r2)
+							</td>
+							<td>2007</td>
+							<td>PGA</td>
+							<td>940</td>
+							<td>10h</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>16 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-940 AM2.svg" src="../assets/imgs/sockets_desktop/img10.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am3"
+									title="amd/packages/socket am3">Socket
+									AM3</a>
+							</td>
+							<td>2009</td>
+							<td>PGA</td>
+							<td>938</td>
+							<td>10h</td>
+							<td>2 × 72 bit DDR2/3</td>
+							<td>16 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-938.svg" src="../assets/imgs/sockets_desktop/img111.png" width="50"
+									height="50" />
+								<img alt="OPGA-940 AM3.svg" src="../assets/imgs/sockets_desktop/img112.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_fm1"
+									title="amd/packages/socket fm1">Socket
+									FM1</a>
+							</td>
+							<td>2011</td>
+							<td>PGA</td>
+							<td>905</td>
+							<td>12h</td>
+							<td>2 × 72 bit DDR3</td>
+							<td>16 + 4 PCIe2</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>4 PCIe2</td>
+							<td>
+								<img alt="OPGA-905.svg" src="../assets/imgs/sockets_desktop/img12.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am3%2B"
+									title="amd/packages/socket am3+">Socket AM3+</a>
+								(AM3b)
+							</td>
+							<td>2012</td>
+							<td>PGA</td>
+							<td>941</td>
+							<td>15h</td>
+							<td>2 × 72 bit DDR3</td>
+							<td>16 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-941.svg" src="../assets/imgs/sockets_desktop/img13.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_fm2"
+									title="amd/packages/socket fm2">Socket
+									FM2</a>
+							</td>
+							<td>2012</td>
+							<td>PGA</td>
+							<td>904</td>
+							<td>15h</td>
+							<td>2 × 64 bit DDR3</td>
+							<td>16 + 4 PCIe2</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>4 PCIe2</td>
+							<td>
+								<img alt="OPGA-904.svg" src="../assets/imgs/sockets_desktop/img14.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am1"
+									title="amd/packages/socket am1">Socket
+									AM1</a>
+								(FS1b)
+							</td>
+							<td>2014</td>
+							<td>PGA</td>
+							<td>721</td>
+							<td>16h</td>
+							<td>72 bit DDR3</td>
+							<td>4 + 4 PCIe2</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>integrated</td>
+							<td>
+								<img alt="OPGA-721.svg" src="../assets/imgs/sockets_desktop/img15.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_fm2%2B"
+									title="amd/packages/socket fm2+">Socket FM2+</a>
+								(FM2b, FM2r2)
+							</td>
+							<td>2014</td>
+							<td>PGA</td>
+							<td>906</td>
+							<td>15h</td>
+							<td>2 × 64 bit DDR3</td>
+							<td>16 + 4 PCIe2/3</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>4 PCIe2</td>
+							<td>
+								<img alt="OPGA-906.svg" src="../assets/imgs/sockets_desktop/img16.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am4"
+									title="amd/packages/socket am4">Socket
+									AM4</a>
+							</td>
+							<td>2016</td>
+							<td>PGA</td>
+							<td>1331</td>
+							<td>15h, 17h, 19h</td>
+							<td>2 × 72 bit DDR3/4</td>
+							<td>16 + 4 PCIe3/4</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>4 PCIe3/4</td>
+							<td>
+								<img alt="socket am4.svg" src="../assets/imgs/sockets_desktop/img17.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_tr4"
+									title="amd/packages/socket tr4">Socket
+									TR4</a>
+								(SP3r2)
+							</td>
+							<td>2017</td>
+							<td>LGA</td>
+							<td>4094</td>
+							<td>17h</td>
+							<td>4 × 72 bit DDR4</td>
+							<td>4 × 16 PCIe3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="FCLGA-4094.svg" src="../assets/imgs/sockets_desktop/img18.png" width="64"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/wiki/amd/packages/socket_strx4" title="amd/packages/socket strx4">Socket
+									sTRX4</a>
+							</td>
+							<td>2019</td>
+							<td>LGA</td>
+							<td>4094</td>
+							<td>17h</td>
+							<td>4 × 72 bit DDR4</td>
+							<td>4 × 16 PCIe4</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="FCLGA-4094.svg" src="../assets/imgs/sockets_desktop/img19.png" width="64"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_swrx8"
+									title="amd/packages/socket swrx8">Socket sWRX8</a>
+							</td>
+							<td>2020</td>
+							<td>LGA</td>
+							<td>4094</td>
+							<td>17h, 19h</td>
+							<td>8 × 72 bit DDR4</td>
+							<td>8 × 16 PCIe4</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="FCLGA-4094.svg" src="../assets/imgs/sockets_desktop/img20.png" width="64"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_am5"
+									title="amd/packages/socket am5">Socket
+									AM5</a>
+							</td>
+							<td>2022</td>
+							<td>LGA</td>
+							<td>1718</td>
+							<td>19h</td>
+							<td>2 × 72 bit DDR5</td>
+							<td>16 + 4 + 4 PCIe4/5</td>
+							<td style="background-color: #d6ffd8; text-align: center">✔</td>
+							<td>4 PCIe4/5</td>
+							<td>
+								<img alt="LGA-1718.svg" src="../assets/imgs/sockets_desktop/img21.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+					</tbody>
+					<tfoot></tfoot>
+				</table>
+
+				<p>
+					<b>Fonte:</b>
+					<a href="https://en.wikichip.org/wiki/amd/List_of_AMD_CPU_sockets" title="fonte tabela">wikichip</a>
+				</p>
+			</section>
+			<section>
+				<h1 class="subtitle">Server Sockets</h1>
+				<p>
+					Estes grupo de Sockets AMD é destinado aos Server's. <br />Todos os
+					sockets apresentados na tabela asseguir são todos os sockets AMD
+					para servidores desde de 2000-2022.
+				</p>
+			</section>
+			<section>
+				<table class="tableStyle">
+					<thead>
+						<tr>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Name
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Year
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Type
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Contacts
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Fam.
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								MC
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								I/O lanes
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								APU
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								<abbr title="Server Controller Hub">SCH</abbr>
+							</th>
+							<th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">
+								Package
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_940"
+									title="amd/packages/socket 940">Socket
+									940</a>
+							</td>
+							<td>2003</td>
+							<td>PGA</td>
+							<td>940</td>
+							<td>0Fh</td>
+							<td>144 bit DDR</td>
+							<td>3 × 16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="OPGA-940 S940.svg" src="../assets/imgs/sockets_server/img11.png" width="50"
+									height="50" />
+								<img alt="CPGA-940.svg" src="../assets/imgs/sockets_server/img12.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_f"
+									title="amd/packages/socket f">Socket F</a>
+							</td>
+							<td>2006</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>NPT 0Fh</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>3 × 16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 F.svg" src="../assets/imgs/sockets_server/img2.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_f"
+									title="amd/packages/socket f">Socket
+									Fr2</a>
+							</td>
+							<td>2007</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>NPT 0Fh, 10h</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>3 × 16 HT1</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 F.svg" src="../assets/imgs/sockets_server/img3.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_f"
+									title="amd/packages/socket f">Socket
+									Fr5</a>
+							</td>
+							<td>2008</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>NPT 0Fh, 10h</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>3 × 16 HT1/3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 F.svg" src="../assets/imgs/sockets_server/img4.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_f"
+									title="amd/packages/socket f">Socket
+									Fr6</a>
+							</td>
+							<td>2009</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>10h</td>
+							<td>2 × 72 bit DDR2</td>
+							<td>3 × 16 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 F.svg" src="../assets/imgs/sockets_server/img5.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_c32"
+									title="amd/packages/socket c32">Socket
+									C32</a>
+							</td>
+							<td>2010</td>
+							<td>LGA</td>
+							<td>1207</td>
+							<td>10h, 15h</td>
+							<td>2 × 72 bit DDR3</td>
+							<td>3 × 16 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1207 C32.svg" src="../assets/imgs/sockets_server/img6.png" width="50"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_g34"
+									title="amd/packages/socket g34">Socket
+									G34</a>
+							</td>
+							<td>2010</td>
+							<td>LGA</td>
+							<td>1944</td>
+							<td>10h, 15h</td>
+							<td>4 × 72 bit DDR3</td>
+							<td>3 × 16 + 2 × 8 HT3</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>-</td>
+							<td>
+								<img alt="LGA-1944.svg" src="../assets/imgs/sockets_server/img7.png" width="70"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_sp3"
+									title="amd/packages/socket sp3">Socket
+									SP3</a>
+							</td>
+							<td>2017</td>
+							<td>LGA</td>
+							<td>4094</td>
+							<td>17h, 19h</td>
+							<td>8 × 72 bit DDR4</td>
+							<td>8 × 16 PCIe3/4</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>integrated</td>
+							<td>
+								<img alt="FCLGA-4094.svg" src="../assets/imgs/sockets_server/img8.png" width="64"
+									height="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="https://en.wikichip.org/wiki/amd/packages/socket_sp5"
+									title="amd/packages/socket sp5">Socket
+									SP5</a>
+							</td>
+							<td>2022</td>
+							<td>LGA</td>
+							<td>6096</td>
+							<td>19h</td>
+							<td>12 × 80 bit DDR5</td>
+							<td>8 × 16 PCIe5</td>
+							<td style="background-color: #ffdad6; text-align: center">✘</td>
+							<td>integrated</td>
+							<td>
+								<img alt="LGA-6096.svg" src="../assets/imgs/sockets_server/img9.png" width="52"
+									height="50" />
+							</td>
+						</tr>
+					</tbody>
+					<tfoot></tfoot>
+				</table>
+
+				<p>
+					<b>Fonte:</b>
+					<a href="https://en.wikichip.org/wiki/amd/List_of_AMD_CPU_sockets" title="fonte tabela">wikichip</a>
+				</p>
+			</section>
+		</article>
+	</main>
+	<footer>&copy; 2022 Bruno Silva, Todos os direitos reservados.</footer>
+	<script>
+		function hamburgerMenu() {
+			var x = document.getElementById("nav");
+			if (x.style.display === "block") {
+				x.style.display = "none";
+			} else {
+				x.style.display = "block";
+			}
+		}
+	</script>
+</body>
+
+</html>

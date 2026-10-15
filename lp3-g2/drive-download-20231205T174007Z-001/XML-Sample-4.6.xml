@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OrderConfirmation>
+	<OrderConfirmationHeader>
+		<OrderConfirmationReference>PL3333</OrderConfirmationReference>
+		<OrderConfirmationIssuedDate>
+			<Date>
+				<Year>2023</Year>
+				<Month>06</Month>
+				<Day>04</Day>
+			</Date>
+		</OrderConfirmationIssuedDate>
+		<SupplierParty>
+			<PartyIdentifier>PL92192</PartyIdentifier>
+			<NameAddress>
+				<Name>Paper Poland</Name>
+				<Address1>ul. Sadków 124</Address1>
+				<City>Kraków</City>
+				<PostalCode>31-411</PostalCode>
+				<Country ISOCountryCode="PL">Poland</Country>
+			</NameAddress>
+		</SupplierParty>
+	</OrderConfirmationHeader>
+	<OrderConfirmationLineItem>
+		<OrderConfirmationLineItemNumber>1</OrderConfirmationLineItemNumber>
+		<Product>
+			<ProductIdentifier Agency="Buyer" ProductIdentifierType="PartNumber">2315252</ProductIdentifier>
+			<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">PL-0864</ProductIdentifier>
+			<ProductDescription>Uncoated paper A3 90g FSC</ProductDescription>
+		</Product>
+		<PriceDetails>
+			<PricePerUnit>
+				<CurrencyValue CurrencyType="PLN">10.00</CurrencyValue>
+				<Value UOM="Ream">1</Value>
+			</PricePerUnit>
+		</PriceDetails>
+		<MonetaryAdjustment AdjustmentType="Tax">
+			<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+			<MonetaryAdjustmentStartAmount>
+				<CurrencyValue CurrencyType="PLN">100.00</CurrencyValue>
+			</MonetaryAdjustmentStartAmount>
+			<TaxAdjustment TaxType="VAT">
+				<TaxPercent>12</TaxPercent>
+				<TaxAmount>
+					<CurrencyValue CurrencyType="PLN">12.00</CurrencyValue>
+				</TaxAmount>
+				<TaxLocation>DE</TaxLocation>
+			</TaxAdjustment>
+		</MonetaryAdjustment>
+		<Quantity QuantityType="Count">
+			<Value UOM="Ream">10</Value>
+		</Quantity>
+		<LineBaseAmount>
+			<CurrencyValue CurrencyType="PLN">112.00</CurrencyValue>
+		</LineBaseAmount>
+	</OrderConfirmationLineItem>
+</OrderConfirmation>

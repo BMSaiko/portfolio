@@ -1,0 +1,224 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+<xs:element name="OrderConfirmation">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="OrderConfirmationHeader">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:string" name="OrderConfirmationReference"/>
+<xs:element name="OrderConfirmationIssuedDate">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Date">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:integer" name="Year"/>
+<xs:element type="xs:integer" name="Month"/>
+<xs:element type="xs:integer" name="Day"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="SupplierParty">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:string" name="PartyIdentifier"/>
+<xs:element name="NameAddress">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:string" name="Name" minOccurs="1" maxOccurs="1"/>
+<xs:element type="xs:string" name="Address1" minOccurs="1" maxOccurs="1"/>
+<xs:element type="xs:string" name="Address2" minOccurs="0" maxOccurs="1"/>
+<xs:element type="xs:string" name="City" minOccurs="1" maxOccurs="1"/>
+<xs:element type="xs:string" name="PostalCode" minOccurs="1" maxOccurs="1"/>
+<xs:element name="Country">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute type="ISOCountryCode" name="ISOCountryCode"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="OrderConfirmationLineItem" maxOccurs="unbounded" minOccurs="1">
+<xs:complexType>
+<xs:choice maxOccurs="unbounded" minOccurs="1">
+<xs:element type="xs:positiveInteger" name="OrderConfirmationLineItemNumber"/>
+<xs:element name="Product">
+<xs:complexType>
+<xs:choice maxOccurs="unbounded" minOccurs="1">
+<xs:element name="ProductIdentifier">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute type="xs:string" name="Agency" use="optional"/>
+<xs:attribute type="xs:string" name="ProductIdentifierType"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element type="xs:string" name="ProductDescription"/>
+</xs:choice>
+</xs:complexType>
+</xs:element>
+<xs:element name="PriceDetails">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="PricePerUnit">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="CurrencyValue">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="xs:string" name="CurrencyType"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Value">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:integer">
+<xs:attribute type="UOM" name="UOM"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="MonetaryAdjustment">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:positiveInteger" name="MonetaryAdjustmentLine"/>
+<xs:element name="MonetaryAdjustmentStartAmount">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="CurrencyValue">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="xs:string" name="CurrencyType"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="TaxAdjustment">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:decimal" name="TaxPercent"/>
+<xs:element name="TaxAmount">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="CurrencyValue">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="xs:string" name="CurrencyType"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element type="xs:string" name="TaxLocation"/>
+</xs:sequence>
+<xs:attribute type="xs:string" name="TaxType" use="optional"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute type="xs:string" name="AdjustmentType" use="optional"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="Quantity">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Value">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="UOM" name="UOM"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute type="xs:string" name="QuantityType" use="optional"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="InformationalQuantity">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Value">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="UOM" name="UOM"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute type="xs:string" name="QuantityType" use="optional"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="LineBaseAmount">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="CurrencyValue">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:decimal">
+<xs:attribute type="xs:string" name="CurrencyType"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:choice>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:simpleType name="UOM" final="restriction">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Sheet"/>
+<xs:enumeration value="Ream"/>
+<xs:enumeration value="Kilogram"/>
+<xs:enumeration value="Box"/>
+<xs:enumeration value="Unit"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="ISOCountryCode" final="restriction">
+<xs:restriction base="xs:string">
+<xs:enumeration value="PT"/>
+<xs:enumeration value="ES"/>
+<xs:enumeration value="EN"/>
+<xs:enumeration value="FR"/>
+<xs:enumeration value="DE"/>
+<xs:enumeration value="PL"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

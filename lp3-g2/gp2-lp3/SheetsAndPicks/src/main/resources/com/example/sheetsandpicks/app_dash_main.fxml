@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sheetsandpicks.Controllers.app_dashboard.AppDashMain">
+   <children>
+      <TableView layoutX="47.0" layoutY="43.0" prefHeight="494.0" prefWidth="766.0">
+         <columns>
+            <TableColumn prefWidth="75.0" text="C1" />
+            <TableColumn prefWidth="75.0" text="C2" />
+         </columns>
+      </TableView>
+      <ImageView fitHeight="235.0" fitWidth="246.0" layoutX="878.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../img/1540-1.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="878.0" layoutY="304.0" prefHeight="26.0" prefWidth="78.0" style="-fx-text-fill: white;" text="Nome" />
+      <Label layoutX="878.0" layoutY="357.0" style="-fx-text-fill: white;" text="Fornecedor" />
+      <Label layoutX="942.0" layoutY="309.0" style="-fx-text-fill: white;" text="Bloco de notas" />
+      <Label layoutX="942.0" layoutY="357.0" style="-fx-text-fill: white;" text="Fornecedor1" />
+   </children>
+</AnchorPane>

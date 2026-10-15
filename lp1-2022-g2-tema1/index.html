@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/assets/imgs/amd.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <title>AMD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <hgroup>
+            <a class="icon navItem" onclick="hamburgerMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </a>
+        </hgroup>
+        <nav id="nav">
+            <ul>
+                <a href="https://www.amd.com/pt" target="_blank" class="amdA">
+                    <img src="../assets/imgs/amd.png" alt="Icon da AMD" class="navIcon" />
+                </a>
+                <li><a class="navItem" href="/pages/history.html">Historia</a></li>
+                <li><a class="navItem" href="/pages/arch.html">Arquitetura</a></li>
+                <li><a class="navItem" href="/pages/sockets.html">Sockets</a></li>
+                <li><a class="navItem" href="/pages/amdvsintel.html">AMD e Intel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+
+        <section style="margin-top: 2%;">
+            <h1  class="title">AMD</h1>
+            <p >
+                Este projecto consiste em uma compilação de informação sobre a empresa de microprocessadores AMD em 5
+                paginas estaticas de HTML5 e CSS3
+            </p>
+            <p >Podemos navegar entre essas páginas pela navbar (barra de navegação em cima a
+                azul) ou pelas rapidas
+                hiperligações em baixo. </p>
+
+            <section class="autores" style="margin-top: 2%;">
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/history.jpg" alt="Foto do Bruno" />
+                    </figure>
+                    <p class="imgText" style="text-align: center;">
+                        <a href="/pages/history.html" class="ref">Historia da AMD</a>
+                    </p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/socket.jpeg" alt="Foto do Bruno" />
+                    </figure>
+                    <p class="imgText" style="text-align: center;">
+                        <a href="/pages/sockets.html" class="ref">Socket dos<br />Mircoprocessadores AMD</a>
+                    </p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/arm.jpg" alt="" />
+                    </figure>
+                    <p class="imgText" style="text-align: center;">
+                        <a href="/pages/arch.html" class="ref">Arquitetura dos<br />Microarquitetura</a>
+                    </p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/amdintel.jpg" alt="" />
+                    </figure>
+                    <p class="imgText" style="text-align: center;">
+                        <a href="/pages/amdvsintel" class="ref">AMD vs Intel</a>
+                    </p>
+                </articale>
+            </section>
+
+            <h1 style="margin-top: 2%; text-align: center;" class="title">Este trabalho foi realizado por</h1>
+            <section class="autores" style="margin-top: 2%;">
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/autores/carlos.jpeg" alt="Foto do Carlos" />
+                    </figure>
+                    <p class="nomeAutor">Carlos Almeida <b>&middot;</b> 1221515</p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/autores/bruno.jpeg" alt="Foto do Bruno"
+                            style="width: 200px;" />
+                    </figure>
+                    <p class="nomeAutor">Bruno Silva  <b>&middot;</b> 1221514</p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/autores/paulo.jpg" alt="Foto do Paulo" />
+                    </figure>
+                    <p class="nomeAutor">Paulo Silva  <b>&middot;</b> 1221528</p>
+                </articale>
+                <articale class="autor">
+                    <figure>
+                        <img class="imgs" src="assets/imgs/autores/henrique.jpg" alt="" />
+                    </figure>
+                    <p class="nomeAutor">Henrique Rodrigues <b>&middot;</b> 1221998</p>
+                </articale>
+            </section>
+        </section>
+    </main>
+    <footer>
+        &copy; 2022 Bruno Silva, Calros Almeida, Henrique Rodrigues e Paulo Silva. Todos os direitos reservados.
+    </footer>
+    <script>
+        function hamburgerMenu() {
+            var nav = document.getElementById("nav");
+            if (nav.style.display === "block") {
+                nav.style.display = "none";
+            } else {
+                nav.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>

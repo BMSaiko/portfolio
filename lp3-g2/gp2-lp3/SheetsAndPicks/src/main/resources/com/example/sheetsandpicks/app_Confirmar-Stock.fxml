@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="811.0" prefWidth="1217.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sheetsandpicks.Controllers.Stock.StockConfirmationController">
+   <children>
+      <TableView fx:id="table_Stocks" layoutX="43.0" layoutY="100.0" prefHeight="524.0" prefWidth="524.0">
+        <columns>
+            <TableColumn fx:id="c_n_encomenda" prefWidth="103.19997787475586" text="Nº de Encomenda" />
+          <TableColumn fx:id="c_Nome" prefWidth="97.5999755859375" text="Nome" />
+          <TableColumn fx:id="c_Fornecedor" prefWidth="115.19996643066406" text="Fornecedor" />
+            <TableColumn fx:id="c_Quantidade" prefWidth="132.00006103515625" text="Quantidade" />
+        </columns>
+      </TableView>
+      <TableView fx:id="table_confirmados" layoutX="646.0" layoutY="100.0" prefHeight="524.0" prefWidth="524.0">
+         <columns>
+            <TableColumn fx:id="c_n_encomenda_confirmado" prefWidth="96.7999267578125" text="Nº de Encomenda" />
+            <TableColumn fx:id="c_Nome_confirmado" prefWidth="142.39996337890625" text="Nome" />
+            <TableColumn fx:id="c_Fornecedor_confirmado" prefWidth="103.199951171875" text="Fornecedor" />
+            <TableColumn fx:id="c_Quantidade_confirmado" prefWidth="77.59991455078125" text="Quantidade" />
+            <TableColumn fx:id="c_Aceite_Rejeitado" prefWidth="103.2000732421875" text="Aceite/Rejeitado" />
+         </columns></TableView>
+      <Button fx:id="btn_confirmar_Stock" layoutX="592.0" layoutY="303.0" mnemonicParsing="false" onAction="#Handler_Confirma_Stock" prefHeight="118.0" prefWidth="35.0" />
+      <Button fx:id="btn_Confirmar" layoutX="1092.0" layoutY="702.0" mnemonicParsing="false" onAction="#Handler_terminar_Confirmacao" prefHeight="63.0" prefWidth="78.0" style="-fx-background-radius: 100;" text="✔️" />
+      <Button fx:id="btn_Cancelar" layoutX="966.0" layoutY="702.0" mnemonicParsing="false" onAction="#Handler_Cancelar_Confirmacao" prefHeight="63.0" prefWidth="78.0" style="-fx-background-radius: 100;" text="❌" />
+      <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="588.0" layoutY="342.0">
+         <image>
+            <Image url="@../../../img/arrow-icon--myiconfinder-23.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="43.0" layoutY="42.0" text="Confirmaçao de Stock">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

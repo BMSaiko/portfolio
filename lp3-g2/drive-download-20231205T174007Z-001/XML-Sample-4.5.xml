@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OrderConfirmation>
+	<OrderConfirmationHeader>
+		<OrderConfirmationReference>DE9821799</OrderConfirmationReference>
+		<OrderConfirmationIssuedDate>
+			<Date>
+				<Year>2023</Year>
+				<Month>06</Month>
+				<Day>04</Day>
+			</Date>
+		</OrderConfirmationIssuedDate>
+		<SupplierParty>
+			<PartyIdentifier>293724844</PartyIdentifier>
+			<NameAddress>
+				<Name>Deutscher Papier</Name>
+				<Address1>Berlin Wall Street</Address1>
+				<City>Berlin</City>
+				<PostalCode>10115</PostalCode>
+				<Country ISOCountryCode="DE">Germany</Country>
+			</NameAddress>
+		</SupplierParty>
+	</OrderConfirmationHeader>
+	<OrderConfirmationLineItem>
+		<OrderConfirmationLineItemNumber>1</OrderConfirmationLineItemNumber>
+		<Product>
+			<ProductIdentifier Agency="Buyer" ProductIdentifierType="PartNumber">654782</ProductIdentifier>
+			<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">DE-5567</ProductIdentifier>
+			<ProductDescription>Riesiges A4-Papier, 80 g, 297 x 210 mm</ProductDescription>
+		</Product>
+		<PriceDetails>
+			<PricePerUnit>
+				<CurrencyValue CurrencyType="EUR">1.00</CurrencyValue>
+				<Value UOM="Ream">1</Value>
+			</PricePerUnit>
+		</PriceDetails>
+		<MonetaryAdjustment AdjustmentType="Tax">
+			<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+			<MonetaryAdjustmentStartAmount>
+				<CurrencyValue CurrencyType="EUR">1000.00</CurrencyValue>
+			</MonetaryAdjustmentStartAmount>
+			<TaxAdjustment TaxType="VAT">
+				<TaxPercent>19</TaxPercent>
+				<TaxAmount>
+					<CurrencyValue CurrencyType="EUR">190.00</CurrencyValue>
+				</TaxAmount>
+				<TaxLocation>DE</TaxLocation>
+			</TaxAdjustment>
+		</MonetaryAdjustment>
+		<Quantity QuantityType="Count">
+			<Value UOM="Ream">1000</Value>
+		</Quantity>
+		<LineBaseAmount>
+			<CurrencyValue CurrencyType="EUR">1190.00</CurrencyValue>
+		</LineBaseAmount>
+	</OrderConfirmationLineItem>
+</OrderConfirmation>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMD vs Intel</title>
+    <link
+      rel="shortcut icon"
+      href="../assets/imgs/amd.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="../styles/amdintel/amdintel.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body>
+    <header>
+      <hgroup>
+        <a
+          href="javascript:void(0);"
+          class="icon navItem"
+          onclick="hamburgerMenu()"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </a>
+      </hgroup>
+
+      <nav id="nav">
+        <ul>
+          <a href="https://www.amd.com/pt" target="_blank" class="amdA">
+            <img
+              src="../assets/imgs/amd.png"
+              alt="Icon da AMD"
+              class="navIcon"
+            />
+          </a>
+          <li><a class="navItem" href="../index.html">Inicio</a></li>
+          <li><a class="navItem" href="./arch.html">Arquitetura</a></li>
+          <li><a class="navItem" href="./sockets.html">Sockets</a></li>
+          <li><a class="navItem" href="./history.html">Historia</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <article>
+        <section>
+          <h1>Intel vs AMD quais as diferenças?</h1>
+
+          <br />
+
+          <img class="imagem" src="../assets/imgs/AMD-Ryzen-vs-Intel.jpg" />
+          <!-- Fonte - https://cpuninja.com/amd-ryzen-vs-intel/ -->
+
+          <p class="textoalinhado">
+            Como se sabe, a intel é a corrente direta da AMD, ambas têm os seus
+            prós e contras e para que se possam familiarizar um pouco mais com a
+            situação deixo-vos aqui em baixo uma pequena comparação entre as
+            principais franquias das marcas.
+          </p>
+        </section>
+      </article>
+      <article>
+        <section>
+          <table>
+            <tr>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Cores</th>
+              <th>Threads</th>
+              <th>Max Clock</th>
+              <th>Max Clock Boost/Turbo</th>
+              <th>Max Ram Suportada</th>
+            </tr>
+            <tr>
+              <td>Intel Core i3</td>
+              <td>114€ - 159€</td>
+              <td>4</td>
+              <td>8</td>
+              <td>3.3 GHz</td>
+              <td>4.3 GHz</td>
+              <td>DDR4-3200 MHz / DDR5-4800 MHz</td>
+            </tr>
+            <tr>
+              <td>Intel Core i5</td>
+              <td>216€ - 344€</td>
+              <td>10</td>
+              <td>16</td>
+              <td>3.7 GHz</td>
+              <td>4.9 GHz</td>
+              <td>DDR4-3200 MHz / DDR5-4800 MHz</td>
+            </tr>
+            <tr>
+              <td>Intel Core i7</td>
+              <td>387€ - 494€</td>
+              <td>12</td>
+              <td>20</td>
+              <td>3.6 GHz</td>
+              <td>5.0 GHz</td>
+              <td>DDR4-3200 MHz / DDR5-4800 MHz</td>
+            </tr>
+            <tr>
+              <td>Intel Core i9</td>
+              <td>597€ - 929€</td>
+              <td>16</td>
+              <td>16</td>
+              <td>3.4 GHz</td>
+              <td>5.5 GHz</td>
+              <td>DDR4-3200 MHz / DDR5-4800 MHz</td>
+            </tr>
+            <tr>
+              <td>AMD Ryzen 5</td>
+              <td>118€ - 349€</td>
+              <td>6</td>
+              <td>12</td>
+              <td>4.7 GHz</td>
+              <td>5.3 GHz</td>
+              <td>DDR4-3600 MHz / DDR5-5200 MHz</td>
+            </tr>
+            <tr>
+              <td>AMD Ryzen 7</td>
+              <td>229€ - 487€</td>
+              <td>8</td>
+              <td>16</td>
+              <td>4.5 GHz</td>
+              <td>5.4 GHz</td>
+              <td>DDR4-3600 MHz / DDR5-5200 MHz</td>
+            </tr>
+            <tr>
+              <td>AMD Ryzen 9</td>
+              <td>414€ - 854€</td>
+              <td>16</td>
+              <td>32</td>
+              <td>4.5 GHz</td>
+              <td>5.7 GHz</td>
+              <td>DDR4-3600 MHz / DDR5-5200 MHz</td>
+            </tr>
+          </table>
+        </section>
+      </article>
+    </main>
+
+    <footer>
+      &copy; 2022 Henrique Rodrigues, Todos os direitos reservados.
+    </footer>
+    <script>
+      function hamburgerMenu() {
+        var nav = document.getElementById("nav");
+        if (nav.style.display === "block") {
+          nav.style.display = "none";
+        } else {
+          nav.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>

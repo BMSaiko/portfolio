@@ -1,0 +1,17 @@
+node_modules/
+/dsos-grupo1-bombastico/DSOS-grupo1-Bombastico/vendor/
+.env
+*.log
+*.zip
+.DS_Store
+Thumbs.db
+*.tar
+target/
+SheetsAndPicks-1.0-SNAPSHOT/
+.idea/
+.vs/
+bin/
+obj/
+build/
+target/
+.gradle/

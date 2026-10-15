@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+* {
+	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Poppins", sans-serif;
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+}
+
+:root {
+	--blackBorder: rgba(0, 0, 0, 0.1);
+	--red: #ef0707;
+	--darkred: #bd0000;
+	--blue: #071c2e;
+}
+
+.title {
+	font-size: 35px;
+	font-weight: bold;
+	color: var(--blue);
+}
+
+main {
+	width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+header {
+	background-color: var(--blue);
+}
+
+nav {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+ul {
+	list-style: none;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.ref {
+	text-decoration: underline;
+	color: black;
+}
+
+a {
+	text-decoration: none;
+}
+
+p {
+	padding-top: 6px;
+	font-size: 1em;
+}
+
+li {
+	padding: 1.5em 2em 1.5em 2em;
+}
+
+.navItem {
+	color: aliceblue;
+	font-weight: bold;
+}
+
+.navItem:hover {
+	text-decoration: underline;
+}
+
+footer {
+	padding: 20px;
+
+	text-align: center;
+}
+
+.amdA {
+	display: flex;
+	align-items: center;
+}
+
+hgroup {
+	display: none;
+}
+
+.autor {
+	padding: 20px;
+	border: solid 1px var(--blackBorder);
+}
+
+.imgs {
+	max-width: 250px;
+	min-width: none;
+	min-height: 250px;
+	max-height: 250px;
+}
+
+.autores {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 20;
+}
+
+.autores>article {
+	margin: 10px;
+}
+
+.subtitleIndex {
+	font-size: 1em;
+	font-weight: 600;
+}
+
+.nomeAutor {
+	font-weight: bold;
+	font-size: 17px;
+}
+
+@media screen and (max-width: 1200px) {
+	hgroup {
+		display: block;
+		padding: 0.8em 1.3em 0.8em 1.3em;
+	}
+
+	nav {
+		display: none;
+		animation-name: navAnimation;
+		animation-duration: 500ms;
+		animation-fill-mode: backwards;
+	}
+
+	.autores {
+		justify-content: center;
+
+	}
+
+	main {
+		margin-top: 2%;
+		width: 95%;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	.autor {
+		margin: 20px;
+	}
+
+	header {
+		animation: ease-in;
+	}
+
+	.nomeAutor {
+		font-weight: bold;
+		font-size: 10px;
+	}
+
+	p {
+		padding-top: 6px;
+		font-size: 14px;
+	}
+
+	@keyframes navAnimation {
+		0% {
+			opacity: 0%;
+		}
+
+		25% {
+			opacity: 24%;
+		}
+
+		50% {
+			opacity: 50%;
+		}
+
+		75% {
+			opacity: 75%;
+		}
+
+		100% {
+			opacity: 100%;
+		}
+	}
+
+	.navIcon {
+		display: none;
+	}
+
+	ul {
+		flex-direction: column;
+	}
+
+	.navItem {
+		font-size: 12px;
+	}
+
+	li {
+		padding: 0.8em 1.3em 0.8em 1.3em;
+	}
+
+}

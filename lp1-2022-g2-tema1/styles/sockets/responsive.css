@@ -1,0 +1,93 @@
+@media screen and (max-width: 1200px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  section {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  table {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    table-layout: fixed;
+    word-break: break-all;
+  }
+
+  p {
+    margin-top: 1em;
+    font-size: 10px;
+    text-align: justify;
+  }
+
+  nav {
+    display: none;
+    animation-name: navAnimation;
+    animation-duration: 500ms;
+    animation-fill-mode: backwards;
+  }
+  header {
+    animation: ease-in;
+  }
+  @keyframes navAnimation {
+    0% {
+      opacity: 0%;
+    }
+    25% {
+      opacity: 24%;
+    }
+
+    50% {
+      opacity: 50%;
+    }
+    75% {
+      opacity: 75%;
+    }
+    100% {
+      opacity: 100%;
+    }
+  }
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--blue);
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--blue);
+  }
+  td,
+  th {
+    border: solid 1px var(--blackBorder);
+    padding: 5px;
+    font-size: 10px;
+  }
+  .navIcon {
+    display: none;
+  }
+  .navItem {
+    font-size: 12px;
+  }
+  li {
+    padding: 0.8em 1.3em 0.8em 1.3em;
+  }
+  aside {
+    border: solid 1px var(--blackBorder);
+    border-radius: 1px;
+    margin-left: 20px;
+  }
+  footer {
+    padding: 10px;
+    font-size: 12px;
+  }
+  ul {
+    flex-direction: column;
+  }
+  hgroup {
+    display: block;
+    padding: 0.8em 1.3em 0.8em 1.3em;
+  }
+}

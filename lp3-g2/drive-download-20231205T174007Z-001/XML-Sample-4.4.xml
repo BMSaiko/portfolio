@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OrderConfirmation>
+	<OrderConfirmationHeader>
+		<OrderConfirmationReference>CC-3347107</OrderConfirmationReference>
+		<OrderConfirmationIssuedDate>
+			<Date>
+				<Year>2023</Year>
+				<Month>12</Month>
+				<Day>04</Day>
+			</Date>
+		</OrderConfirmationIssuedDate>
+		<SupplierParty>
+			<PartyIdentifier>11PT920</PartyIdentifier>
+			<NameAddress>
+				<Name>Papel do Porto</Name>
+				<Address1>Rua da Alegria</Address1>
+				<Address2>nº1</Address2>
+				<City>Porto</City>
+				<PostalCode>4000-032</PostalCode>
+				<Country ISOCountryCode="PT">Portugal</Country>
+			</NameAddress>
+		</SupplierParty>
+	</OrderConfirmationHeader>
+	<OrderConfirmationLineItem>
+		<OrderConfirmationLineItemNumber>1</OrderConfirmationLineItemNumber>
+		<Product>
+			<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">767676</ProductIdentifier>
+			<ProductIdentifier Agency="Supplier" ProductIdentifierType="PartNumber">P2-5297</ProductIdentifier>
+			<ProductDescription>Resma Papel A5 80g</ProductDescription>
+		</Product>
+		<PriceDetails>
+			<PricePerUnit>
+				<CurrencyValue CurrencyType="EUR">1.32</CurrencyValue>
+				<Value UOM="Ream">1</Value>
+			</PricePerUnit>
+		</PriceDetails>
+		<MonetaryAdjustment AdjustmentType="Tax">
+			<MonetaryAdjustmentLine>1</MonetaryAdjustmentLine>
+			<MonetaryAdjustmentStartAmount>
+				<CurrencyValue CurrencyType="EUR">132.00</CurrencyValue>
+			</MonetaryAdjustmentStartAmount>
+			<TaxAdjustment TaxType="VAT">
+				<TaxPercent>23</TaxPercent>
+				<TaxAmount>
+					<CurrencyValue CurrencyType="EUR">30.36</CurrencyValue>
+				</TaxAmount>
+				<TaxLocation>PT</TaxLocation>
+			</TaxAdjustment>
+		</MonetaryAdjustment>
+		<Quantity QuantityType="Count">
+			<Value UOM="Ream">100</Value>
+		</Quantity>
+		<InformationalQuantity QuantityType="Count">
+			<Value UOM="Sheet">5000000</Value>
+		</InformationalQuantity>
+		<LineBaseAmount>
+			<CurrencyValue CurrencyType="EUR">162.36</CurrencyValue>
+		</LineBaseAmount>
+	</OrderConfirmationLineItem>	
+</OrderConfirmation>

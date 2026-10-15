@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sheetsandpicks.Controllers.app_dashboard.app_dash_updateutilizadoresController">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="lb_titulo" text="Fornecedores">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="198.0" prefWidth="548.0">
+         <children>
+            <VBox maxWidth="115.0" minWidth="100.0" prefHeight="225.0" prefWidth="115.0">
+               <children>
+                  <Label text="Nome">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="2.0" top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Label>
+                  <Label text="Endereço">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Endereço2">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Cidade">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="País">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Telefone">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Email">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Codigo-postal">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Data nascimento">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox maxWidth="100.0" minWidth="100.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <TextField fx:id="txt_nome" promptText="nome" />
+                  <TextField fx:id="txt_endereco" layoutX="10.0" layoutY="10.0" promptText="endereço" />
+                  <TextField fx:id="txt_endereco2" layoutX="10.0" layoutY="35.0" promptText="endereço2" />
+                  <TextField fx:id="txt_cidade" layoutX="10.0" layoutY="60.0" promptText="cidade" />
+                  <ComboBox fx:id="cmb_pais" prefWidth="150.0" />
+                  <TextField fx:id="txt_telefone" layoutX="10.0" layoutY="110.0" promptText="telefone" />
+                  <TextField fx:id="txt_email" layoutX="10.0" layoutY="135.0" promptText="email" />
+                  <TextField fx:id="txt_cod_postal" layoutX="10.0" layoutY="160.0" promptText="codigo-postal" />
+                  <DatePicker fx:id="dpicker_data" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+               <children>
+                  <Label fx:id="lblusername" text="Username">
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding></Label>
+                  <Label fx:id="lblpassword" text="Password">
+                     <padding>
+                        <Insets left="2.0" />
+                     </padding></Label>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <TextField fx:id="txt_username" />
+                  <TextField fx:id="txt_password" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Pane prefHeight="92.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="btn_adicionar" layoutX="506.0" layoutY="44.0" mnemonicParsing="false" onAction="#HandlerAlterar" text="Alterar" />
+            <Button fx:id="btn_Cancelar" layoutX="406.0" layoutY="44.0" mnemonicParsing="false" onAction="#HandlerCancelar" text="Cancelar" />
+         </children>
+      </Pane>
+   </children>
+</VBox>

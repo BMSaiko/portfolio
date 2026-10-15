@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sheetsandpicks.Controllers.Stock.AppDashVizualizarStock">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: transparent;">
+         <children>
+            <ImageView fitHeight="235.0" fitWidth="246.0" layoutX="935.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/1540-1.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="935.0" layoutY="304.0" prefHeight="26.0" prefWidth="78.0" style="-fx-text-fill: white;" text="Nome" />
+            <Label layoutX="935.0" layoutY="357.0" style="-fx-text-fill: white;" text="Fornecedor" />
+            <Label layoutX="999.0" layoutY="309.0" style="-fx-text-fill: white;" text="Bloco de notas" />
+            <Label layoutX="999.0" layoutY="357.0" style="-fx-text-fill: white;" text="Fornecedor1" />
+         </children>
+      </AnchorPane>
+      <TableView fx:id="table_stock" layoutX="37.0" layoutY="33.0" prefHeight="494.0" prefWidth="834.0">
+         <columns>
+            <TableColumn fx:id="c_nome" prefWidth="75.0" text="Nome" />
+            <TableColumn fx:id="c_Fornecedor" prefWidth="126.0" text="Fornecedor" />
+            <TableColumn fx:id="c_Quantidade" prefWidth="126.0" text="Quantidade" />
+            <TableColumn fx:id="c_UOM" prefWidth="126.0" text="UOM" />
+            <TableColumn fx:id="c_p_uni" prefWidth="126.0" text="Preço Unidade" />
+            <TableColumn fx:id="c_v_base" prefWidth="126.0" text="Valor_base" />
+            <TableColumn fx:id="c_pais" prefWidth="126.0" text="Pais" />
+         </columns>
+      </TableView>
+      <Button fx:id="btn_adicionar_stock" layoutX="722.0" layoutY="560.0" mnemonicParsing="false" onAction="#Handler_adicionar_Stock" prefHeight="43.0" prefWidth="149.0" styleClass="sbttn2" stylesheets="@../../../css/mainstyle.css" text="Adicionar Stock" />
+      <Button id="sbttn3" fx:id="btn_confirmar_stock" layoutX="556.0" layoutY="560.0" mnemonicParsing="false" onAction="#Handler_confirmar_Stock" prefHeight="43.0" prefWidth="149.0" styleClass="sbttn3" stylesheets="@../../../css/mainstyle.css" text="Confirmar Stock" />
+   </children>
+</Pane>

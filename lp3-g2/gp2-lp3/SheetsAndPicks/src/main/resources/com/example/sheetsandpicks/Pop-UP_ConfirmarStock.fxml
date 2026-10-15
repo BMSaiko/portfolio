@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import java.lang.String?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="286.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sheetsandpicks.Controllers.Stock.PopUp_ConfirmarStockController">
+   <children>
+      <Label fx:id="lb_produto" layoutX="129.0" layoutY="30.0" text="label" />
+      <ComboBox fx:id="cmb_aceept_reject" layoutX="143.0" layoutY="71.0" prefHeight="25.0" prefWidth="108.0" >
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Rejeitado"/>
+               <String fx:value="Aprovado"/>
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Label layoutX="14.0" layoutY="75.0" text="Confirmar/Rejeitar" />
+      <Button fx:id="btn_ok" layoutX="215.0" layoutY="144.0" mnemonicParsing="false" onAction="#Handle_Confirmation_Option" text="OK!" />
+   </children>
+</Pane>

@@ -1,0 +1,84 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	background-color: #FD0905;
+	color: black ;
+	font-family: 'Rubik', sans-serif;
+}
+
+.fontH {
+	color: #FD0905;
+	font-family: 'Bebas Neue', cursive;
+}
+
+.fontP {
+	color: gray;
+	font-size: 20px;
+	font-family: 'Bebas Neue', cursive;
+}
+
+.bgBlack {
+	background-color: #202020 !important;
+	color:white !important;
+}
+
+.bgBlackRed {
+	background-color: #202020 !important;
+	color: #FD0905 !important;
+	font-weight: bold;
+}
+
+.img-logo {
+	background-color: #202020 !important;
+	border-radius: 25px;
+	height: 50%;
+	width: 50%;
+}
+
+.navBlack{
+	background-color: #202020 !important;
+	color:#FD0905 !important;
+}
+
+.navDrop{
+	background-color: #333333 !important;
+	color:#FD0905 !important;
+}
+
+li{
+	background-color:transparent;
+}
+
+.navBlack a {
+	border-radius: 25px;
+	font-weight: bold;
+}
+
+.navBlack a:hover {
+	background-color: #FD0905 !important;
+	color: white !important;
+	border-radius: 25px;
+}
+
+.bgBlackRed button{
+	border-radius: 25px;
+	font-weight: bold;
+}
+
+.bgBlackRed button:hover{
+	background-color: #FD0905 !important;
+	color: white !important;
+	border-radius: 25px;
+}
+
+.carousel-indicators {
+	background-color: transparent !important;
+}
+
+.gridWhite {
+	background-color: white !important;
+}
+
+.borda{
+	border-radius: 25px;
+}

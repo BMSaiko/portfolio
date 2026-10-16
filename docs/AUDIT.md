@@ -64,6 +64,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### lp3-g2
 - Existing: `lp3-g2/Docs/` with use case, sequence and domain model PNGs, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospectives).
 - Gaps: setup, ADR, written architecture overview, API/contracts.
+- Added (pass 2, in the existing `Docs/` folder because Windows treats `docs` and `Docs` as the same path): [ARCHITECTURE](../lp3-g2/Docs/ARCHITECTURE.md) (packages, roles, login and XML-import flows, ER from the SQL export, 7 verified issues), [SETUP](../lp3-g2/Docs/SETUP.md) (commands not tested), [ADR 0001](../lp3-g2/Docs/adr/0001-xsd-validated-xml-import.md).
+- Findings: hardcoded XSD paths (`C:\Trabalho\...`), `ConfirmarStock` processes only the last id, SQL built by concatenation, missing `app_utilizador_movimentos.fxml`, empty test class, no FK on `Produto.id_Encomenda`, `VARCHAR` without length in the export.
 
 ### rentacar
 - Existing: README; SQL file `rentacar/RentACar/src/main/java/olabomdia.sql`.

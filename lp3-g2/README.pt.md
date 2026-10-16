@@ -43,6 +43,9 @@ Requer JDK 17+ e uma base de dados SQL Server; definir o URL JDBC em `SHEETS_DB_
 ## Documentação
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#lp3-g2) — estado e lacunas deste projeto
+- [Arquitetura, modelo de dados e problemas conhecidos](Docs/ARCHITECTURE.pt.md)
+- [Setup e resolução de problemas](Docs/SETUP.pt.md)
+- [ADR 0001 — Importação de XML validada por XSD](Docs/adr/0001-xsd-validated-xml-import.pt.md)
 - [Pasta de documentação do projeto](Docs/)
 - [Modelo de base de dados](Docs/Modelo%20de%20base%20de%20dados.png)
 - [Diagrama do modelo de domínio](Docs/diagramaModeloDominio.png)

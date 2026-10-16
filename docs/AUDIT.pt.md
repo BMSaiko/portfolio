@@ -64,6 +64,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### lp3-g2
 - Existente: `lp3-g2/Docs/` com PNG de casos de uso, sequência e modelo de domínio, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospetivas).
 - Lacunas: setup, ADR, visão de arquitetura escrita, API/contratos.
+- Adicionado (passagem 2, na pasta `Docs/` existente porque o Windows trata `docs` e `Docs` como o mesmo caminho): [ARCHITECTURE](../lp3-g2/Docs/ARCHITECTURE.pt.md) (pacotes, papéis, fluxos de login e importação XML, ER a partir do export SQL, 7 problemas verificados), [SETUP](../lp3-g2/Docs/SETUP.pt.md) (comandos não testados), [ADR 0001](../lp3-g2/Docs/adr/0001-xsd-validated-xml-import.pt.md).
+- Achados: caminhos do XSD fixos (`C:\Trabalho\...`), `ConfirmarStock` processa só o último id, SQL por concatenação, falta `app_utilizador_movimentos.fxml`, classe de teste vazia, sem FK em `Produto.id_Encomenda`, `VARCHAR` sem comprimento no export.
 
 ### rentacar
 - Existente: README; SQL em `rentacar/RentACar/src/main/java/olabomdia.sql`.

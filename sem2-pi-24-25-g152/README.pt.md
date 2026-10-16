@@ -1,15 +1,45 @@
-# LEI 2nd semester — Railway game
+# Railway Network Game (Integrative Project, 2nd semester)
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Projeto Integrador do 2.º semestre da LEI (ISEP, 2024/25) — Projeto de grupo (5 elementos).
+> Simulação em Java em que o jogador constrói uma rede ferroviária, com algoritmos de grafos e desempenho medido.
 
-## O que faz
-Aplicação Java em que o jogador constrói uma rede ferroviária: cidades, indústrias, estações, linhas, locomotivas e comboios, geração de carga, manutenção, resultados financeiros e jogos guardados. Inclui componentes de MATCP (Jupyter) e MDISC e documentação completa por user story em `docs/`.
+| | |
+|---|---|
+| **Contexto** | LEI — Projeto Integrador do 2.º semestre (ESINF · MATCP · MDISC) |
+| **Ano** | 2024/25 (Mar–Jun 2025) |
+| **Equipa** | Grupo 152, 5 elementos, 3 sprints |
+| **Stack** | Java 17 · Maven · JUnit · Jupyter (MATCP) · UML / PlantUML |
 
-## Stack
-Java · Maven · Jupyter (MATCP) · UML
+## A minha contribuição
+- Adição de cidades e indústrias aos mapas (US02, US03) com testes e diagramas de sequência.
+- Implementação do **caminho mais curto com waypoints** (US27) com Dijkstra / fecho transitivo, incluindo a UI.
+- Criação da **framework de testes de desempenho e análise** dos algoritmos de conectividade e de rota de manutenção (US13/US14/US29), com cenários, resultados CSV e gráficos.
+- Trabalho no notebook de MATCP e no relatório em LaTeX.
+
+## O que este projeto demonstra
+- **Algoritmos de grafos** (conectividade, caminhos mais curtos, rotas de manutenção) com **análise empírica de complexidade**.
+- Design Java em camadas: controllers, serviços, DTOs, domínio e UI.
+- Documentação completa do processo por user story (requisitos, análise, desenho, testes).
+- Entrega em equipa com sprints Scrum.
+
+## Funcionalidades
+- Editor: criar mapas, adicionar cidades e indústrias.
+- Jogador: construir estações e linhas, comprar locomotivas, circular comboios, geração de carga, manutenção, resultados financeiros, guardar/carregar jogos.
+- Ficheiros de cenário e cenários de teste gerados em `test_scenarios/`.
+
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `src/main/java/pt/ipp/isep/dei/` | Aplicação (controller, domain, dto, ui) |
+| `docs/system-documentation/` | Documentação por US dos sprints 1–3 |
+| `matcp.ipynb, MATCP/` | Componente de MATCP |
+| `test_scenarios/` | Datasets de cenários |
+
+## Execução
+```bash
+mvn compile exec:java -Dexec.mainClass=pt.ipp.isep.dei.Main
+```
 
 ## Notas
-Executar `mvn compile exec:java` (classe principal `pt.ipp.isep.dei.Main`).
-Pastas de build, de IDE e jars ficaram de fora.
+- Documentação em inglês; ver `docs/TeamMembersAndTasks.md` para a distribuição de tarefas.

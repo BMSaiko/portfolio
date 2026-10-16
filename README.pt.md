@@ -2,27 +2,57 @@
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Projetos académicos desenvolvidos durante o curso de Engenharia Informática no ISEP (Instituto Superior de Engenharia do Porto) e num curso profissional (PAP). Cobrem aplicações desktop, desenvolvimento web e sistemas com base de dados, na maioria feitos em grupo.
+Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 projetos académicos** do meu percurso — curso profissional (PAP), CTESP em Desenvolvimento Ágil de Software e Licenciatura em Engenharia Informática (LEI) — com aplicações backend e desktop, web, bases de dados, DevOps, redes e programação de baixo nível. A maioria foi feita em equipa com Scrum.
 
-| Projeto | Stack | Resumo |
-|---|---|---|
-| [pap-gym](pap-gym) | C# · WPF · MySQL · HTML/CSS | Aplicação desktop de gestão de ginásio (PAP 2021/22) |
-| [lp3-g2](lp3-g2) | Java · JavaFX · Gradle · SQL Server | Aplicação "Sheets and Picks" de gestão de stock e encomendas, com documentação Scrum |
-| [dsos-grupo1-bombastico](dsos-grupo1-bombastico) | PHP · Laravel · MySQL | Plataforma de gestão de propostas de estágio/projeto entre alunos, docentes e empresas |
-| [lp1-2022-g2-tema1](lp1-2022-g2-tema1) | HTML · CSS · JS | Website estático sobre a AMD: história, arquiteturas, sockets, AMD vs Intel |
-| [companhia-aerea](companhia-aerea) | Java · Maven | Gestão de voos de uma companhia aérea, aplicação de consola (versão inicial) |
-| [apoo-lp1-companhia-aerea](apoo-lp1-companhia-aerea) | Java · Maven | Gestão de voos de uma companhia aérea, consola (grupo 3, refactor OO) |
-| [biblioteca-ermesinde](biblioteca-ermesinde) | C# · ASP.NET Core · SQL Server · Docker · Jenkins | API de gestão de biblioteca com CI/CD, SonarQube e testes (projeto final CTESP) |
-| [porto-on-wheels](porto-on-wheels) | PHP · MySQL · Bootstrap | Website de aluguer de carros/bicicletas/trotinetes com back-office |
-| [rentacar](rentacar) | Java · JavaFX · Gradle · SQL Server | Aplicação desktop de gestão de aluguer de automóveis |
-| [rcomp-25-26-de-g2](rcomp-25-26-de-g2) | Cisco Packet Tracer · Networking | Desenho de rede de campus e simulações Packet Tracer |
-| [sem2-pi-24-25-g152](sem2-pi-24-25-g152) | Java · Maven · Jupyter (MATCP) · UML | Jogo de construção ferroviária (projeto integrador do 2.º semestre da LEI) |
-| [sem3-pi-24-25-g152](sem3-pi-24-25-g152) | Oracle PL/SQL · C · Assembly · Arduino · Java | Gestão de chão de fábrica: Oracle, C/Assembly, Java (LEI 3.º semestre, 2024/25) |
-| [sem3-pi-25-26-g075](sem3-pi-25-26-g075) | Java · Oracle SQL · Scrum | Logística de estações/armazéns ferroviários com Oracle (LEI 3.º semestre, 2025/26) |
-| [sem4pi-25-26-2de4](sem4pi-25-26-2de4) | Java · EAPLI · Maven · C · PlantUML | Plataforma de controlo de voos AISafe (LEI 4.º semestre) |
+## Por onde começar
+| Se te interessa… | Vê |
+|---|---|
+| Arquitetura, DDD, processamento de linguagens, programação de sistemas em C | [sem4pi-25-26-2de4](sem4pi-25-26-2de4) |
+| Algoritmos e estruturas de dados com análise de complexidade | [sem3-pi-25-26-g075](sem3-pi-25-26-g075), [sem2-pi-24-25-g152](sem2-pi-24-25-g152) |
+| DevOps, CI/CD, testes, contentores | [biblioteca-ermesinde](biblioteca-ermesinde) |
+| Prática ágil (artefactos Scrum, UAT) | [lp3-g2](lp3-g2) |
+| Redes | [rcomp-25-26-de-g2](rcomp-25-26-de-g2) |
+| Bases de dados (Oracle PL/SQL, SQL Server, MySQL) | [sem3-pi-24-25-g152](sem3-pi-24-25-g152), [lp3-g2](lp3-g2), [dsos-grupo1-bombastico](dsos-grupo1-bombastico) |
 
-Cada pasta tem o seu `README.md` (inglês) e `README.pt.md` (português).
+## Competências nos projetos
+- **Linguagens:** Java, C#, C, PHP, SQL/PL-SQL, Python, Assembly RISC-V/x86, JavaScript, HTML/CSS.
+- **Frameworks e ferramentas:** JavaFX, WPF, ASP.NET Core, Laravel, Entity Framework, Maven, Gradle, JUnit, xUnit, ANTLR4, EAPLI.
+- **Práticas:** Scrum, DDD, testes unitários, documentação UML/PlantUML, CI/CD (Jenkins, SonarQube, Docker), Git.
+- **Redes:** VLAN/STP/OSPF, DHCP/DNS/VoIP/NAT/ACLs em Cisco Packet Tracer.
+
+## Projetos
+### LEI — Licenciatura em Engenharia Informática (ISEP)
+
+| Projeto | Ano | Stack | Resumo |
+|---|---|---|---|
+| [sem4pi-25-26-2de4](sem4pi-25-26-2de4) | 2025/26 | Java · DDD · ANTLR · C · TCP/UDP | Plataforma de controlo de voos AISafe |
+| [sem3-pi-25-26-g075](sem3-pi-25-26-g075) | 2025/26 | Java · Oracle · RISC-V · C | Logística ferroviária/armazéns: KD-tree, centralidade em grafos, assembly |
+| [rcomp-25-26-de-g2](rcomp-25-26-de-g2) | 2025/26 | Packet Tracer · OSPF · VLAN · DHCP/DNS/VoIP | Rede de campus aeroportuário, Terminal 2 |
+| [sem3-pi-24-25-g152](sem3-pi-24-25-g152) | 2024/25 | Java · PL/SQL · C · Assembly · Arduino | Gestão de chão de fábrica, PERT/CPM |
+| [sem2-pi-24-25-g152](sem2-pi-24-25-g152) | 2024/25 | Java · graphs · JUnit | Jogo ferroviário com análise de desempenho de algoritmos |
+
+### CTESP — Desenvolvimento Ágil de Software (ISEP)
+
+| Projeto | Ano | Stack | Resumo |
+|---|---|---|---|
+| [biblioteca-ermesinde](biblioteca-ermesinde) | 2023/24 | ASP.NET Core · EF Core · Docker · Jenkins · SonarQube | API de biblioteca com pipeline DevOps completo (projeto final) |
+| [lp3-g2](lp3-g2) | 2023/24 | JavaFX · Gradle · SQL Server · XML/XSD | Sheets and Picks: stock/encomendas, Scrum |
+| [dsos-grupo1-bombastico](dsos-grupo1-bombastico) | 2023/24 | PHP · Laravel · MySQL | Plataforma de propostas de estágio/projeto |
+| [rentacar](rentacar) | 2023/24 | JavaFX · Gradle · SQL Server | Aplicação desktop de gestão de aluguer de automóveis |
+| [porto-on-wheels](porto-on-wheels) | 2023/24 | PHP · MySQL · Bootstrap | Website de aluguer de carros/bicicletas/trotinetes + admin |
+| [apoo-lp1-companhia-aerea](apoo-lp1-companhia-aerea) | 2022/23 | Java · Maven | Gestão de companhia aérea, design OO |
+| [companhia-aerea](companhia-aerea) | 2022/23 | Java · Maven | Gestão de companhia aérea, versão inicial |
+| [lp1-2022-g2-tema1](lp1-2022-g2-tema1) | 2022 | HTML · CSS · JS | Website informativo sobre a AMD |
+
+### PAP — Prova de Aptidão Profissional (ensino profissional)
+
+| Projeto | Ano | Stack | Resumo |
+|---|---|---|---|
+| [pap-gym](pap-gym) | 2021/22 | C# · WPF · MySQL | Aplicação de gestão de ginásio + website |
+
+Cada pasta tem `README.md` (inglês) e `README.pt.md` (português) com contexto, a minha contribuição (quando é distinguível da equipa), funcionalidades, estrutura e como executar.
 
 ## Notas
-- Os projetos foram importados sem o histórico git original.
-- Segredos (`.env`, pastas vendor, arquivos) ficaram de fora de propósito.
+- Os projetos foram importados sem o histórico git original; os projetos de grupo foram feitos em equipa e os READMEs indicam-no.
+- Segredos (`.env`, tokens de API, passwords de bases de dados) foram removidos ou substituídos por variáveis de ambiente/placeholders. Outputs de build, pastas de IDE e arquivos ficaram de fora.
+- Alguma documentação está em português, tal como entregue às unidades curriculares.

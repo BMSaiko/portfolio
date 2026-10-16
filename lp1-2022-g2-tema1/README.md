@@ -1,20 +1,36 @@
-# LP1 2022 — Group 2, Topic 1: AMD
+# AMD — Static Website (LP1)
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Static website for the *Laboratório de Programação 1* course (ISEP, 2022) about AMD, written in Portuguese.
+> Multi-page informational website about AMD: history, architectures, sockets, AMD vs Intel.
 
-## Pages
-| Page | Content |
+| | |
 |---|---|
-| `index.html` | Home and team credits |
-| `pages/history.html` | Company history and a short timeline of AMD processors |
-| `pages/arch.html` | Architectures: K8/Hammer, K10, Llano (APU), Bobcat, Jaguar/Puma, Zen to Zen 4 and the future |
-| `pages/sockets.html` | What sockets are; desktop/workstation and server sockets |
-| `pages/amdvsintel.html` | Intel vs AMD: what are the differences? |
+| **Context** | CTESP — Programming Lab 1 |
+| **Year** | 2022 |
+| **Team** | Group 2 |
+| **Stack** | HTML · CSS · JavaScript (no build step) |
 
-## Stack
-HTML · CSS · JavaScript (no build step)
+## What this project shows
+- Semantic HTML/CSS and consistent multi-page navigation.
+- Research, structuring and writing technical content for a general audience.
+
+## Features
+- `index.html` — home and team credits.
+- `pages/history.html` — company history and processor timeline.
+- `pages/arch.html` — K8, K10, Llano, Bobcat, Jaguar/Puma, Zen to Zen 4.
+- `pages/sockets.html` — desktop/workstation and server sockets.
+- `pages/amdvsintel.html` — differences between Intel and AMD.
+
+## Structure
+| Path | Content |
+|---|---|
+| `pages/` | Content pages |
+| `styles/` | CSS |
+| `assets/` | Images and media |
 
 ## Running
 Open `index.html` in a browser.
+
+## Notes
+- Site content is in Portuguese.

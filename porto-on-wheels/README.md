@@ -2,20 +2,37 @@
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Group web project: a vehicle rental website for Porto (cars, bikes and scooters) with user accounts, a cart and an admin back-office.
+> Vehicle rental website (cars, bikes, scooters) with accounts, cart and admin back-office.
 
-## What it does
-- **Public site** — catalogue pages (`cars.php`, `bikes.php`, `scooters.php`), cart, rental booking, registration/login, user profile, contact, FAQs and about pages.
-- **Admin (`admin/`)** — dashboard with tables and CRUD for users, cars and bikes.
-- **`src/database/`** — small PHP MySQL wrapper (`db.php`) and auth/booking scripts.
+| | |
+|---|---|
+| **Context** | CTESP — Group web project |
+| **Year** | 2023/24 |
+| **Team** | Team project |
+| **Stack** | PHP · MySQL · HTML · CSS · JavaScript · Bootstrap (SB Admin back-office) |
 
-## Stack
-PHP · MySQL · HTML · CSS · JavaScript · Bootstrap (SB Admin template for the back-office)
+## What this project shows
+- Server-rendered PHP with a small custom **MySQL wrapper** using prepared statements (`src/database/db.php`).
+- Public site + authenticated user area + admin area with CRUD.
+- Responsive front-end built on Bootstrap.
+
+## Features
+- Catalogue pages: cars, bikes, scooters; cart and rental booking.
+- Registration, login, user profile; contact, FAQs, about.
+- Admin dashboard with tables and CRUD for users, cars and bikes.
+
+## Structure
+| Path | Content |
+|---|---|
+| `admin/` | Back-office (dashboard, tables, CRUD) |
+| `src/database/` | DB wrapper, auth and booking scripts |
+| `assets/` | CSS, JS, images |
 
 ## Running
-1. Create a MySQL database called `portoonwheels` (the schema is not included in the original repository).
-2. Set `PORTOONWHEELS_DB_HOST`, `PORTOONWHEELS_DB_USER` and `PORTOONWHEELS_DB_PASSWORD` (defaults: `localhost`, `root`, empty).
-3. Serve the folder with PHP/Apache, e.g. `php -S localhost:8000`.
+1. Create a MySQL database `portoonwheels` (schema not included in the original repo).
+2. Set `PORTOONWHEELS_DB_HOST`, `PORTOONWHEELS_DB_USER`, `PORTOONWHEELS_DB_PASSWORD`.
+3. `php -S localhost:8000`
 
 ## Notes
-The original database credentials and Mapbox token (`contact.php`, placeholder `<MAPBOX_PUBLIC_TOKEN>`) were removed. Passwords are stored in plain text in this academic version.
+- Original DB credentials and the Mapbox token (`contact.php`, `<MAPBOX_PUBLIC_TOKEN>`) were removed, so the map needs your own token.
+- Academic version: passwords are stored in plain text — not suitable for production.

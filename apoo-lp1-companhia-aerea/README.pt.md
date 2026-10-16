@@ -1,18 +1,35 @@
-# APOO / LP1 — Gestão de Companhia Aérea (Grupo 3)
+# Airline Management — OOP refactor (Group 3)
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Aplicação de consola em Java para gestão de voos de uma companhia aérea, feita pelo grupo 3 para as UCs de APOO e LP1 (ISEP). Estende a [versão inicial](../companhia-aerea) com um desenho orientado a objetos mais limpo.
+> Aplicação de consola Java para voos de uma companhia aérea, refeita com um design orientado a objetos mais limpo.
 
-## Desenho
-- Domínio: `Voo`, `Aviao`, `Aeroporto`, `Passageiro`, `Tripulante`, com `Pessoa` como superclasse comum (herança).
-- Pacote `utils`: `Console` (leitura de dados), `Data` (datas), `File` (guardar/ler ficheiros).
+| | |
+|---|---|
+| **Contexto** | CTESP — Programação Orientada a Objetos (APOO) / LP1 |
+| **Ano** | 2022/23 |
+| **Equipa** | Grupo 3 |
+| **Stack** | Java · Maven |
 
-## Stack
-Java · Maven
+## O que este projeto demonstra
+- **Herança** (`Pessoa` → `Passageiro`, `Tripulante`) e encapsulamento.
+- Separação entre domínio e utilitários (`Console`, `Data`, `File`).
+- Persistência em ficheiro (guardar/carregar) em Java puro.
 
-## Como executar
+## Funcionalidades
+- Domínio: `Voo`, `Aviao`, `Aeroporto`, `Passageiro`, `Tripulante`, `Pessoa` (superclasse).
+- `utils`: leitura de input, datas e persistência em ficheiro.
+
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `grupo3-apoo-lp1-projeto-companhiaarea/` | Projeto Maven |
+
+## Execução
 ```bash
 cd grupo3-apoo-lp1-projeto-companhiaarea
 mvn compile exec:java -Dexec.mainClass=org.companhiaaerea.Main
 ```
+
+## Notas
+- Evolução da [versão inicial](../companhia-aerea).

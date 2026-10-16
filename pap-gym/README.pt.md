@@ -2,20 +2,37 @@
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Projeto final de curso profissional (PAP, 12.º ano, 2021/22): sistema de gestão de ginásio composto por uma aplicação desktop e um website de apresentação.
+> Gestão de ginásio: aplicação desktop WPF e website promocional.
 
-## O que faz
-- **Aplicação desktop (`spump/`)** — C# / WPF, padrão MVVM, base de dados MySQL. Gestão de clientes, professores, salas, modalidades, exercícios e aulas de grupo; edição de planos de treino; aulas do dia e horários das aulas.
-- **Website (`site/`)** — página HTML/CSS estática com formulário de registo.
-- **`img/`** — capturas de todos os ecrãs, diagramas da base de dados e anexos do projeto.
+| | |
+|---|---|
+| **Contexto** | Curso profissional (PAP) — projeto final |
+| **Ano** | 2021/22 |
+| **Equipa** | Projeto final (PAP), 12.º ano |
+| **Stack** | C# · .NET Framework 4.7.2 · WPF/XAML (MVVM) · MySQL · HTML · CSS |
 
-## Stack
-C# · .NET Framework 4.7.2 · WPF/XAML · MySQL · HTML · CSS
+## O que este projeto demonstra
+- Arquitetura de aplicação desktop com **MVVM** em WPF.
+- Modelação relacional em MySQL (clientes, professores, salas, modalidades, exercícios, aulas) com diagramas em `img/`.
+- Entrega ponta a ponta: aplicação, base de dados, website e ecrãs documentados.
 
-## Como executar
-1. Criar uma base de dados MySQL chamada `gym` em `localhost` (esquema nos anexos do projeto).
+## Funcionalidades
+- Gestão de clientes, professores, salas, modalidades, exercícios e aulas de grupo.
+- Edição de planos de treino; consulta das aulas do dia e dos horários.
+- Landing page estática HTML/CSS com formulário de registo (`site/`).
+- Capturas de todos os ecrãs e diagramas da base de dados em `img/`.
+
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `spump/` | Solução WPF (Visual Studio) |
+| `site/` | Website promocional |
+| `img/` | Capturas, diagramas de BD, anexos |
+
+## Execução
+1. Criar uma base de dados MySQL `gym` em `localhost` (esquema nos anexos).
 2. Abrir `spump/spump.sln` no Visual Studio, restaurar os pacotes NuGet e executar.
-3. A connection string está em `spump/spump/BD.cs`; a password é lida da variável de ambiente `GYM_DB_PASSWORD`.
+3. A password é lida da variável de ambiente `GYM_DB_PASSWORD` (`spump/spump/BD.cs`).
 
-## Capturas de ecrã
-Ver [`img/screenshoots`](img/screenshoots) e [`img/App`](img/App).
+## Notas
+- Os textos da interface estão em português.

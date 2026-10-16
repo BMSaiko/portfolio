@@ -1,15 +1,40 @@
-# RCOMP 2025/26 — Campus network
+# RCOMP 2025/26 — Airport campus network
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Redes de Computadores (RCOMP), ISEP 2025/26 — Projeto de grupo (3 elementos).
+> Desenho e simulação da rede de um campus aeroportuário com quatro terminais, em três sprints.
 
-## O que faz
-Cablagem estruturada e desenho de rede para um campus com vários edifícios, em três sprints: esquemas por membro, planos de cablagem e simulações Packet Tracer (`.pkt`) em `doc/`.
+| | |
+|---|---|
+| **Contexto** | LEI — Redes de Computadores (RCOMP) |
+| **Ano** | 2025/26 (Feb–May 2026) |
+| **Equipa** | Grupo de 3 (turma DE, grupo 2) |
+| **Stack** | Cisco Packet Tracer · structured cabling (T568B) · VLAN/VTP/STP · OSPF · DHCPv4 · DNS · VoIP · NAT · ACLs |
 
-## Stack
-Cisco Packet Tracer · Networking
+## A minha contribuição
+- Responsável pelo **Terminal 2** em todos os sprints (cablagem, simulação, serviços).
+- Sprint master do Sprint 1; coordenei as decisões técnicas globais (p. ex. norma T568B) e o inventário global.
+
+## O que este projeto demonstra
+- Projeto de cablagem estruturada com plantas, medições e normas.
+- Engenharia de rede L2/L3: **VLANs, VTP, trunking, redundância STP**, router-on-a-stick, **OSPF**.
+- Serviços de rede: **DHCPv4, DNS (domínio raiz), telefonia VoIP, NAT estático, ACLs de firewall**.
+- Prática de equipa: plannings, reviews e documentação por membro.
+
+## Funcionalidades
+- **Sprint 1** — cablagem estruturada dos terminais do campus (tomadas, APs Wi-Fi, cross-connects, backbone).
+- **Sprint 2** — simulação em Packet Tracer do Terminal 2: 10 switches, router Cisco 2811, ligações HCC redundantes, ligação ao backbone do campus e ao ISP.
+- **Sprint 3** — OSPF (área 2) a substituir rotas estáticas, DHCPv4 em todas as redes, VoIP com reencaminhamento, DNS, NAT estático para servidor HTTP/HTTPS, ACLs.
+
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `doc/sprint1/` | Projeto de cablagem, planeamento, review, inventário global |
+| `doc/sprint2/` | Simulações Packet Tracer e configurações |
+| `doc/sprint3/` | Configuração de routing e serviços |
+
+## Execução
+Abrir os ficheiros `.pkt` no Cisco Packet Tracer (p. ex. `doc/sprint2/1221514/Terminal2.pkt`). As configurações estão em `docs-running-config/`.
 
 ## Notas
-Desenho da infraestrutura de rede (cablagem UTP/fibra, VLANs, routing) com documentação por sprint.
-Pastas de build, de IDE e jars ficaram de fora.
+- A documentação mistura inglês e português, tal como entregue.

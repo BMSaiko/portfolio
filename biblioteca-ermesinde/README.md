@@ -2,21 +2,38 @@
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Final project of the CTESP in Agile Software Development (ISEP, 2023/24): a library management REST API with a full DevOps toolchain around it.
+> Library REST API with a complete DevOps pipeline: containers, CI, static analysis and a provisioned database VM.
 
-## What it does
-- **API (`Biblioteca_Ermesinde/`)** — ASP.NET Core 7 with Entity Framework Core and SQL Server. Controllers for clients, books and reservations.
-- **Tests (`Teste_Biblioteca/`)** — xUnit + Moq unit tests.
-- **DevOps** — `dockerfile` + `docker-compose.yml` (API, SQL Server, SonarQube), `jenkinsfile` CI pipeline, SonarQube analysis and a `vagrant/` VM running SQL Server.
-- **`Relatorio_de_DOS.docx`** — project report.
+| | |
+|---|---|
+| **Context** | CTESP — Final project (Agile Software Development) |
+| **Year** | 2023/24 |
+| **Team** | Team project |
+| **Stack** | C# · .NET 7 · ASP.NET Core · EF Core · SQL Server · xUnit · Moq · Docker · Jenkins · SonarQube · Vagrant |
 
-## Stack
-C# · .NET 7 · ASP.NET Core · EF Core · SQL Server · xUnit · Moq · Docker · Jenkins · SonarQube · Vagrant
+## What this project shows
+- **REST API** in ASP.NET Core with Entity Framework Core migrations.
+- **Automated tests** (xUnit + Moq) and **SonarQube** static analysis.
+- **CI/CD and infrastructure**: Dockerfile, Docker Compose (API + SQL Server + SonarQube), Jenkins pipeline, Vagrant VM.
+- Secrets handled through environment variables in this public version.
+
+## Features
+- Clients, books and reservations (`Cliente`, `Livro`, `Reserva` controllers).
+- Create a reservation, get a reservation, list the books of a client.
+- EF Core migrations and models (`Cliente`, `Livro`, `Reserva`, `ReservaLivro`).
+
+## Structure
+| Path | Content |
+|---|---|
+| `Biblioteca_Ermesinde/` | ASP.NET Core API |
+| `Teste_Biblioteca/` | xUnit + Moq tests |
+| `dockerfile, docker-compose.yml, jenkinsfile, vagrant/` | DevOps toolchain |
+| `Relatorio_de_DOS.docx` | Project report (Portuguese) |
 
 ## Running
-1. Set the `SA_PASSWORD` environment variable (and `SONAR_TOKEN` for the Sonar build step).
+1. Set `SA_PASSWORD` (and `SONAR_TOKEN` for the Sonar build step).
 2. `docker compose up --build`, or start the SQL Server VM with `vagrant up` and run the API from Visual Studio.
-3. Update the connection string in `appsettings*.json` (`<SA_PASSWORD>` placeholder).
+3. Connection string placeholder `<SA_PASSWORD>` in `appsettings*.json`.
 
 ## Notes
-Credentials and tokens present in the original repository were replaced by environment variables / placeholders.
+- Tokens and passwords of the original repository were replaced by variables/placeholders; the Jenkins job expects a `bitbucket-token` credential.

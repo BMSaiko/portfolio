@@ -1,22 +1,35 @@
-# Companhia Aérea — versão inicial
+# Companhia Aérea — early version
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Aplicação de consola em Java para gestão dos voos de uma companhia aérea (UC de LP1, ISEP). É a versão inicial; a versão refatorizada do grupo está em [`../apoo-lp1-companhia-aerea`](../apoo-lp1-companhia-aerea).
+> Aplicação de consola para gerir voos de uma companhia aérea — a primeira iteração, depois refeita em `apoo-lp1-companhia-aerea`.
 
-## Modelo de domínio
-`Voo` · `Aviao` (matrícula, marca/modelo, lugares turística/executiva) · `Aeroporto` (sigla, país, cidade mais próxima) · `Passageiro` (email, tipo de bilhete, lugar) · tripulação.
+| | |
+|---|---|
+| **Contexto** | CTESP — Laboratório de Programação 1 (LP1) |
+| **Ano** | 2022/23 |
+| **Equipa** | Projeto de equipa |
+| **Stack** | Java · Maven |
 
-## Menu previsto
-Adicionar/remover voo, pesquisar por rota e data, mostrar/alterar passageiros, pesquisar voos num intervalo de datas, voo com mais passageiros, total e média de passageiros por rota, guardar/ler ficheiro.
+## O que este projeto demonstra
+- Modelação de um domínio real com classes (voo, avião, aeroporto, passageiro, tripulação).
+- Menus de consola e tratamento de input em Java.
+- Iteração honesta: esta é a versão inicial; o refactor OO está no projeto seguinte.
 
-> Estado: em desenvolvimento — apenas "adicionar voo" está implementado no menu.
+## Funcionalidades
+- Domínio: `Voo`, `Aviao` (matrícula, modelo, lugares turística/executiva), `Aeroporto` (código, país, cidade mais próxima), `Passageiro` (email, tipo de bilhete, lugar), tripulação.
+- Menu planeado: adicionar/remover voo, pesquisar por rota e data, listar/editar passageiros, voos num intervalo de datas, voo com mais passageiros, totais e médias por rota, guardar/carregar.
 
-## Stack
-Java · Maven
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `CompanhiaAerea/` | Projeto Maven |
 
-## Como executar
+## Execução
 ```bash
 cd CompanhiaAerea
 mvn compile exec:java -Dexec.mainClass=org.example.Main
 ```
+
+## Notas
+- Trabalho em curso: no menu só está implementado “adicionar voo”. A versão concluída está em [`apoo-lp1-companhia-aerea`](../apoo-lp1-companhia-aerea).

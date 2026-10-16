@@ -1,22 +1,35 @@
-# Companhia Aérea (airline) — early version
+# Companhia Aérea — early version
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Console application in Java for managing the flights of an airline (*LP1* course, ISEP). This is the early version; the refactored group version is in [`../apoo-lp1-companhia-aerea`](../apoo-lp1-companhia-aerea).
+> Console app to manage airline flights — the first iteration, later refactored in `apoo-lp1-companhia-aerea`.
 
-## Domain model
-`Voo` (flight) · `Aviao` (aircraft: registration, model, tourist/executive seats) · `Aeroporto` (airport: code, country, nearest city) · `Passageiro` (passenger: email, ticket type, seat) · crew members.
+| | |
+|---|---|
+| **Context** | CTESP — Programming Lab 1 (LP1) |
+| **Year** | 2022/23 |
+| **Team** | Team project |
+| **Stack** | Java · Maven |
 
-## Planned menu
-Add/remove flight, search by route and date, list/edit passengers, search flights in a date range, flight with most passengers, total and average passengers per route, save/load file.
+## What this project shows
+- Modelling a real domain with classes (flight, aircraft, airport, passenger, crew).
+- Console menus and input handling in Java.
+- Honest iteration: this is the early version; the OOP refactor lives in the next project.
 
-> Status: work in progress — only "add flight" is implemented in the menu.
+## Features
+- Domain: `Voo`, `Aviao` (registration, model, tourist/executive seats), `Aeroporto` (code, country, nearest city), `Passageiro` (email, ticket type, seat), crew.
+- Planned menu: add/remove flight, search by route and date, list/edit passengers, flights in a date range, flight with most passengers, totals and averages per route, save/load.
 
-## Stack
-Java · Maven
+## Structure
+| Path | Content |
+|---|---|
+| `CompanhiaAerea/` | Maven project |
 
 ## Running
 ```bash
 cd CompanhiaAerea
 mvn compile exec:java -Dexec.mainClass=org.example.Main
 ```
+
+## Notes
+- Work in progress: only “add flight” is implemented in the menu. See the finished version in [`apoo-lp1-companhia-aerea`](../apoo-lp1-companhia-aerea).

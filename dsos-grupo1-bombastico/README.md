@@ -1,24 +1,33 @@
-# DSOS Group 1 — Project Proposals Platform
+# Project Proposals Platform (DSOS)
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Web application built with Laravel for the *Desenvolvimento de Sistemas Orientados a Serviços* course (ISEP, 2023/24). It manages the lifecycle of internship and project proposals between **students, teachers and companies**.
+> Laravel web platform managing internship and project proposals between students, teachers and companies.
 
-## What it does
+| | |
+|---|---|
+| **Context** | CTESP — Service-Oriented Systems Development (DSOS) |
+| **Year** | 2023/24 |
+| **Team** | Group 1 |
+| **Stack** | PHP · Laravel · MySQL · Blade · Bootstrap (Material Dashboard) · Composer · npm |
+
+## What this project shows
+- **MVC with Laravel**: models, controllers, Blade views, migrations and routes.
+- Multi-role workflows (student, teacher, company) with state tracking.
+- Database design and seed dump (`DB/`).
+
+## Features
 - Registration, login and password recovery.
-- Companies/teachers publish **proposals**; students apply, teachers apply as supervisors.
-- Accept or reject student applications; track proposal and application states.
-- Project delivery (file submission) and **feedback** on projects.
+- Companies/teachers publish proposals; students apply, teachers apply as supervisors.
+- Accept/reject applications; track proposal and application states.
+- Project delivery (file submission) and feedback.
 - Profile editing, company and student listings, application PDF.
 
 ## Structure
 | Path | Content |
 |---|---|
 | `DSOS-grupo1-Bombastico/` | Laravel app (`app/Models`, `app/Http/Controllers`, `routes/web.php`, migrations) |
-| `DB/2023_ERM_DSOS_G1.sql` | Database dump (users, students, teachers, companies, proposals, projects, relations) |
-
-## Stack
-PHP · Laravel · MySQL · Blade · Bootstrap (Material Dashboard) · Composer · npm
+| `DB/2023_ERM_DSOS_G1.sql` | Database dump |
 
 ## Running
 ```bash
@@ -29,3 +38,6 @@ php artisan key:generate
 php artisan migrate       # or import ../DB/2023_ERM_DSOS_G1.sql
 php artisan serve
 ```
+
+## Notes
+- `vendor/` and `.env` are not included.

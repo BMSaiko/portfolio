@@ -1,33 +1,41 @@
-# LP3 Group 2 — Sheets and Picks
+# Sheets and Picks (LP3)
 
 🇬🇧 English · [🇵🇹 Português](README.pt.md)
 
-Team project for the *Laboratório de Programação 3* course (ISEP, 2023/24): a JavaFX desktop application for stock and order management, developed with Scrum over six sprints.
+> JavaFX desktop application for stock and order management, built with Scrum.
 
-## What it does
-- Login and role-based dashboards: **admins, operators, clients and suppliers**.
-- User management (create, update, list users per role).
-- **Stock** viewing and confirmation, supplier movements.
-- **XML import** of orders/stock, validated against an XSD schema (`XSDverificator.xsd`); sample files in `XMLs/`.
-- SQL Server persistence over JDBC.
+| | |
+|---|---|
+| **Context** | CTESP — Programming Lab 3 (LP3) |
+| **Year** | 2023/24 |
+| **Team** | Group 2 — Scrum, six sprints |
+| **Stack** | Java · JavaFX 15 · Gradle · ControlsFX · SQL Server (mssql-jdbc) · JUnit · XML/XSD |
 
-## Repository layout
+## What this project shows
+- **Agile delivery**: sprint plannings, groomings and retrospectives plus a UAT test plan (`Docs/`).
+- **XML import validated by XSD** schema.
+- Role-based desktop UI with JavaFX and JDBC persistence.
+
+## Features
+- Login and dashboards per role: admins, operators, clients, suppliers.
+- User management (create, update, list per role).
+- Stock viewing and confirmation, supplier movements.
+- XML import of orders/stock validated against `XSDverificator.xsd`; samples in `XMLs/`.
+
+## Structure
 | Path | Content |
 |---|---|
 | `gp2-lp3/SheetsAndPicks` | Gradle project (JavaFX, modules, jlink) |
-| `gp2-lp3/SheetsAndPicks-1.0-SNAPSHOT` | Packaged build |
-| `Docs/Sprints` | Sprint plannings, groomings and retrospectives (PDF, Portuguese) |
-| `Docs/UAT Test Plan.pdf` | User acceptance test plan (Portuguese) |
-| `XMLs` | Sample XML input files |
-
-## Stack
-Java · JavaFX 15 · Gradle · ControlsFX · SQL Server (mssql-jdbc) · JUnit
+| `Docs/Sprints` | Sprint documents (PDF, Portuguese) |
+| `Docs/UAT Test Plan.pdf` | User acceptance test plan |
+| `XMLs/` | Sample XML inputs |
 
 ## Running
 ```bash
 cd gp2-lp3/SheetsAndPicks
 ./gradlew run
 ```
-Requires JDK 17+ and access to the SQL Server database. Set the full JDBC URL (including credentials) in the `SHEETS_DB_URL` environment variable, e.g. `jdbc:sqlserver://host;databaseName=db;user=u;password=p`. See `Controllers/database/DBConnect.java`.
+Requires JDK 17+ and a SQL Server database; set the JDBC URL in `SHEETS_DB_URL` (see `Controllers/database/DBConnect.java`).
 
-> The project documentation (PDFs) is in Portuguese, as delivered to the course.
+## Notes
+- Project documentation (PDFs) is in Portuguese, as delivered.

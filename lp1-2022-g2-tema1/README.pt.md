@@ -1,20 +1,36 @@
-# LP1 2022 — Grupo 2, Tema 1: AMD
+# AMD — Static Website (LP1)
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Website estático para a UC de Laboratório de Programação 1 (ISEP, 2022) sobre a AMD.
+> Website informativo multi-página sobre a AMD: história, arquiteturas, sockets, AMD vs Intel.
 
-## Páginas
-| Página | Conteúdo |
+| | |
 |---|---|
-| `index.html` | Início e créditos da equipa |
-| `pages/history.html` | História da empresa e cronologia dos processadores AMD |
-| `pages/arch.html` | Arquiteturas: K8/Hammer, K10, Llano (APU), Bobcat, Jaguar/Puma, Zen a Zen 4 e futuro |
-| `pages/sockets.html` | O que são sockets; sockets desktop/workstation e servidor |
-| `pages/amdvsintel.html` | Intel vs AMD: quais as diferenças? |
+| **Contexto** | CTESP — Laboratório de Programação 1 |
+| **Ano** | 2022 |
+| **Equipa** | Grupo 2 |
+| **Stack** | HTML · CSS · JavaScript (no build step) |
 
-## Stack
-HTML · CSS · JavaScript (sem build)
+## O que este projeto demonstra
+- HTML/CSS semânticos e navegação consistente entre páginas.
+- Pesquisa, estruturação e escrita de conteúdo técnico para público geral.
 
-## Como executar
-Abrir `index.html` no browser.
+## Funcionalidades
+- `index.html` — página inicial e créditos da equipa.
+- `pages/history.html` — história da empresa e cronologia de processadores.
+- `pages/arch.html` — K8, K10, Llano, Bobcat, Jaguar/Puma, Zen até Zen 4.
+- `pages/sockets.html` — sockets desktop/workstation e servidores.
+- `pages/amdvsintel.html` — diferenças entre Intel e AMD.
+
+## Estrutura
+| Caminho | Conteúdo |
+|---|---|
+| `pages/` | Páginas de conteúdo |
+| `styles/` | CSS |
+| `assets/` | Imagens e multimédia |
+
+## Execução
+Abrir `index.html` num browser.
+
+## Notas
+- O conteúdo do site está em português.

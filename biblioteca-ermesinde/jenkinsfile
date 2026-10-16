@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        DOTNET_VERSION = '7.0' // Adjust to your .NET Core version
+        BITBUCKET_TOKEN = credentials('bitbucket-token')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    echo "Token loaded successfully"
+                    def bitbucketUrl = "https://bitbucket.org/1221529/ctesp2324-final-gde.git"
+                    checkout([$class: 'GitSCM',
+                      branches: [[name: '*/master']],
+                      userRemoteConfigs: [[url: "${bitbucketUrl.replaceFirst('https://', 'https://x-token-auth:' + env.BITBUCKET_TOKEN + '@')}"]]])
+                }
+            }
+        }
+
+        stage('Build') {
+    steps {
+        script {
+            def dotnetHome = tool 'DotNet SDK ' + env.DOTNET_VERSION
+            env.PATH = "${dotnetHome}/bin:${env.PATH}"
+
+            sh 'dotnet restore'
+            sh 'dotnet build -c Release'
+        }
+    }
+}
+
+    }
+}

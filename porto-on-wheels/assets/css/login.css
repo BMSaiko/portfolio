@@ -1,0 +1,52 @@
+.gradient-custom-2 {
+    /* fallback for old browsers */
+    background: #0f5468;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, #25735e, #0f5468);
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #25735e, #0f5468);
+}
+
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: 0.3rem;
+        border-bottom-right-radius: 0.3rem;
+    }
+}
+
+.Button-Login {
+    color: #ffffff;
+    background-color: #053d42;
+    font-size: 17px;
+    border: 1px solid #053d42;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+}
+
+.Button-Login:hover {
+    color: #053d42;
+    background-color: #ffffff;
+}
+
+.create-new-account-btn {
+    color: #6dabb0;
+    background-color: #ffffff;
+    font-size: 15px;
+    border: 2px solid #6dabb0;
+    border-radius: 10px;
+    padding: 5px 30px;
+    cursor: pointer;
+}
+.create-new-account-btn:hover {
+    color: #ffffff;
+    background-color: #6dabb0;
+}

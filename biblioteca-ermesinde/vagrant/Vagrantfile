@@ -1,0 +1,11 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "maquina" do |maquina|
+    config.vm.box = "gusztavvargadr/sql-server"
+    maquina.vm.network "private_network", ip:"10.1.23.254" # Network publica / internet
+    config.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "2048"
+  end
+end
+end
+

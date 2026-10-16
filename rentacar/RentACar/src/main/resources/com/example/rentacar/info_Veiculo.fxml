@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="538.0" prefWidth="707.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Veiculo.infoVeiculoController">
+   <children>
+      <VBox layoutX="19.0" layoutY="194.0" prefHeight="200.0" prefWidth="109.0">
+         <children>
+            <Label text="Matricula:" />
+            <Label text="Marca:" />
+            <Label text="Modelo:" />
+            <Label text="cilindrada:" />
+            <Label text="cavalos:" />
+            <Label text="combustível:" />
+            <Label text="kms:" />
+            <Label text="categoria:" />
+            <Label text="prox. revisao:" />
+            <Label text="prox. inspeção" />
+            <Label text="limpeza:" />
+            <Label text="disponibilidade:" />
+            <Label text="seguro:" />
+         </children>
+      </VBox>
+      <VBox layoutX="123.0" layoutY="197.0" prefHeight="194.0" prefWidth="84.0">
+         <children>
+            <Label fx:id="matricula" />
+            <Label fx:id="marca" />
+            <Label fx:id="modelo" />
+            <Label fx:id="cilindrada" />
+            <Label fx:id="cavalos" />
+            <Label fx:id="combustivel" />
+            <Label fx:id="kms" />
+            <Label fx:id="categoria" />
+            <Label fx:id="prox_revisao" />
+            <Label fx:id="prox_inspecao" />
+            <Label fx:id="limpeza" />
+            <Label fx:id="disponibilidade" />
+            <Label fx:id="seguro" />
+         </children>
+      </VBox>
+      <ImageView fx:id="image" fitHeight="150.0" fitWidth="150.0" layoutX="19.0" layoutY="14.0">
+         <image>
+            <Image url="@images/Car-2-icon.png" />
+         </image>
+      </ImageView>
+      <TableView fx:id="tableRevisao" layoutX="303.0" layoutY="14.0" prefHeight="150.0" prefWidth="386.0" style="-fx-background-radius: 25; -fx-background-color: transparent;">
+        <columns>
+          <TableColumn fx:id="c_proxrevisao" prefWidth="103.0" text="Próxima Revisão" />
+          <TableColumn fx:id="c_revisaokms" prefWidth="83.0" text="Kms" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableOrcamento" layoutX="303.0" layoutY="194.0" prefHeight="332.0" prefWidth="386.0" style="-fx-background-radius: 25; -fx-background-color: transparent;">
+         <columns>
+            <TableColumn fx:id="c_ncliente" prefWidth="83.0" text="Nome Cliente" />
+            <TableColumn fx:id="c_datainic" prefWidth="83.0" text="Dia de inicio" />
+            <TableColumn fx:id="c_datafinal" prefWidth="83.0" text="Dia de fim" />
+            <TableColumn fx:id="c_valor" prefWidth="64.0" text="valor" />
+         </columns>
+      </TableView>
+      <Button fx:id="butchange" layoutX="96.0" layoutY="152.0" mnemonicParsing="false" onAction="#editcarro" style="-fx-background-color: transparent;" text="Change..." textFill="#1e868d" />
+   </children>
+</Pane>

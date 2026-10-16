@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="mypane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1000.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Aluguer.Criar_AluguerController">
+   <children>
+      <VBox prefHeight="265.0" prefWidth="670.0">
+         <children>
+            <Label text="Criar Aluguer">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="11.0" top="20.0" />
+               </VBox.margin>
+            </Label>
+            <HBox prefHeight="210.0" prefWidth="670.0">
+               <children>
+                  <HBox prefHeight="197.0" prefWidth="260.0">
+                     <children>
+                        <VBox prefHeight="276.0" prefWidth="123.0">
+                           <children>
+                              <Label text="nº de Cliente:">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Num Empregado:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Marca:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="11.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="92.0" prefWidth="113.0">
+                           <children>
+                              <TextField fx:id="num_txt" promptText="nº de Cliente" style="-fx-background-color: white;">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="num_empregado_txt" promptText="Num Empregado" style="-fx-background-color: white;">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin></TextField>
+                              <ComboBox fx:id="combo_Marca" onAction="#onmarcachange" prefHeight="26.0" prefWidth="110.0" style="-fx-background-color: #d2cccc; -fx-background-radius: 25;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox prefHeight="161.0" prefWidth="224.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <children>
+                        <VBox prefHeight="163.0" prefWidth="101.0">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <children>
+                              <Label text="Data de Inicio:">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Data de Fim:">
+                                 <VBox.margin>
+                                    <Insets bottom="14.0" top="14.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Modelo:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" right="12.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="combo_EstAluguer" prefHeight="184.0" prefWidth="115.0">
+                           <children>
+                              <DatePicker fx:id="data_iniciodate" onAction="#OnDataChange">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                              <DatePicker fx:id="data_fimdate">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="14.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                              <ComboBox fx:id="combo_Modelo" onAction="#onmodelochange" prefHeight="26.0" prefWidth="110.0" style="-fx-background-color: #d2cccc; -fx-background-radius: 25;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Estado Aluguer:">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></Label>
+                        <Label text="Valor Diario(€):">
+                           <VBox.margin>
+                              <Insets bottom="14.0" right="12.0" top="14.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ComboBox fx:id="estado_combox" prefWidth="150.0" style="-fx-background-color: #d2cccc; -fx-background-radius: 25;">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin></ComboBox>
+                        <Slider fx:id="sliderValor" blockIncrement="1" onDragDetected="#moverSlider" prefHeight="14.0" prefWidth="103.0" showTickLabels="true" showTickMarks="true">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="18.0" />
+                           </VBox.margin>
+                        </Slider>
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <Pane fx:id="Pane" layoutY="273.0" prefHeight="479.0" prefWidth="1000.0">
+         <children>
+            <Button fx:id="CancelButton" layoutX="785.0" layoutY="437.0" mnemonicParsing="false" onAction="#HandleCancelButton" prefHeight="27.0" prefWidth="72.0" style="-fx-background-radius: 25; -fx-background-color: #155e63;" text="Cancelar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <TableView fx:id="tableVeiculos" layoutX="14.0" layoutY="40.0" prefHeight="424.0" prefWidth="670.0" style="-fx-background-color: transparent; -fx-background-radius: 25;">
+               <columns>
+                  <TableColumn fx:id="c_matricula" prefWidth="75.0" text="Matricula" />
+                  <TableColumn fx:id="c_marca" prefWidth="75.0" text="Marca" />
+                  <TableColumn fx:id="c_kms" prefWidth="75.0" text="KMs" />
+                  <TableColumn fx:id="c_valor" prefWidth="75.0" text="Valor Diário" />
+                  <TableColumn fx:id="c_seguro" prefWidth="75.0" text="Seguro" />
+                  <TableColumn fx:id="c_revisao" prefWidth="75.0" text="Revisao" />
+                  <TableColumn fx:id="c_inspecao" prefWidth="75.0" text="Inspecao" />
+                  <TableColumn fx:id="c_limpeza" prefWidth="75.0" text="Limpeza" />
+                  <TableColumn fx:id="c_categoria" prefWidth="75.0" text="Categoria" />
+                  <TableColumn fx:id="c_modelo" prefWidth="75.0" text="Modelo" />
+                  <TableColumn fx:id="c_cv" prefWidth="75.0" text="Cavalos" />
+                  <TableColumn fx:id="c_cilindrada" prefWidth="75.0" text="Cilindrada" />
+                  <TableColumn fx:id="c_combustivel" prefWidth="75.0" text="Combustivel" />
+               </columns>
+            </TableView>
+            <Button fx:id="but_continuar" layoutX="702.0" layoutY="437.0" mnemonicParsing="false" onAction="#but_continuar" prefHeight="27.0" prefWidth="72.0" style="-fx-background-radius: 25; -fx-background-color: #155e63;" text="Continuar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <TableView fx:id="tableVeiculosAluguer" layoutX="702.0" layoutY="34.0" prefHeight="376.0" prefWidth="285.0" style="-fx-background-color: transparent; -fx-background-radius: 10;">
+               <columns>
+                  <TableColumn fx:id="c_matricula2_aluguer" prefWidth="75.0" text="Matricula" />
+                  <TableColumn fx:id="c_marca2_aluguer" prefWidth="75.0" text="Marca" />
+                  <TableColumn fx:id="c_modelo2_aluguer" prefWidth="75.0" text="Modelo" />
+                  <TableColumn fx:id="c_data_inic_aluguer" prefWidth="75.0" text="Data Inicio" />
+                  <TableColumn fx:id="c_data_fim_aluguer" prefWidth="75.0" text="Data Fim" />
+                  <TableColumn fx:id="c_valor_aluguer" prefWidth="75.0" text="Valor" />
+               </columns></TableView>
+            <TextField fx:id="txtVeiculos" layoutX="14.0" layoutY="7.0" onKeyPressed="#textboxPress" promptText="Search" style="-fx-background-color: #eae7e7; -fx-background-radius: 5;" />
+         </children></Pane>
+      <ImageView fitHeight="173.0" fitWidth="228.0" layoutX="730.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imageCarro" fitHeight="212.0" fitWidth="285.0" layoutX="740.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/carro.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="butVerImagem" layoutX="740.0" layoutY="61.0" mnemonicParsing="false" onAction="#verImagem" prefHeight="212.0" prefWidth="212.0" style="-fx-background-color: transparent;" />
+      <TextField fx:id="txtValor" layoutX="670.0" layoutY="101.0" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: transparent;" text="0€" />
+   </children>
+   <padding>
+      <Insets top="2.0" />
+   </padding>
+</Pane>

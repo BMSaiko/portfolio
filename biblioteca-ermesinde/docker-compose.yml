@@ -1,0 +1,63 @@
+version: '3.4'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: Biblioteca_Ermesinde
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=production
+    depends_on:
+      - database
+    networks:
+      - biblioteca_network
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Biblioteca_Ermesinde_bd
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: Y
+      MSSQL_DATABASE: Biblioteca_Ermesinde
+      MSSQL_SERVER: 10.1.23.254
+    networks:
+      - biblioteca_network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - biblioteca_network
+    container_name: jenkins
+
+  sonar_biblioteca:
+    image: sonarqube:latest
+    container_name: sonar_biblioteca
+    ports:
+      - "9000:9000"
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:sqlserver://10.1.23.254:1433;databaseName=Biblioteca_Ermesinde
+      - SONARQUBE_JDBC_USERNAME=sa
+      - SONARQUBE_JDBC_PASSWORD=${SA_PASSWORD}
+      - SONAR_LOGIN=admin
+      - SONAR_PASSWORD=Robalo
+      - SONAR_TOKEN=${SONAR_TOKEN}
+    networks:
+      - biblioteca_network
+
+networks:
+  biblioteca_network:
+    driver: bridge
+
+volumes:
+  jenkins_home:
+    driver: local

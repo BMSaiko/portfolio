@@ -1,0 +1,67 @@
+.productImg {
+    width: auto !important;
+    height: 150px !important;
+    padding: 1rem;
+}
+#contact-text{
+    color:#053d42 !important;
+}
+.marker {
+    background-image: url("../img/marker_map.png");
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: solid red 2px;
+    box-shadow: 2px 2px 15px black;
+}
+
+.mapboxgl-popup {
+    max-width: 200px;
+    z-index: 999;
+}
+
+.mapboxgl-popup-content {
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+}
+
+.bannerContactos {
+    background-color: #053d42;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.TitleContactosBanner {
+    margin: auto;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
+}
+
+.contactos-container {
+    background-color: #053d42;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.contactos-imagem-slider {
+    height: 150px;
+    width: 150px;
+}
+
+.contactBorder {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 20px;
+    max-width: 24rem;
+}
+
+
+.text-icon-contact {
+    size: 3rem !important;
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="692.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Menu.app_pane_manutencao">
+   <children>
+      <Pane layoutX="42.0" layoutY="64.0" prefHeight="177.0" prefWidth="256.0" style="-fx-background-color: transparent; -fx-border-color: #545252; -fx-border-width: 1; -fx-border-radius: 20;">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="25.0" layoutY="40.0">
+               <image>
+                  <Image url="@images/cleaning.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="100.0" layoutY="36.0" text="Limpeza">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <Button fx:id="Limpezabtn" mnemonicParsing="false" onAction="#abrirLimpeza" prefHeight="177.0" prefWidth="264.0" style="-fx-background-color: transparent;" />
+            <VBox layoutX="100.0" layoutY="62.0" prefHeight="99.0" prefWidth="156.0">
+               <children>
+                  <Label text="Acesso rápido e verificação">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="10.0" text="em tempo real da limpeza">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="35.0" text="dos veículos">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+         </children></Pane>
+      <Pane layoutX="390.0" layoutY="64.0" prefHeight="177.0" prefWidth="256.0" style="-fx-border-radius: 20; -fx-background-color: transparent; -fx-border-color: #545252; -fx-border-width: 1;">
+         <children>
+            <Label layoutX="100.0" layoutY="36.0" text="Inspeção/revisão">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="25.0" layoutY="40.0">
+               <image>
+                  <Image url="@images/inspection.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="insp_revibtn" mnemonicParsing="false" onAction="#abrir_insp_revisao" prefHeight="177.0" prefWidth="264.0" style="-fx-background-color: transparent;" />
+            <VBox layoutX="100.0" layoutY="62.0" prefHeight="99.0" prefWidth="156.0">
+               <children>
+                  <Label text="Acesso rápido e verificação">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="10.0" text="em tempo real das revisões">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="35.0" text="e inspeções dos veículos">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+         </children></Pane>
+   </children>
+</Pane>

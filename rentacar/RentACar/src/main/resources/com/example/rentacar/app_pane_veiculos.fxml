@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="692.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Menu.app_pane_veiculosController">
+   <children>
+      <HBox alignment="BOTTOM_CENTER" layoutX="456.0" layoutY="50.0" prefHeight="27.0" prefWidth="225.0">
+         <children>
+            <Button fx:id="butAdicioanarVeiculos" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#adicionarVeiculos" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #1e868d; -fx-background-radius: 25;" text="Adicionar" textFill="WHITE">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="butRetirarVeiculos" mnemonicParsing="false" onAction="#retirarVeiculos" prefHeight="25.0" prefWidth="56.0" style="-fx-background-color: #d2cccc; -fx-background-radius: 25;" text="Retirar" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <HBox layoutX="14.0" layoutY="51.0">
+         <children>
+            <TextField fx:id="txtVeiculos" onKeyPressed="#textboxPress" promptText="Search" style="-fx-background-color: #eae7e7; -fx-background-radius: 5;" />
+         </children>
+      </HBox>
+      <TableView fx:id="tableVeiculos" layoutX="11.0" layoutY="94.0" prefHeight="424.0" prefWidth="670.0" style="-fx-background-color: transparent; -fx-background-radius: 25;">
+         <columns>
+            <TableColumn fx:id="c_matricula" prefWidth="75.0" text="Matricula" />
+            <TableColumn fx:id="c_marca" prefWidth="75.0" text="Marca" />
+            <TableColumn fx:id="c_kms" prefWidth="75.0" text="KMs" />
+            <TableColumn fx:id="c_seguro" prefWidth="75.0" text="Seguro" />
+            <TableColumn fx:id="c_revisao" prefWidth="75.0" text="Revisao" />
+            <TableColumn fx:id="c_inspecao" prefWidth="75.0" text="Inspecao" />
+            <TableColumn fx:id="c_limpeza" prefWidth="75.0" text="Limpeza" />
+            <TableColumn fx:id="c_categoria" prefWidth="75.0" text="Categoria" />
+            <TableColumn fx:id="c_modelo" prefWidth="75.0" text="Modelo" />
+            <TableColumn fx:id="c_cv" prefWidth="75.0" text="Cavalos" />
+            <TableColumn fx:id="c_cilindrada" prefWidth="75.0" text="Cilindrada" />
+            <TableColumn fx:id="c_combustivel" prefWidth="75.0" text="Combustivel" />
+            <TableColumn fx:id="c_manutencao" prefWidth="75.0" text="Manutenção" />
+            <TableColumn fx:id="c_disponibilidade" prefWidth="75.0" text="Disponibilidade" />
+
+         </columns>
+      </TableView>
+   </children>
+</Pane>

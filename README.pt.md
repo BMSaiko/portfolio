@@ -12,6 +12,9 @@ Projetos académicos desenvolvidos durante o curso de Engenharia Informática no
 | [lp1-2022-g2-tema1](lp1-2022-g2-tema1) | HTML · CSS · JS | Website estático sobre a AMD: história, arquiteturas, sockets, AMD vs Intel |
 | [companhia-aerea](companhia-aerea) | Java · Maven | Gestão de voos de uma companhia aérea, aplicação de consola (versão inicial) |
 | [apoo-lp1-companhia-aerea](apoo-lp1-companhia-aerea) | Java · Maven | Gestão de voos de uma companhia aérea, consola (grupo 3, refactor OO) |
+| [biblioteca-ermesinde](biblioteca-ermesinde) | C# · ASP.NET Core · SQL Server · Docker · Jenkins | API de gestão de biblioteca com CI/CD, SonarQube e testes (projeto final CTESP) |
+| [porto-on-wheels](porto-on-wheels) | PHP · MySQL · Bootstrap | Website de aluguer de carros/bicicletas/trotinetes com back-office |
+| [rentacar](rentacar) | Java · JavaFX · Gradle · SQL Server | Aplicação desktop de gestão de aluguer de automóveis |
 
 Cada pasta tem o seu `README.md` (inglês) e `README.pt.md` (português).
 

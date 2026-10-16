@@ -12,6 +12,9 @@ Academic projects developed during my Computer Engineering studies at ISEP (Inst
 | [lp1-2022-g2-tema1](lp1-2022-g2-tema1) | HTML · CSS · JS | Static website about AMD: history, architectures, sockets, AMD vs Intel |
 | [companhia-aerea](companhia-aerea) | Java · Maven | Airline flight management, console app (early version) |
 | [apoo-lp1-companhia-aerea](apoo-lp1-companhia-aerea) | Java · Maven | Airline flight management, console app (group 3, OOP refactor) |
+| [biblioteca-ermesinde](biblioteca-ermesinde) | C# · ASP.NET Core · SQL Server · Docker · Jenkins | Library management API with CI/CD, SonarQube and tests (CTESP final project) |
+| [porto-on-wheels](porto-on-wheels) | PHP · MySQL · Bootstrap | Car/bike/scooter rental website with admin back-office |
+| [rentacar](rentacar) | Java · JavaFX · Gradle · SQL Server | Car rental management desktop app |
 
 Each folder has its own `README.md` (English) and `README.pt.md` (Portuguese).
 

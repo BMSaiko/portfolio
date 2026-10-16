@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="462.0" prefWidth="665.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Aluguer.infoOrcamentoController">
+   <children>
+      <VBox prefHeight="249.0" prefWidth="656.0">
+         <children>
+            <HBox prefHeight="59.0" prefWidth="656.0">
+               <children>
+                  <Label text="Orçamento nº">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="txt_norcamento" text="label">
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="148.0" prefWidth="722.0">
+               <children>
+                  <HBox prefHeight="261.0" prefWidth="260.0">
+                     <children>
+                        <VBox prefHeight="148.0" prefWidth="155.0">
+                           <children>
+                              <Label text="nº de Cliente:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Nome Funcionário:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#editOrcamento" style="-fx-background-color: #155e63; -fx-background-radius: 25;" text="Editar" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="261.0" prefWidth="129.0">
+                           <children>
+                              <Label fx:id="txt_ncliente" text="0001">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label fx:id="txt_nfuncionario" prefHeight="18.0" prefWidth="30.0" text="0001">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox prefHeight="144.0" prefWidth="265.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <children>
+                        <VBox prefHeight="144.0" prefWidth="125.0">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="117.0" text="Estado Pagamento:">
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Estado Aluguer:" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label fx:id="txt_estadopagamento" text="Label">
+                                 <padding>
+                                    <Insets bottom="16.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="txt_estadoaluguer" text="Label" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <ImageView fitHeight="180.0" fitWidth="249.0" layoutX="30.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/carro.png" />
+         </image>
+      </ImageView>
+      <TableView fx:id="tableVeiculos" layoutX="266.0" layoutY="131.0" prefHeight="330.0" prefWidth="397.0" style="-fx-background-color: transparent; -fx-background-radius: 25;">
+         <columns>
+            <TableColumn fx:id="c_matricula" prefWidth="75.0" text="Matricula" />
+            <TableColumn fx:id="c_marca" prefWidth="75.0" text="Marca" />
+            <TableColumn fx:id="c_kms" prefWidth="75.0" text="KMs" />
+            <TableColumn fx:id="c_seguro" prefWidth="75.0" text="Seguro" />
+            <TableColumn fx:id="c_revisao" prefWidth="75.0" text="Revisao" />
+            <TableColumn fx:id="c_inspecao" prefWidth="75.0" text="Inspecao" />
+            <TableColumn fx:id="c_limpeza" prefWidth="75.0" text="Limpeza" />
+            <TableColumn fx:id="c_categoria" prefWidth="75.0" text="Categoria" />
+            <TableColumn fx:id="c_modelo" prefWidth="75.0" text="Modelo" />
+            <TableColumn fx:id="c_cv" prefWidth="75.0" text="Cavalos" />
+            <TableColumn fx:id="c_cilindrada" prefWidth="75.0" text="Cilindrada" />
+            <TableColumn fx:id="c_combustivel" prefWidth="75.0" text="Combustivel" />
+            <TableColumn fx:id="c_manutencao" prefWidth="75.0" text="Manutenção" />
+            <TableColumn fx:id="c_disponibilidade" prefWidth="75.0" text="Disponibilidade" />
+         </columns>
+      </TableView>
+   </children>
+</Pane>

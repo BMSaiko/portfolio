@@ -1,0 +1,66 @@
+.text-values {
+    background-color: #63A0A6 !important;
+    width: 100%;
+}
+
+.our-values-title {
+    size: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.values {
+    padding-bottom: 3%;
+}
+
+.valuesBorder {
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+    max-width: 24rem;
+}
+
+.valuesImg {
+    height: 150px;
+    width: 150px;
+    margin: auto;
+    padding: auto;
+}
+
+.carousel-inner .carousel-item .row {
+    display: flex;
+}
+
+.carousel-inner .carousel-item .col-sm-3 {
+    flex: 0 0 50%;
+    max-width: 25%;
+}
+
+
+.carousel-inner {
+    height: 200px;
+    padding-top:1%;
+    margin-bottom:1%;
+}
+
+.carousel-inner .carousel-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: fill;
+}
+
+#multi-item-carousel {
+    padding: 5%;
+    height: 100px;
+}
+
+#about-us-padding-slider{
+    padding: 2%;
+    height: auto;
+}
+@media screen and (max-width: 576px) {
+    .carousel-inner .carousel-item .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

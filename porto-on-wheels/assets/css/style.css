@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+    padding: 0%;
+    margin: 0%;
+}
+
+body {
+    font-family: "Montserrat" !important;
+}
+
+.h2 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+#h2-black {
+    color: #000;
+}
+
+#h2-white {
+    color: #fff;
+}
+
+.p {
+    font-size: 2rem;
+    font-family: "Montserrat" !important;
+    font-weight: 300;
+    line-height: 20px;
+}
+
+#p-white {
+    color: #fff;
+}
+
+.p-white {
+    color: #fff;
+}
+
+#p-black {
+    color: #000;
+}
+
+.ol, ul {
+    padding-left: 0rem !important;
+}
+
+#ul-white {
+    color: white;
+}
+
+#ul-black {
+    color: black;
+}
+
+#icon {
+    fill: #fff;
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+}
+
+.nav-item {
+    padding-left: 3rem !important;
+}
+
+.productBorder {
+    border: 1px solid black;
+    background-color: #e6e6e6;
+    border-radius: 20px;
+    max-width: 24rem;
+}
+
+li {
+    list-style: none;
+}
+
+#textPartners {
+    color: #000;
+    size: 2rem;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-bottom: 1%;
+}
+
+.ourPartners {
+    color: #000;
+    size: 4rem;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+#partners-slider {
+    height: auto;
+    padding-bottom: 5%;
+}

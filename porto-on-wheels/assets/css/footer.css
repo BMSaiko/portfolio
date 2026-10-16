@@ -1,0 +1,32 @@
+a {
+    color: white;
+    text-decoration: none !important;
+    transition: all 0.3s;
+}
+
+#footer-icon{
+    height: 20px;
+    width: auto;
+}
+footer {
+    font-family: "Montserrat" !important;
+}
+.footer-text{
+color: white !important;
+text-decoration: none !important;
+
+}
+a:hover,
+a:focus {
+    text-decoration: none;
+color: grey !important;
+
+}
+
+footer {
+    background: #053d42;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}

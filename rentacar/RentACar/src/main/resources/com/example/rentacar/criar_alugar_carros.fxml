@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="mypane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="1000.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Aluguer.criar_alugar_carrosController">
+   <children>
+      <HBox layoutX="12.0" layoutY="23.0">
+         <children>
+            <TextField fx:id="txtVeiculos" onKeyPressed="#textboxPress" promptText="Search" style="-fx-background-color: #eae7e7; -fx-background-radius: 5;" />
+            <Button fx:id="butProcurarVeiculos" mnemonicParsing="false" style="-fx-background-color: #1e868d; -fx-background-radius: 25;" text="🔎" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="but_adicionarCarro" mnemonicParsing="false" prefWidth="28.0" style="-fx-background-color: #1e868d; -fx-background-radius: 50;" text="+" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+       <TableView fx:id="tableVeiculos" layoutX="11.0" layoutY="94.0" prefHeight="424.0" prefWidth="670.0" style="-fx-background-color: #eae7e7; -fx-background-radius: 25;">
+           <columns>
+               <TableColumn fx:id="c_matricula" prefWidth="75.0" text="Matricula" />
+               <TableColumn fx:id="c_marca" prefWidth="75.0" text="Marca" />
+               <TableColumn fx:id="c_kms" prefWidth="75.0" text="KMs" />
+               <TableColumn fx:id="c_seguro" prefWidth="75.0" text="Seguro" />
+               <TableColumn fx:id="c_revisao" prefWidth="75.0" text="Revisao" />
+               <TableColumn fx:id="c_inspecao" prefWidth="75.0" text="Inspecao" />
+               <TableColumn fx:id="c_limpeza" prefWidth="75.0" text="Limpeza" />
+               <TableColumn fx:id="c_categoria" prefWidth="75.0" text="Categoria" />
+               <TableColumn fx:id="c_modelo" prefWidth="75.0" text="Modelo" />
+               <TableColumn fx:id="c_cv" prefWidth="75.0" text="Cavalos" />
+               <TableColumn fx:id="c_cilindrada" prefWidth="75.0" text="Cilindrada" />
+               <TableColumn fx:id="c_combustivel" prefWidth="75.0" text="Combustivel" />
+               <TableColumn fx:id="c_manutencao" prefWidth="75.0" text="Manutenção" />
+               <TableColumn fx:id="c_disponibilidade" prefWidth="75.0" text="Disponibilidade" />
+
+           </columns>
+       </TableView>
+      <ComboBox fx:id="combo_Marca" layoutX="11.0" layoutY="58.0" prefHeight="26.0" prefWidth="110.0" style="-fx-background-color: #eae7e7; -fx-background-radius: 20;" />
+      <ComboBox fx:id="combo_Modelo" layoutX="127.0" layoutY="58.0" prefHeight="26.0" prefWidth="110.0" style="-fx-background-color: #eae7e7; -fx-background-radius: 20;" />
+      <TableView fx:id="tableVeiculosAluguer" layoutX="699.0" layoutY="94.0" prefHeight="380.0" prefWidth="288.0" style="-fx-background-color: #eae7e7; -fx-background-radius: 10;">
+        <columns>
+
+
+        </columns>
+      </TableView>
+      <Button fx:id="but_continuar" layoutX="705.0" layoutY="488.0" mnemonicParsing="false" onAction="#but_continuar" prefHeight="27.0" prefWidth="72.0" style="-fx-background-radius: 25; -fx-background-color: #155e63;" text="Continuar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

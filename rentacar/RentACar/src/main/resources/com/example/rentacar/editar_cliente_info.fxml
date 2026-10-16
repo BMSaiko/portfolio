@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="450.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.Cliente.Editar_ClienteController">
+   <children>
+      <VBox layoutX="117.0" layoutY="233.0" prefHeight="402.0" prefWidth="126.0">
+         <children>
+            <Label text="Nome:">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label text="Email:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Telefone:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="NIF:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label layoutX="10.0" layoutY="145.0" text="Morada:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="190.0" text="Data Nascimento:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label layoutX="10.0" layoutY="235.0" text="CC:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label layoutX="10.0" layoutY="280.0" text="Carta Condução:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label layoutX="10.0" layoutY="325.0" text="País:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+      <VBox layoutX="258.0" layoutY="233.0" prefHeight="402.0" prefWidth="150.0">
+         <children>
+            <TextField fx:id="name_txt" promptText="Nome" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="email_txt" promptText="Email" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="telefone_txt" promptText="Telefone" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="NIF_txt" promptText="NIF" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="morada_txt" layoutX="10.0" layoutY="145.0" promptText="Morada" style="-fx-background-color: white;" />
+            <DatePicker fx:id="dataNascimento_datapicker" prefHeight="25.0" prefWidth="161.0">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </DatePicker>
+            <TextField fx:id="txt_CC" promptText="CC" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="txt_CConducao" layoutX="10.0" layoutY="280.0" promptText="Carta Condução" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="txt_Pais" layoutX="10.0" layoutY="325.0" promptText="País" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </TextField>
+         </children>
+      </VBox>
+      <ImageView fx:id="image" fitHeight="150.0" fitWidth="150.0" layoutX="150.0" layoutY="14.0">
+         <image>
+            <Image url="@images/guest.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="importbtn" layoutX="150.0" layoutY="179.0" mnemonicParsing="false" onAction="#Importar_imagem" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #1e868d; -fx-background-radius: 25;" text="Importar Imagem" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="editbtn" layoutX="263.0" layoutY="643.0" mnemonicParsing="false" onAction="#EditClienteInfo" style="-fx-background-color: #155e63; -fx-background-radius: 25;" text="Editar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button fx:id="Cancelbutton" layoutX="318.0" layoutY="643.0" mnemonicParsing="false" onAction="#CancelarEdit" style="-fx-background-color: #f9f8eb; -fx-border-color: black; -fx-border-radius: 25;" text="Cancelar">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+   </children>
+</Pane>

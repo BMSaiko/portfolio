@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #f9f8eb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rentacar.dash.dash_alertaController">
+   <children>
+      <TableView fx:id="tableAlerta" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: transparent;">
+        <columns>
+          <TableColumn fx:id="c_matricula" prefWidth="227.19995725154877" text="Matricula" />
+          <TableColumn fx:id="c_tipo" prefWidth="228.00006103515625" text="Tipo" />
+            <TableColumn fx:id="c_descricao" prefWidth="244.79995727539062" text="Descrição" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

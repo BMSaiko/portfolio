@@ -1,0 +1,34 @@
+@startuml US03-SD-partial-get-map-list
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US03 - Get Map List - Partial Sequence Diagram
+
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant ":GameRepository" as GAMEREPO
+participant ":MapRepository" as MAPREPO
+participant ":MapMapper" as MAPMAPPER
+
+UI -> CTRL : getMapList()
+activate CTRL
+    group Get Maps List
+    CTRL -> GAMEREPO : getMapRepository()
+    activate GAMEREPO
+        GAMEREPO --> CTRL : mapRepository
+    deactivate GAMEREPO
+    
+    CTRL -> MAPREPO : getAllMaps()
+    activate MAPREPO
+        MAPREPO --> CTRL : mapList
+    deactivate MAPREPO
+    
+    CTRL -> MAPMAPPER : toDTOList(mapList)
+    activate MAPMAPPER
+        MAPMAPPER --> CTRL : mapDTOList
+    deactivate MAPMAPPER
+    end group
+    CTRL --> UI : mapDTOList
+deactivate CTRL
+@enduml

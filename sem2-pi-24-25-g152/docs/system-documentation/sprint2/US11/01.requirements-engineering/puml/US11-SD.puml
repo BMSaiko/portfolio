@@ -1,0 +1,50 @@
+@startuml US11-SD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US11 List Trains
+
+actor "Player" as player
+participant "UI" as ui
+participant "TrainController" as ctrl
+participant "TrainService" as svc
+participant "TrainRepository" as repo
+participant "TrainMapper" as mapper
+
+activate player
+player -> ui : listTrains()
+activate ui
+
+ui -> ctrl : getAllTrains()
+activate ctrl
+
+ctrl -> svc : getAllTrainsGrouped()
+activate svc
+
+svc -> repo : findAll()
+activate repo
+repo --> svc : List<Train>
+deactivate repo
+
+svc -> svc : groupByLocomotiveType()
+
+svc -> mapper : toDTO(trains)
+activate mapper
+mapper --> svc : List<TrainDTO>
+deactivate mapper
+
+svc -> svc : sortAlphabetically()
+
+svc --> ctrl : groupedTrains
+deactivate svc
+
+ctrl --> ui : trainsList
+deactivate ctrl
+
+ui --> player : display trains
+deactivate ui
+
+deactivate player
+
+@enduml 

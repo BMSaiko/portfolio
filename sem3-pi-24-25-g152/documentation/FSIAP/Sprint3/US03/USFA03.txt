@@ -1,0 +1,179 @@
+// Código para Raspberry Pi Pico usando Arduino IDE
+#include <DHT.h>
+
+// Pinos do DHT11
+#define DHTPIN 0        
+#define DHTTYPE DHT11   
+
+// Pinos dos LEDs
+#define LED_TEMP_PIN 17  
+#define LED_HUM_PIN 18  
+
+// Pinos das Ventoinhas
+#define FAN_EXHAUST_PIN 22   // Ventoinha de exaustão
+#define FAN_VENT_PIN 20      // Ventoinha de ventilação
+
+// Pino do Sensor MQ-2 (analógico)
+#define GAS_SENSOR_PIN 0
+
+DHT dht(DHTPIN, DHTTYPE);
+
+// Variáveis para armazenar leituras iniciais
+float temp_initial = 0.0;
+float hum_initial = 0.0;
+float gas_initial = 0.0;
+
+// Para a lógica de variação brusca (30%/min)
+unsigned long lastCheckTime = 0;
+float lastTemp = 0.0;
+float lastHum = 0.0;
+float lastGas = 0.0;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Iniciando sensores e ventoinhas...");
+
+  dht.begin();
+
+  // Configura pinos de saída
+  pinMode(LED_TEMP_PIN, OUTPUT);
+  pinMode(LED_HUM_PIN, OUTPUT);
+  pinMode(FAN_EXHAUST_PIN, OUTPUT);
+  pinMode(FAN_VENT_PIN, OUTPUT);
+
+  // Desliga tudo inicialmente
+  digitalWrite(LED_TEMP_PIN, LOW);
+  digitalWrite(LED_HUM_PIN, LOW);
+  digitalWrite(FAN_EXHAUST_PIN, LOW);
+  digitalWrite(FAN_VENT_PIN, LOW);
+
+  delay(2000); // Espera estabilizar o DHT11
+
+  temp_initial = dht.readTemperature();
+  hum_initial = dht.readHumidity();
+  gas_initial = analogRead(GAS_SENSOR_PIN); // Leitura inicial de gás
+
+  if (isnan(temp_initial) || isnan(hum_initial)) {
+    Serial.println("Falha ao ler o sensor DHT11 inicial.");
+  } else {
+    Serial.print("Leitura Inicial - Temp: ");
+    Serial.print(temp_initial);
+    Serial.print(" °C | Hum: ");
+    Serial.print(hum_initial);
+    Serial.print(" % | Gas: ");
+    Serial.println(gas_initial);
+  }
+
+  // Inicialização para monitorar variações bruscas
+  lastCheckTime = millis();
+  lastTemp = temp_initial;
+  lastHum = hum_initial;
+  lastGas = gas_initial;
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+  float gas = analogRead(GAS_SENSOR_PIN);
+
+  if (isnan(temp) || isnan(hum)) {
+    Serial.println("Falha ao ler o sensor DHT11.");
+  } else {
+    // Atualiza LEDs conforme antes (opcional, mantendo a lógica antiga)
+    digitalWrite(LED_TEMP_PIN, (temp >= temp_initial + 5.0) ? HIGH : LOW);
+    digitalWrite(LED_HUM_PIN, (hum >= hum_initial + 5.0) ? HIGH : LOW);
+
+    Serial.print("Temp: ");
+    Serial.print(temp);
+    Serial.print(" °C | LED_TEMP: ");
+    Serial.print(digitalRead(LED_TEMP_PIN) ? "ON" : "OFF");
+    Serial.print(" | Hum: ");
+    Serial.print(hum);
+    Serial.print(" % | LED_HUM: ");
+    Serial.print(digitalRead(LED_HUM_PIN) ? "ON" : "OFF");
+    Serial.print(" | Gas: ");
+    Serial.println(gas);
+
+    // 1) Temperatura 5°C acima
+    if (temp >= (temp_initial + 5.0)) {
+      acionarSequenciaTemp();
+    }
+
+    // 2) Umidade 5% acima
+    if (hum >= (hum_initial + 5.0)) {
+      acionarSequenciaHum();
+    }
+
+    // 3) Gás 2% acima
+    // Considerando que gas_initial é a leitura inicial.
+    // 2% acima: gas >= gas_initial * 1.02
+    if (gas >= (gas_initial * 1.02)) {
+      acionarSequenciaGas();
+    }
+
+    // Considerar variações bruscas (30% por minuto)
+    // Isto é um extra: vamos verificar se a cada minuto há variação > 30%.
+    unsigned long currentTime = millis();
+    if (currentTime - lastCheckTime >= 60000) { // a cada 60s
+      float tempChange = fabs((temp - lastTemp) / lastTemp) * 100.0;
+      float humChange = fabs((hum - lastHum) / lastHum) * 100.0;
+      float gasChange = fabs((gas - lastGas) / lastGas) * 100.0;
+
+      if (tempChange > 30.0 || humChange > 30.0 || gasChange > 30.0) {
+        // Se houve variação > 30%, ativa ambas as ventoinhas por prevenção
+        ligarAmbasFans(5000); // 5s, pode ajustar
+      }
+
+      // Atualiza referências
+      lastCheckTime = currentTime;
+      lastTemp = temp;
+      lastHum = hum;
+      lastGas = gas;
+    }
+  }
+
+  delay(1000); // Aguarda 1s para próxima leitura
+}
+
+// Funções de acionar sequências
+void acionarSequenciaTemp() {
+  // Exaustão 5s
+  digitalWrite(FAN_EXHAUST_PIN, HIGH);
+  delay(5000);
+  digitalWrite(FAN_EXHAUST_PIN, LOW);
+
+  // Ventilação 5s
+  digitalWrite(FAN_VENT_PIN, HIGH);
+  delay(5000);
+  digitalWrite(FAN_VENT_PIN, LOW);
+}
+
+void acionarSequenciaHum() {
+  // Ventilação 10s
+  digitalWrite(FAN_VENT_PIN, HIGH);
+  delay(10000);
+  digitalWrite(FAN_VENT_PIN, LOW);
+
+  // Exaustão 10s
+  digitalWrite(FAN_EXHAUST_PIN, HIGH);
+  delay(10000);
+  digitalWrite(FAN_EXHAUST_PIN, LOW);
+}
+
+void acionarSequenciaGas() {
+  // Ambas as fans por 10s
+  digitalWrite(FAN_EXHAUST_PIN, HIGH);
+  digitalWrite(FAN_VENT_PIN, HIGH);
+  delay(10000);
+  digitalWrite(FAN_EXHAUST_PIN, LOW);
+  digitalWrite(FAN_VENT_PIN, LOW);
+}
+
+// Função de ligar ambas as fans para variação brusca
+void ligarAmbasFans(unsigned long tempoMS) {
+  digitalWrite(FAN_EXHAUST_PIN, HIGH);
+  digitalWrite(FAN_VENT_PIN, HIGH);
+  delay(tempoMS);
+  digitalWrite(FAN_EXHAUST_PIN, LOW);
+  digitalWrite(FAN_VENT_PIN, LOW);
+}

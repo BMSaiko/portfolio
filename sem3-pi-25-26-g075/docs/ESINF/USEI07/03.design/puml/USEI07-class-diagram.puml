@@ -1,0 +1,178 @@
+@startuml USEI07-balanced-kdtree-construction
+
+title USEI07 - Balanced 2D-Tree Construction for Stations
+
+package "Controller" {
+    class PlannerMenuController {
+      - stationSearchService: StationSearchService
+      - dataInitService: DataInitializationService
+      + handleSearchStations(): void
+      + searchByCoordinatesRange(): void
+    }
+}
+
+package "Service Layer" {
+    class StationSearchService {
+        - repository: StationsRepository
+        + getStationsByRange(latMin, latMax, lonMin, lonMax, filter): List<Station>
+    }
+
+    class BalancedTreeBuilder {
+        + buildBalancedKDTree(List<Station>): KDTree<Station>
+        + buildBalancedKDTreeDirect(List<Station>): KDTree<Station>
+        + buildOptimizedBalancedKDTree(List<Station>): KDTree<Station>
+        - buildBalancedKDTreeRecursive(KDTree, List<Station>, depth): void
+        - bulkLoadKDTree(KDTree, List<Station>, depth): void
+        - printTreeStatistics(KDTree, totalStations): void
+    }
+}
+
+package "Data Structures" {
+    interface BSTInterface<E> {
+        + isEmpty(): boolean
+        + insert(E): void
+        + size(): int
+        + height(): int
+    }
+
+    class BST<E extends Comparable<E>> {
+        # root: Node<E>
+        + insert(E): void
+        + height(): int
+        + size(): int
+    }
+
+    class KDTree<E extends Comparable<E> & KDTreeNodeInterface> {
+        - cmpX: Comparator<KDNode<E>>
+        - cmpY: Comparator<KDNode<E>>
+        + insert(E): void
+        + rangeSearch(latMin, latMax, lonMin, lonMax): List<E>
+        + rangeSearch(latMin, latMax, lonMin, lonMax, filter): List<E>
+        - insert(KDNode, KDNode, divX): void
+        - rangeSearchRecursive(KDNode, latMin, latMax, lonMin, lonMax, divX, results, filter): void
+    }
+
+    class KDNode<E> {
+        - coords: Point2D.Double
+        - left: KDNode<E>
+        - right: KDNode<E>
+        + getX(): double
+        + getY(): double
+        + getCoords(): Point2D.Double
+    }
+
+    interface KDTreeNodeInterface {
+        + getCoords(): Point2D.Double
+    }
+}
+
+package "Domain Model" {
+    class Station implements KDTreeNodeInterface {
+        - name: String
+        - coordinates: Coordinates
+        - timeZone: TimeZone
+        - isCity: boolean
+        - isMainStation: boolean
+        - isAirport: boolean
+        + getCoords(): Point2D.Double
+        + isValid(): boolean
+        + compareTo(Station): int
+    }
+
+    class Coordinates {
+        - latitude: Double
+        - longitude: Double
+        + isValid(): boolean
+        + compareTo(Coordinates): int
+    }
+
+    class TimeZone {
+        - country: String
+        - zone: String
+        - group: String
+        + isValid(): boolean
+    }
+
+    class StationFilter {
+        - isCity: Boolean
+        - isMainStation: Boolean
+        - country: String
+        + matches(Station): boolean
+        + hasActiveFilters(): boolean
+    }
+}
+
+package "Repository" <<Singleton>> {
+    class StationsRepository {
+        - instance: StationsRepository
+        - kdTree: KDTree<Station>
+        - stationsBST: BST<TimeZone>
+        - coordinatesBST: BST<CoordinateStationKey>
+        + getInstance(): StationsRepository
+        + getKdTree(): KDTree<Station>
+        + addStation(TimeZone, Station): void
+        + clear(): void
+    }
+}
+
+package "Testing" {
+    class BalancedTreeConstructionTest {
+        + shouldBuildBalancedKDTree_withStationsFromDataset(): void
+        + shouldAchieveReasonableBalance_forLargeDatasets(): void
+        + shouldHandleStationsWithIdenticalCoordinates(): void
+        + shouldFilterOutInvalidStations_duringConstruction(): void
+    }
+
+    class PerformanceTests {
+        + kdTreeRangeSearch_shouldBeEfficient(): void
+        + treeConstruction_shouldBeEfficient(): void
+    }
+}
+
+' Inheritance Relationships
+KDTree --|> BST
+KDNode --|> Node
+Station ..|> KDTreeNodeInterface
+BST ..|> BSTInterface
+
+' Composition Relationships
+Station --> Coordinates
+Station --> TimeZone
+StationsRepository --> KDTree
+StationsRepository --> BST
+
+' Usage Relationships
+PlannerMenuController --> StationSearchService
+StationSearchService --> StationsRepository
+StationSearchService --> StationFilter
+BalancedTreeBuilder --> KDTree
+BalancedTreeBuilder --> Station
+
+' Construction Flow
+BalancedTreeBuilder ..> Station : "filters valid stations"
+BalancedTreeBuilder ..> KDTree : "builds balanced tree"
+StationsRepository ..> BalancedTreeBuilder : "uses for initialization"
+
+' Test Dependencies
+BalancedTreeConstructionTest --> BalancedTreeBuilder
+BalancedTreeConstructionTest --> StationSearchService
+PerformanceTests --> StationSearchService
+PerformanceTests --> BalancedTreeBuilder
+
+note right of BalancedTreeBuilder
+  Balanced Construction Strategy:
+  1. Filter valid stations
+  2. Recursive median partitioning
+  3. Alternate dimensions (X/Y)
+  4. Target balance ratio ≤ 3.0
+end note
+
+note right of KDTree
+  Spatial Indexing:
+  - X = Longitude
+  - Y = Latitude
+  - Efficient range queries
+  - O(log n) search complexity
+end note
+
+@enduml

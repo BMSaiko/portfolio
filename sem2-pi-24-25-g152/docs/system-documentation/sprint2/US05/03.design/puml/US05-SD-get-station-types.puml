@@ -1,0 +1,20 @@
+@startuml US05-SD-StationTypes
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuildStationController" as CTRL
+
+autonumber 3
+-> CTRL : getStationTypes()
+autonumber 3.1
+activate CTRL
+    group Get Station Types
+        ' Simple method that returns the available station types
+        ' No external resources needed
+    end
+    autonumber 4
+    <-- CTRL : stationTypes (depot, station, terminal)
+deactivate CTRL
+
+@enduml

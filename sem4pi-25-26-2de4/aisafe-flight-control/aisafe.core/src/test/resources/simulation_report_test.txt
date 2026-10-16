@@ -1,0 +1,25 @@
+========================================
+  SIMULATION REPORT
+========================================
+Generated  : 2026-01-15 10:30:00
+Area       : OPO_MAD
+Time range : 0 -- 3600 s (step 60 s, 60 steps total)
+Threshold  : 50 km
+Flights    : 3
+----------------------------------------
+
+FLIGHT DETAILS
+Flight ID         Status        History steps   Violations  Final position
+---------         ------        -------------   ----------  --------------
+AA123             COMPLETED     46              2           lat=40.4895 lon=-3.5643 alt=610
+AA124             COMPLETED     46              0           lat=40.9895 lon=-3.0643 alt=610
+AA125             COMPLETED     42              3           lat=41.2000 lon=-2.8000 alt=550
+
+----------------------------------------
+SAFETY VIOLATIONS: 5 total
+
+
+----------------------------------------
+VALIDATION RESULT: FAIL
+========================================
+

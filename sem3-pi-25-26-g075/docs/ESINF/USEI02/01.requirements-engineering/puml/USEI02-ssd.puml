@@ -1,0 +1,21 @@
+@startuml USEI02 - System Sequence Diagram
+
+actor "Freight Manager" as Manager
+participant ":System" as System
+
+Manager -> System : loadOrders(ordersCsv, orderLinesCsv)
+activate System
+System --> Manager : status
+deactivate System
+
+Manager -> System : allocateOrder(orderId, mode)
+activate System
+System --> Manager : allocationResult
+deactivate System
+
+Manager -> System : viewAllocationDetails(orderId)
+activate System
+System --> Manager : allocationReport
+deactivate System
+
+@enduml

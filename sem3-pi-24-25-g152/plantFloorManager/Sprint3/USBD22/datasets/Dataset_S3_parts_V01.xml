@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part_list>
+	<part>
+		<part_number>"PN12344A21"</part_number>
+		<description>"Screw M6 35 mm"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN52384R50"</part_number>
+		<description>"300x300 mm 5 mm stainless steel sheet"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN52384R10"</part_number>
+		<description>"300x300 mm 1 mm stainless steel sheet"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN18544A21"</part_number>
+		<description>"Rivet 6 mm"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN18544C21"</part_number>
+		<description>"Stainless steel handle model U6"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN18324C54"</part_number>
+		<description>"Stainless steel handle model R12"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN52384R45"</part_number>
+		<description>"250x250 mm 5mm stainless steel sheet"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN52384R12"</part_number>
+		<description>"250x250 mm 1mm stainless steel sheet"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN18324C91"</part_number>
+		<description>"Stainless steel handle model S26"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"PN18324C51"</part_number>
+		<description>"Stainless steel handle model R11"</description>
+		<part_type>"Component"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945T22"</part_number>
+		<name>"La Belle 22 5l pot"</name>
+		<family>130</family>
+		<description>"5l 22 cm aluminium and teflon non stick pot"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945S22"</part_number>
+		<name>"Pro 22 5l pot"</name>
+		<family>125</family>
+		<description>"5l 22 cm stainless steel pot"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12946S22"</part_number>
+		<name>"Pro 22 5l pot bottom"</name>
+		<family>125</family>
+		<description>"5l 22 cm stainless steel pot bottom"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12947S22"</part_number>
+		<name>"Pro 22 lid"</name>
+		<family>145</family>
+		<description>"22 cm stainless steel lid"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945S20"</part_number>
+		<name>"Pro 20 3l pot"</name>
+		<family>125</family>
+		<description>"3l 20 cm stainless steel pot"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12946S20"</part_number>
+		<name>"Pro 20 3l pot bottom"</name>
+		<family>125</family>
+		<description>"3l 20 cm stainless steel pot bottom"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12947S20"</part_number>
+		<name>"Pro 20 lid"</name>
+		<family>145</family>
+		<description>"20 cm stainless steel lid"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945S17"</part_number>
+		<name>"Pro 17 2l pot"</name>
+		<family>125</family>
+		<description>"2l 17 cm stainless steel pot"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945P17"</part_number>
+		<name>"Pro 17 2l sauce pan"</name>
+		<family>132</family>
+		<description>"2l 17 cm stainless steel souce pan"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945S48"</part_number>
+		<name>"Pro 17 lid"</name>
+		<family>145</family>
+		<description>"17 cm stainless steel lid"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"AS12945G48"</part_number>
+		<name>"Pro Clear 17 lid"</name>
+		<family>146</family>
+		<description>"17 cm glass lid"</description>
+		<part_type>"Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A01"</part_number>
+		<description>"250 mm 5 mm stailess steel disc"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A02"</part_number>
+		<description>"220 mm pot base phase 1"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A03"</part_number>
+		<description>"220 mm pot base phase 2"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A04"</part_number>
+		<description>"220 mm pot base final"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A01"</part_number>
+		<description>"250 mm 1 mm stailess steel disc"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A02"</part_number>
+		<description>"220 mm lid pressed"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A03"</part_number>
+		<description>"220 mm lid polished"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A04"</part_number>
+		<description>"220 mm lid with handle"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A32"</part_number>
+		<description>"200 mm pot base phase 1"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A33"</part_number>
+		<description>"200 mm pot base phase 2"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12945A34"</part_number>
+		<description>"200 mm pot base final"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A32"</part_number>
+		<description>"200 mm lid pressed"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A33"</part_number>
+		<description>"200 mm lid polished"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"IP12947A34"</part_number>
+		<description>"200 mm lid with handle"</description>
+		<part_type>"Intermediate Product"</part_type>
+	</part>
+	<part>
+		<part_number>"PN94561L67"</part_number>
+		<description>"Coolube 2210XP"</description>
+		<part_type>"Raw Material"</part_type>
+	</part>
+</part_list>

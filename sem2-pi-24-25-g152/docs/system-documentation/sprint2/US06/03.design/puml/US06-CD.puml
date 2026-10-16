@@ -1,0 +1,145 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class ApplicationSession
+{
+    - ApplicationSession()
+    + {static} getInstance()
+    + getCurrentSession()
+}
+
+class UserSession
+{
+    + getPlayer()
+    + getCurrentDate()
+}
+
+class Player {
+    - id : String
+    - name : String
+    - budget : double
+
+    + updateBudget(amount)
+}
+
+class Station {
+    - name : String
+    - type : StationType
+    - buildings : List<BuildingUpgrade>
+
+    + addUpgrade(buildingUpgrade)
+    + validateUpgrade(buildingUpgrade)
+    + getBuildings()
+    + getStationType()
+}
+
+enum StationType {
+    DEPOT
+    STATION
+    TERMINAL
+}
+
+class BuildingUpgrade {
+    - id : String
+    - name : String
+    - type : BuildingType
+    - cost : double
+    - availableFrom : Date
+    - description : String
+
+    + BuildingUpgrade(id, name, type, cost, availableFrom, description)
+    + getCost()
+    + getType()
+    + getAvailableFrom()
+}
+
+enum BuildingType {
+    TELEGRAPH
+    TELEPHONE
+    SMALL_CAFE
+    LARGE_CAFE
+    CUSTOMS
+    POST_OFFICE
+    SMALL_HOTEL
+    LARGE_HOTEL
+    SILO
+    LIQUID_STORAGE
+}
+
+class StationRepository {
+    + getStations()
+    + getStationById(stationId)
+    + updateStation(station)
+}
+
+class BuildingUpgradeRepository {
+    + getAvailableUpgrades(station, currentDate)
+    + getUpgradeById(upgradeId)
+}
+
+class Repositories {
+    - Repositories()
+    + {static} getInstance()
+    + getStationRepository()
+    + getBuildingUpgradeRepository()
+}
+
+class UpgradeStationController {
+    + UpgradeStationController()
+    + getStations()
+    + getAvailableUpgrades(stationId)
+    + applyUpgrade(stationId, upgradeId)
+    - validateUpgradeCompatibility(station, buildingUpgrade)
+}
+
+class UpgradeStationUI {
+}
+
+note right of UpgradeStationController
+    Validates compatibility between
+    buildings and station type
+end note
+
+note bottom of BuildingUpgradeRepository
+    Filters upgrades based on:
+    - Current date in scenario
+    - Station compatibility
+    - Mutual exclusivity rules
+end note
+
+UpgradeStationUI .> UpgradeStationController
+
+UpgradeStationController ..> ApplicationSession
+UpgradeStationController ..> UserSession
+UpgradeStationController ..> Station
+UpgradeStationController ..> BuildingUpgrade
+UpgradeStationController ..> StationRepository
+UpgradeStationController ..> BuildingUpgradeRepository
+UpgradeStationController .> Repositories
+
+Repositories -> "1" Repositories : instance
+Repositories --> "1" StationRepository : stationRepository
+Repositories --> "1" BuildingUpgradeRepository : buildingUpgradeRepository
+
+ApplicationSession -> "1" ApplicationSession : instance
+ApplicationSession ..> UserSession
+
+StationRepository --> "*" Station : stations
+
+BuildingUpgradeRepository --> "*" BuildingUpgrade : buildingUpgrades
+
+Station --> "1" StationType : type
+Station --> "*" BuildingUpgrade : buildings
+
+BuildingUpgrade --> "1" BuildingType : type
+
+UserSession --> "1" Player : player
+@enduml

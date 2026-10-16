@@ -1,0 +1,11 @@
+@startuml
+
+title Domain Model for Map Creation
+
+class Map {
+  name
+  width
+  height
+}
+
+@enduml

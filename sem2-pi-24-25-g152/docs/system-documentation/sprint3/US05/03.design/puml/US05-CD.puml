@@ -1,0 +1,300 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+
+class ApplicationSession {
+    - ApplicationSession()
+    + {static} getInstance()
+    + getCurrentSession()
+    + updateBudget(amount)
+}
+
+class UserSession {
+    + getPlayer()
+}
+
+class Player {
+    - id : String
+    - name : String
+    - budget : double
+
+    + updateBudget(amount)
+}
+
+abstract class Station {
+    - id : String
+    - name : String
+    - location : Location
+    - map : Map
+
+    + Station(x, y, name, map)
+    + {abstract} getCost() : double
+    + {abstract} getRadius() : int
+    + {abstract} getType() : String
+    + getName() : String
+    + getLocation() : Location
+}
+
+class DepotStation extends Station {
+    + getCost() : double
+    + getRadius() : int
+    + getType() : String
+    + getMaintenanceCapacity() : int
+}
+
+class PassengerStation extends Station {
+    + getCost() : double
+    + getRadius() : int
+    + getType() : String
+    + getPassengerCapacity() : int
+}
+
+class TerminalStation extends Station {
+    + getCost() : double
+    + getRadius() : int
+    + getType() : String
+    + getCargoCapacity() : int
+}
+
+interface StationFactory {
+    + createStation(x : int, y : int, name : String, map : Map) : Station
+}
+
+class DepotStationFactory implements StationFactory {
+    + createStation(x : int, y : int, name : String, map : Map) : Station
+}
+
+class PassengerStationFactory implements StationFactory {
+    + createStation(x : int, y : int, name : String, map : Map) : Station
+}
+
+class TerminalStationFactory implements StationFactory {
+    + createStation(x : int, y : int, name : String, map : Map) : Station
+}
+
+class StationFactoryProvider {
+    + {static} getFactory(stationType : String) : StationFactory
+}
+
+class StationCreationRequestDTO {
+    - x : int
+    - y : int
+    - stationType : String
+    - customName : String
+
+    + StationCreationRequestDTO(x, y, stationType)
+
+}
+
+class StationResponseDTO {
+    - id : String
+    - name : String
+    - type : String
+    - cost : double
+    - location : LocationDTO
+    - radius : int
+
+    + StationResponseDTO(station : Station)
+}
+
+class LocationDTO {
+    - x : int
+    - y : int
+
+    + LocationDTO(x, y)
+}
+
+class ValidationResultDTO {
+    - isValid : boolean
+    - errorMessage : String
+    - suggestedName : String
+
+    + ValidationResultDTO(isValid, errorMessage, suggestedName)
+    + isValid() : boolean
+}
+
+class PlayerDTO {
+    - id : String
+    - name : String
+    - funds : double
+
+    + PlayerDTO(player : Player)
+}
+
+class Location {
+    - x : int
+    - y : int
+
+    + Location(x, y)
+}
+
+class Map {
+    - name : String
+    - width : int
+    - height : int
+    - cities : List<City>
+    - industries : List<Industry>
+
+    + validateStationPosition(x, y, stationType)
+    + findClosestCity(x, y)
+}
+
+class City {
+    - name : String
+    - location : Location
+    - houseBlocks : int
+}
+
+interface IMapRepository {
+    + getCurrentMap() : Map
+    + findClosestCity(x : int, y : int) : City
+    + validatePosition(x : int, y : int, stationType : String) : boolean
+}
+
+interface IStationRepository {
+    + addStation(station : Station) : void
+    + getStations() : List<Station>
+    + getStationById(id : String) : Station
+    + removeStation(id : String) : boolean
+}
+
+class MapRepository implements IMapRepository {
+    + getCurrentMap() : Map
+    + findClosestCity(x : int, y : int) : City
+    + validatePosition(x : int, y : int, stationType : String) : boolean
+}
+
+class StationRepository implements IStationRepository {
+    + addStation(station : Station) : void
+    + getStations() : List<Station>
+    + getStationById(id : String) : Station
+    + removeStation(id : String) : boolean
+}
+
+class Repositories {
+    - Repositories()
+    + {static} getInstance()
+    + getMapRepository() : IMapRepository
+    + getStationRepository() : IStationRepository
+}
+
+class BuildStationController {
+    - mapRepository : IMapRepository
+    - stationRepository : IStationRepository
+
+    + BuildStationController()
+    + getAvailableStationTypes() : List<String>
+    + getCurrentMap() : Map
+    + validatePosition(request : StationCreationRequestDTO) : ValidationResultDTO
+    + generateStationName(x : int, y : int) : String
+    + buildStation(request : StationCreationRequestDTO) : StationResponseDTO
+    + getPlayerInfo() : PlayerDTO
+    - canAffordStation(stationType : String, budget : double) : boolean
+}
+
+class BuildStationUI {
+    + displayStationTypes() : void
+    + getStationCreationInput() : StationCreationRequestDTO
+    + displayValidationResult(result : ValidationResultDTO) : void
+    + displayStationCreated(station : StationResponseDTO) : void
+    + displayPlayerInfo(player : PlayerDTO) : void
+}
+
+BuildStationUI .> BuildStationController
+BuildStationUI ..> StationCreationRequestDTO
+BuildStationUI ..> StationResponseDTO
+BuildStationUI ..> ValidationResultDTO
+BuildStationUI ..> PlayerDTO
+
+BuildStationController ..> ApplicationSession
+BuildStationController ..> UserSession
+BuildStationController ..> IMapRepository
+BuildStationController ..> IStationRepository
+BuildStationController ..> StationFactoryProvider
+BuildStationController ..> StationCreationRequestDTO
+BuildStationController ..> StationResponseDTO
+BuildStationController ..> ValidationResultDTO
+BuildStationController ..> PlayerDTO
+BuildStationController .> Repositories
+
+ApplicationSession -> "1" ApplicationSession : instance
+ApplicationSession ..> UserSession
+
+MapRepository --> "1" Map : currentMap
+StationRepository --> "*" Station : stations
+
+Map --> "*" City : cities
+Station --> "1" Location : location
+Station --> "1" Map : map
+City --> "1" Location : location
+
+UserSession --> "1" Player : player
+StationResponseDTO --> "1" LocationDTO : location
+
+StationFactoryProvider ..> StationFactory
+StationFactoryProvider ..> DepotStationFactory
+StationFactoryProvider ..> PassengerStationFactory
+StationFactoryProvider ..> TerminalStationFactory
+
+DepotStationFactory ..> DepotStation
+PassengerStationFactory ..> PassengerStation
+TerminalStationFactory ..> TerminalStation
+
+
+' MAPPERS
+class StationMapper {
+    + toDTO(station : Station) : StationResponseDTO
+    + fromDTO(dto : StationCreationRequestDTO, map : Map) : Station
+}
+
+class LocationMapper {
+    + toDTO(location : Location) : LocationDTO
+    + fromDTO(dto : LocationDTO) : Location
+}
+
+class PlayerMapper {
+    + toDTO(player : Player) : PlayerDTO
+}
+
+BuildStationController ..> StationMapper
+BuildStationController ..> LocationMapper
+BuildStationController ..> PlayerMapper
+
+note right of BuildStationController
+    Now uses DTOs for data transfer,
+    interfaces for repositories,
+    and Mappers to handle conversions.
+end note
+
+note bottom of IStationRepository
+    Interface provides protection
+    against implementation changes
+end note
+
+note right of Station
+    Abstract class enables polymorphism.
+    Each station type has specific
+    behavior and properties.
+end note
+
+note right of StationMapper
+    Converts Station objects to/from DTOs
+end note
+
+note right of LocationMapper
+    Converts Location objects to/from DTOs
+end note
+
+note right of PlayerMapper
+    Converts Player to PlayerDTO
+end note
+
+@enduml

@@ -1,0 +1,90 @@
+@startuml US23-SD
+
+!theme plain
+skinparam sequence {
+    ArrowColor Black
+    ActorBorderColor Black
+    LifeLineBorderColor Black
+    ParticipantBorderColor Black
+    ParticipantBackgroundColor White
+    ActorBackgroundColor White
+    BoxBorderColor Black
+}
+
+title US23 - Save Game - Sequence Diagram
+
+actor Player as P
+participant "SaveGameUI" as UI
+participant "SaveGameController" as Controller
+participant "SaveGameService" as Service
+participant "SaveGameSerializer" as Serializer
+participant "SaveGameRepository" as Repository
+participant "GameSession" as Session
+participant "UserSession" as UserSess
+
+P -> UI : run()
+activate UI
+
+UI -> UI : showSaveGameMenu()
+UI -> P : display menu options
+
+P -> UI : select "Save Current Game"
+UI -> P : request save file name
+P -> UI : provide fileName
+
+UI -> Controller : saveCurrentGame(fileName)
+activate Controller
+
+Controller -> Controller : hasActiveGameSession()
+Controller -> Session : isGameActive()
+activate Session
+Session --> Controller : true/false
+deactivate Session
+
+alt if active session exists
+    Controller -> Controller : isValidFileName(fileName)
+    Controller -> Controller : getCurrentPlayer()
+    Controller -> UserSess : getInstance()
+    activate UserSess
+    UserSess --> Controller : userSession
+    Controller -> UserSess : getPlayer()
+    UserSess --> Controller : player
+    deactivate UserSess
+    
+    Controller -> Controller : getCurrentScenario()
+    Controller -> Session : getCurrentScenario()
+    activate Session
+    Session --> Controller : scenario
+    deactivate Session
+    
+    Controller -> Service : saveGame(fileName, player, scenario, gameSession)
+    activate Service
+    
+    Service -> Service : collectGameState(saveData, gameSession)
+    Service -> Serializer : serializeToJson(saveData)
+    activate Serializer
+    Serializer --> Service : jsonData
+    deactivate Serializer
+    
+    Service -> Repository : saveGame(fileName, saveData, jsonData)
+    activate Repository
+    Repository -> Repository : sanitizeFileName(fileName)
+    Repository -> Repository : createSavesDirectoryIfNotExists()
+    Repository --> Service : success/failure
+    deactivate Repository
+    
+    Service --> Controller : success/failure
+    deactivate Service
+    
+    Controller --> UI : success/failure
+else no active session
+    Controller --> UI : error (no active session)
+end
+
+deactivate Controller
+
+UI -> P : display result message
+
+deactivate UI
+
+@enduml

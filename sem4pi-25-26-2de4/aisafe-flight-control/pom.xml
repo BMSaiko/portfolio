@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>eapli.aisafe</groupId>
+    <artifactId>aisafe-flight-control</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>aisafe.core</module>
+        <module>aisafe.persistence.impl</module>
+        <module>aisafe.bootstrap</module>
+        <module>aisafe.app.common.console</module>
+        <module>aisafe.app.backoffice.console</module>
+        <module>aisafe.app.server</module>
+        <module>aisafe.app.company.console</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <h2.version>2.2.224</h2.version>
+        <junit.version>5.10.1</junit.version>
+        <jacoco.version>0.8.11</jacoco.version>
+        <eapli.framework.core.version>25.0.0-RELEASE</eapli.framework.core.version>
+        <eapli.framework.authz.version>25.0.0-RELEASE</eapli.framework.authz.version>
+        <eapli.framework.pubsub.version>25.0.0-RELEASE</eapli.framework.pubsub.version>
+    </properties>
+
+    <!-- Nexus repository for EAPLI framework -->
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- EAPLI Framework Core -->
+            <dependency>
+                <groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+                <artifactId>eapli.framework.core</artifactId>
+                <version>${eapli.framework.core.version}</version>
+            </dependency>
+            <!-- EAPLI Framework Authorization -->
+            <dependency>
+                <groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+                <artifactId>eapli.framework.infrastructure.authz</artifactId>
+                <version>${eapli.framework.authz.version}</version>
+            </dependency>
+            <!-- EAPLI Framework PubSub -->
+            <dependency>
+                <groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+                <artifactId>eapli.framework.infrastructure.pubsub</artifactId>
+                <version>${eapli.framework.pubsub.version}</version>
+            </dependency>
+            <!-- H2 Database -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <!-- JUnit 5 -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+             <dependency>
+                 <groupId>org.junit.vintage</groupId>
+                 <artifactId>junit-vintage-engine</artifactId>
+                 <version>${junit.version}</version>
+             </dependency>
+             <!-- Internal Modules -->
+             <dependency>
+                 <groupId>eapli.aisafe</groupId>
+                 <artifactId>aisafe.core</artifactId>
+                 <version>${project.version}</version>
+             </dependency>
+             <dependency>
+                 <groupId>eapli.aisafe</groupId>
+                 <artifactId>aisafe.persistence.impl</artifactId>
+                 <version>${project.version}</version>
+             </dependency>
+             <dependency>
+                 <groupId>eapli.aisafe</groupId>
+                 <artifactId>aisafe.bootstrap</artifactId>
+                 <version>${project.version}</version>
+             </dependency>
+             <dependency>
+                 <groupId>eapli.aisafe</groupId>
+                 <artifactId>aisafe.app.common.console</artifactId>
+                 <version>${project.version}</version>
+             </dependency>
+              <dependency>
+                  <groupId>eapli.aisafe</groupId>
+                  <artifactId>aisafe.app.backoffice.console</artifactId>
+                  <version>${project.version}</version>
+              </dependency>
+              <!-- Lombok -->
+              <dependency>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+                  <version>1.18.38</version>
+                  <scope>provided</scope>
+              </dependency>
+          </dependencies>
+      </dependencyManagement>
+
+    <dependencies>
+        <!-- H2 Database (runtime) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- JUnit 5 (test) -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

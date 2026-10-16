@@ -1,0 +1,24 @@
+@startuml US08-SD-partial-get-end-stations
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US08 - Get End Stations - Partial Sequence Diagram
+
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant ":StationRepository" as STATIONREPO
+participant "startStation:Station" as START_STATION
+participant "stationList :List<Station>" as STATIONLIST
+
+UI -> CTRL : getAvailableEndStations(startStation)
+activate CTRL
+    group Get End Stations
+    CTRL -> STATIONREPO : getPossibleEndStations(startStation)
+    activate STATIONREPO
+        STATIONREPO --> CTRL : stationList
+    deactivate STATIONREPO
+    end group
+    CTRL --> UI : stationList
+deactivate CTRL
+@enduml

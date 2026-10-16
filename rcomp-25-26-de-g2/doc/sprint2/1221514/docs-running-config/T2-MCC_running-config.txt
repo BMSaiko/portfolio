@@ -1,0 +1,85 @@
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T2-MCC
+!
+!
+!
+ptp clock transparent domain 0 profile default
+!
+username admin privilege 15 password 0 isep2026
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-4094 priority 0
+!
+interface FastEthernet0/1
+ description Trunk to T3-IC Fa9/1 (backbone)
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet1/1
+ description Trunk to T4-IC Fa9/1 (backbone)
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet2/1
+ description Trunk to T2-L1-HC-A Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet3/1
+ description Trunk to T2-L1-HC-C Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet4/1
+ description Trunk to T2-L4-HC-A Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet5/1
+ description Trunk to T2-L4-HC-B Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet8/1
+ description Access port for T2-PC-DMZ (VLAN 770)
+ switchport access vlan 770
+ switchport mode access
+!
+interface FastEthernet9/1
+ description Trunk to T2-Router Fa0/0
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan770
+ ip address 10.61.170.1 255.255.254.0
+!
+ip default-gateway 10.61.170.200
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+

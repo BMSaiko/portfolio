@@ -1,0 +1,67 @@
+@startuml
+title Sequence Diagram - Air Control Area Registration (AirControlArea Aggregate)
+
+actor "Backoffice Operator" as BO
+participant "AirControlAreaController" as Controller
+participant "AirControlAreaService" as Service
+participant "AirControlAreaRepository" as Repo
+participant "AirControlArea" as Aggregate
+
+BO -> Controller: registerAirControlArea(areaCode, name, northLat, southLat, eastLon, westLon, minFuelRequired)
+activate Controller
+
+Controller -> Service: registerAirControlArea(areaData)
+activate Service
+
+Service -> Repo: findByAreaCode(areaCode)
+activate Repo
+Repo --> Service: existingArea (or null)
+deactivate Repo
+
+alt areaCode already exists
+    Service --> Controller: throw DuplicateAreaCodeException
+    Controller --> BO: error: "Air control area code already exists"
+else
+    Service -> Aggregate: new AirControlArea(areaCode, name, northLat, southLat, eastLon, westLon, minFuelRequired)
+    activate Aggregate
+    note right of Aggregate
+        **Invariants enforced inside constructor:**
+        - Area code must be unique
+        - Geographic boundaries must be valid:
+          northLatitude > southLatitude
+          eastLongitude > westLongitude
+        - Coordinates must be within
+          valid ranges (-90 to 90 for lat,
+          -180 to 180 for lon)
+        - Minimum fuel required must be > 0
+    end note
+
+    alt boundaries invalid (north <= south)
+        Aggregate --> Service: throw InvalidGeoBoundaryException
+        Service --> Controller: throw InvalidGeoBoundaryException
+        Controller --> BO: error: "North latitude must be greater than south latitude"
+    else boundaries invalid (east <= west)
+        Aggregate --> Service: throw InvalidGeoBoundaryException
+        Service --> Controller: throw InvalidGeoBoundaryException
+        Controller --> BO: error: "East longitude must be greater than west longitude"
+    else minFuel <= 0
+        Aggregate --> Service: throw InvalidMinimumFuelException
+        Service --> Controller: throw InvalidMinimumFuelException
+        Controller --> BO: error: "Minimum fuel required must be positive"
+    else all invariants satisfied
+        Aggregate --> Service: airControlArea
+        deactivate Aggregate
+
+        Service -> Repo: save(airControlArea)
+        activate Repo
+        Repo --> Service: saved
+        deactivate Repo
+
+        Service --> Controller: airControlArea
+        Controller --> BO: success: "Air control area registered successfully"
+    end
+end
+
+deactivate Service
+deactivate Controller
+@enduml

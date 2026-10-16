@@ -1,0 +1,218 @@
+@startuml US03-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+left to right direction
+
+title US03 - Class Diagram - Add City to Map
+
+class AddCityUI {
+}
+
+class AddCityController {
+  - authService: AuthenticationService
+  - gameRepository: GameRepository
+  - cityService: CityService
+  - mapMapper: MapMapper
+  - cityMapper: CityMapper
+  + getCurrentUserRole(): String
+  + getMapList(): List<MapDTO>
+  + validateCityData(request: AddCityRequestDTO): boolean
+  + addCity(request: AddCityRequestDTO): void
+}
+
+' DTOs for UI <- Domain (providing lists)
+class MapDTO {
+  + id: Long
+  + name: String
+  + width: int
+  + height: int
+  + existingCityNames: List<String>
+}
+
+class CityDTO {
+  + id: Long
+  + name: String
+  + location: LocationDTO
+  + houseBlocksCount: int
+  + population: int
+}
+
+class LocationDTO {
+  + x: int
+  + y: int
+}
+
+' DTO for UI -> Domain (sending data)
+class AddCityRequestDTO {
+  + mapId: Long
+  + name: String
+  + x: int
+  + y: int
+  + houseBlocksCount: int
+  + placementMethod: String
+  + manualBlockLocations: List<LocationDTO>
+}
+
+interface Mapper {
+  + toDTO(type: T): T
+  + toDTOList(type: List<T>): List<T>
+}
+
+' Mappers
+class MapMapper {
+  + toDTO(map: Map): MapDTO
+  + toDTOList(maps: List<Map>): List<MapDTO>
+}
+
+class CityMapper {
+  + toDTO(city: City): CityDTO
+  + locationToDTO(location: Location): LocationDTO
+  + locationFromDTO(dto: LocationDTO): Location
+}
+
+class MapRepository {
+  + getAllMaps(): List<Map>
+  + findById(id: Long): Map
+  + save(map: Map): void
+}
+
+class CityRepository {
+  + saveCity(city: City): void
+  + findByNameAndMap(name: String, mapId: Long): City
+}
+
+class CityService {
+  - cityRepository: CityRepository
+  - cityValidator: CityValidator
+  + validateCityPlacement(map: Map, cityData: AddCityRequestDTO): boolean
+  + createCity(request: AddCityRequestDTO, map: Map): City
+  + isNameUniqueInMap(name: String, mapId: Long): boolean
+}
+
+class CityValidator {
+  + {static}isValidName(name: String): boolean
+  + {static}isValidHouseBlocksCount(count: int): boolean
+  + {static}validateCityData(request: AddCityRequestDTO): void
+}
+
+interface BlockPlacementStrategy {
+  + placeBlocks(cityLocation: Location, count: int, mapWidth: int, mapHeight: int): List<HouseBlock>
+}
+
+class AutomaticBlockPlacement {
+  - random: Random
+  + placeBlocks(cityLocation: Location, count: int, mapWidth: int, mapHeight: int): List<HouseBlock>
+  - generateNormalDistributionLocation(center: Location, mapWidth: int, mapHeight: int): Location
+}
+
+class ManualBlockPlacement {
+  - blockLocations: List<Location>
+  + placeBlocks(cityLocation: Location, count: int, mapWidth: int, mapHeight: int): List<HouseBlock>
+}
+
+class GameRepository {
+  + getMapRepository(): MapRepository
+}
+
+class AuthenticationService {
+  + getCurrentUserSession(): UserSession
+}
+
+class UserSession {
+  + getUserRoles(): List<String>
+}
+
+class Map {
+  - id: Long
+  - name: String
+  - width: int
+  - height: int
+  - cities: List<City>
+  - industries: List<Industry>
+  + addCity(city: City): boolean
+  + isValidLocation(location: Location): boolean
+  + hasElementAt(location: Location): boolean
+  + getCityNames(): List<String>
+}
+
+class City {
+  - id: Long
+  - name: String
+  - location: Location
+  - houseBlocks: List<HouseBlock>
+  + getName(): String
+  + getLocation(): Location
+  + addHouseBlock(block: HouseBlock): void
+  + addHouseBlocks(blocks: List<HouseBlock>): void
+  + getHouseBlocks(): List<HouseBlock>
+  + getPopulation(): int
+  + validateData(): boolean
+}
+
+class HouseBlock {
+  - id: Long
+  - location: Location
+  - populationValue: int
+  + getLocation(): Location
+  + getPopulationValue(): int
+}
+
+class Location {
+  - x: int
+  - y: int
+  + getX(): int
+  + getY(): int
+  + isWithinBounds(width: int, height: int): boolean
+  + distanceTo(other: Location): double
+}
+
+class Editor {
+  - id: String
+  - name: String
+  - role: String
+}
+
+' UI uses DTOs, not domain objects
+AddCityUI --> AddCityController
+AddCityUI ..> MapDTO : displays
+AddCityUI ..> CityDTO : displays
+AddCityUI ..> AddCityRequestDTO : creates
+
+' Controller uses mappers to convert domain to DTOs
+AddCityController --> MapMapper
+AddCityController --> CityMapper
+AddCityController --> AuthenticationService
+AddCityController --> UserSession
+AddCityController --> GameRepository
+AddCityController --> CityService
+
+MapMapper ..|> Mapper : implements
+CityMapper ..|> Mapper : implements
+
+' Mappers convert between domain and DTOs
+MapMapper ..> Map : converts from
+MapMapper ..> MapDTO : converts to
+CityMapper ..> City : converts from
+CityMapper ..> CityDTO : converts to
+CityMapper ..> Location : converts from/to
+CityMapper ..> LocationDTO : converts from/to
+
+GameRepository --> MapRepository
+AddCityController --> MapRepository
+AddCityController --> CityRepository
+CityService --> CityRepository
+CityService --> CityValidator
+CityService ..> BlockPlacementStrategy : uses
+
+BlockPlacementStrategy <|-- AutomaticBlockPlacement
+BlockPlacementStrategy <|-- ManualBlockPlacement
+
+Map "1" *-- "*" City : contains
+City "1" *-- "1" Location : has central position
+City "1" *-- "1..*" HouseBlock : contains
+HouseBlock "1" *-- "1" Location : has position
+Editor "1" *-- "*" City : creates
+
+@enduml

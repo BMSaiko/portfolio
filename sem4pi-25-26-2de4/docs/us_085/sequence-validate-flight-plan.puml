@@ -1,0 +1,152 @@
+@startuml
+title Sequence Diagram - US085: Test/Validate a Flight Plan
+
+actor "Pilot" as Pilot
+participant "ValidateFlightPlanUI" as UI
+participant "ValidateFlightPlanController" as Controller
+participant "FlightPlanRepository" as FlightPlanRepo
+participant "ValidateFlightPlanService\n(lprog)" as Service
+participant "FlightPlanImportService\n(ANTLR)" as ANTLR
+participant "FlightPlanTestRunner\n(ProcessBuilder)" as Runner
+participant "flight_tester\n(C process)" as C
+participant "FlightPlan" as Aggregate
+
+activate UI
+
+' --- 1. Selection Phase ---
+UI -> Controller: listFlightPlans()
+activate Controller
+Controller -> FlightPlanRepo: findAll()
+activate FlightPlanRepo
+FlightPlanRepo --> Controller: Iterable<FlightPlan>
+deactivate FlightPlanRepo
+Controller --> UI: flight plans
+deactivate Controller
+
+UI --> Pilot: displays plans (ID, FROM, TO, STATUS)
+Pilot -> UI: selects flight plan by ID
+
+' --- 2. DSL check ---
+UI -> Controller: validateById(flightPlanId)\nor validate(dslContent, flightPlanId)
+activate Controller
+
+alt flightPlanId is null or blank
+    Controller --> UI: US085Result.ioError("ID must not be empty.")
+    UI --> Pilot: error: "Flight plan ID must not be empty."
+else ID is valid
+
+    Controller -> FlightPlanRepo: findById(FlightPlanId.of(id))
+    activate FlightPlanRepo
+    FlightPlanRepo --> Controller: Optional<FlightPlan>
+    deactivate FlightPlanRepo
+
+    alt plan not found
+        Controller --> UI: US085Result.ioError("Flight plan not found.")
+        UI --> Pilot: error: "Flight plan not found."
+    else plan found
+
+        Controller -> Aggregate: dslContent()
+        activate Aggregate
+        Aggregate --> Controller: dslContent (String or null)
+        deactivate Aggregate
+
+        alt no DSL stored (plan created via US080 without file)
+            Controller --> UI: US085Result.ioError("No DSL stored.")
+            UI --> Pilot: "No DSL stored. Provide a .dsl file."
+            Pilot -> UI: provides path to .dsl file
+            UI -> Controller: validate(dslContent, flightPlanId)
+            Controller -> Aggregate: storeDsl(dslContent)
+            activate Aggregate
+            Aggregate --> Controller: ok
+            deactivate Aggregate
+        end
+
+        ' --- 3. Eixo 1 Pipeline (LPROG) ---
+        Controller -> Service: validateString(dslContent)
+        activate Service
+
+        ' 3a. DSL validation (ANTLR)
+        Service -> ANTLR: importFlightPlan(dslContent)
+        activate ANTLR
+        note right of ANTLR
+            Lexer → Parser → AST
+            SemanticValidator
+        end note
+
+        alt DSL invalid (lexical / syntactic / semantic error)
+            ANTLR --> Service: ImportResult (errors)
+            deactivate ANTLR
+            Service --> Controller: US085Result.dslFailure(errors)
+            deactivate Service
+            Controller --> UI: DSL_FAILURE + error list
+            UI --> Pilot: "[FAILED] DSL validation — N error(s):\n• [SYNTACTIC L7:10] ..."
+            note right of Controller
+                R7: repository is NOT called.
+                FlightPlan status stays DRAFT.
+            end note
+        else DSL valid
+            ANTLR --> Service: ImportResult (List<FlightPlan lprog model>)
+            deactivate ANTLR
+
+            ' 3b. Physical test (C)
+            Service -> Runner: run(FlightPlanTestInput)
+            activate Runner
+            note right of Runner
+                FlightPlanTestInputBuilder converts
+                lprog FlightPlan → JSON DTO
+                (ft→m, l→kg unit normalisation)
+            end note
+            Runner -> C: ProcessBuilder\nstdin: JSON payload
+            activate C
+            note right of C
+                physics.c validates:
+                • fuel > 0
+                • altitudes >= 0
+                • segment start != end
+                • CLIMB/CRUISE/DESCEND coherence
+            end note
+            C --> Runner: stdout: {"passed":true/false,"issues":[...]}
+            deactivate C
+            Runner --> Service: FlightPlanTestResult
+            deactivate Runner
+
+            alt physical test failed
+                Service --> Controller: US085Result.physicalFailure(issues)
+                deactivate Service
+                Controller -> Aggregate: invalidate()
+                activate Aggregate
+                note right of Aggregate
+                    status = FAILED
+                end note
+                Aggregate --> Controller: ok
+                deactivate Aggregate
+                Controller -> FlightPlanRepo: save(plan)
+                activate FlightPlanRepo
+                FlightPlanRepo --> Controller: savedPlan
+                deactivate FlightPlanRepo
+                Controller --> UI: PHYSICAL_FAILURE + issue list
+                UI --> Pilot: "[FAILED] Physical validation issues:\n• [fuel]: ..."
+            else physical test passed
+                Service --> Controller: US085Result.success()
+                deactivate Service
+                Controller -> Aggregate: validate()
+                activate Aggregate
+                note right of Aggregate
+                    status = VALIDATED
+                end note
+                Aggregate --> Controller: ok
+                deactivate Aggregate
+                Controller -> FlightPlanRepo: save(plan)
+                activate FlightPlanRepo
+                FlightPlanRepo --> Controller: savedPlan
+                deactivate FlightPlanRepo
+                Controller --> UI: SUCCESS
+                UI --> Pilot: "[SUCCESS] Flight plan passed all validation checks.\nStatus updated to VALIDATED."
+            end
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

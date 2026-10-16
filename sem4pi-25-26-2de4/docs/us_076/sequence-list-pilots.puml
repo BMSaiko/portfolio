@@ -1,0 +1,58 @@
+@startuml
+title Sequence Diagram - US076: List Pilot Roster
+
+actor "Company Collaborator" as Collab
+participant "ListPilotsUI" as UI
+participant "ListPilotsController" as Controller
+participant "AuthService" as Auth
+participant "PilotRepository" as PilotRepo
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+
+activate UI
+
+Collab -> UI: request list of pilots
+UI -> Controller: listPilotsOfMyCompany()
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(AIR_TRANSPORT_COMPANY_COLLABORATOR)
+Controller -> Auth: currentUser()
+activate Auth
+Auth --> Controller: Optional<User>
+deactivate Auth
+
+alt no active session
+    Controller --> UI: throw IllegalStateException
+    UI --> Collab: error: "No user is currently logged in."
+else user logged in
+
+    Controller -> CollabRepo: findByUserEmail(userEmail)
+    activate CollabRepo
+    CollabRepo --> Controller: Optional<CustomerCollaborator>
+    deactivate CollabRepo
+
+    alt collaborator not found
+        Controller --> UI: throw IllegalStateException
+    else found
+        Controller -> CompanyRepo: findByIcaoCode(collab.customerCode())
+        activate CompanyRepo
+        CompanyRepo --> Controller: Optional<AirTransportCompany>
+        deactivate CompanyRepo
+
+        alt company not found
+            Controller --> UI: throw IllegalStateException
+        else company found
+            Controller -> PilotRepo: findByCompany(company)
+            activate PilotRepo
+            PilotRepo --> Controller: pilots (Iterable<Pilot>)
+            deactivate PilotRepo
+
+            Controller --> UI: pilots
+            UI --> Collab: display pilot list
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

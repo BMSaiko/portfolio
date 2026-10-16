@@ -1,0 +1,18 @@
+@startuml US12-SD-partial-get-stations
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US12 - Get Stations List - Partial Sequence Diagram
+
+participant ":CargoGenerationController" as CTRL
+participant ":StationRepository" as STATIONREPO
+participant "stationList:List<Station>" as STATIONLIST
+
+group Get Stations List
+CTRL -> STATIONREPO : getAllStations()
+activate STATIONREPO
+    STATIONREPO --> CTRL : stationList
+deactivate STATIONREPO
+end group
+@enduml

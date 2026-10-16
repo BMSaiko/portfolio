@@ -1,0 +1,90 @@
+@startuml
+title Sequence Diagram - US082 Insert Weather Data In Flight Plan
+
+actor "Pilot" as Pilot
+participant "InsertWeatherDataInFlightPlanUI" as UI
+participant "InsertWeatherDataInFlightPlanController" as Controller
+participant "AuthService" as Auth
+participant "FlightPlanRepository" as FlightPlanRepo
+participant "WeatherDataRepository" as WeatherRepo
+participant "FlightPlan" as FlightPlan
+
+Pilot -> UI: select "Insert Weather Data In Flight Plan"
+UI -> Controller: myFlightPlans()
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(PILOT)
+activate Auth
+Auth --> Controller: authorized
+deactivate Auth
+
+Controller -> Auth: currentUser()
+Auth --> Controller: current pilot user
+
+Controller -> FlightPlanRepo: findAll()
+activate FlightPlanRepo
+FlightPlanRepo --> Controller: all flight plans
+deactivate FlightPlanRepo
+
+Controller --> UI: flight plans owned by current pilot
+deactivate Controller
+
+UI -> Controller: availableWeatherData()
+activate Controller
+Controller -> Auth: ensureHasAnyRole(PILOT)
+Controller -> WeatherRepo: findAll()
+activate WeatherRepo
+WeatherRepo --> Controller: weather data records
+deactivate WeatherRepo
+Controller --> UI: available weather data
+deactivate Controller
+
+UI -> Pilot: request flightPlanId and weatherDataId
+Pilot -> UI: flightPlanId, weatherDataId
+
+UI -> Controller: insertWeatherData(flightPlanId, weatherDataId)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(PILOT)
+Controller -> FlightPlanRepo: findById(flightPlanId)
+activate FlightPlanRepo
+FlightPlanRepo --> Controller: FlightPlan
+deactivate FlightPlanRepo
+
+Controller -> Auth: currentUser()
+Auth --> Controller: current pilot user
+
+alt flight plan does not belong to current pilot
+    Controller --> UI: ACCESS DENIED
+else flight plan belongs to current pilot
+    Controller -> WeatherRepo: findById(weatherDataId)
+    activate WeatherRepo
+    WeatherRepo --> Controller: WeatherData
+    deactivate WeatherRepo
+
+    Controller -> FlightPlan: addWeatherData(weatherData)
+    activate FlightPlan
+    note right of FlightPlan
+        Invariants enforced by FlightPlan:
+        - WeatherData is required
+        - Data cannot be duplicated
+        - Weather data can only be added
+          before flight execution
+        - If status is VALIDATED or APPROVED,
+          status becomes DRAFT
+    end note
+    FlightPlan --> Controller: updated flight plan
+    deactivate FlightPlan
+
+    Controller -> FlightPlanRepo: save(flightPlan)
+    activate FlightPlanRepo
+    FlightPlanRepo --> Controller: persisted flight plan
+    deactivate FlightPlanRepo
+
+    Controller --> UI: updated flight plan
+end
+
+deactivate Controller
+UI --> Pilot: show success/status
+
+@enduml

@@ -1,0 +1,22 @@
+
+@startuml US02-SD-partial-get-map-list
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US02 - Get Map List - Partial Sequence Diagram
+
+participant ":AddIndustryUI" as UI
+participant ":AddIndustryController" as CTRL
+participant ":GameRepository" as GAMEREPO
+participant ":MapRepository" as MAPREPO
+participant ":MapMapper" as MAPMAPPER
+
+UI -> CTRL : getMapList()
+activate CTRL
+    group Get Maps List
+    CTRL -> GAMEREPO : getMapRepository()
+    activate GAMEREPO
+        GAMEREPO --> CTRL : mapRepository
+    deactivate CTRL
+@enduml

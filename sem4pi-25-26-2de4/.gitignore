@@ -1,0 +1,29 @@
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+*.db
+*.trace.db
+database/aisafe.trace.db

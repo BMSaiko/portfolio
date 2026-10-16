@@ -1,0 +1,89 @@
+@startuml USEI12-class-diagram
+
+class MinimalBackboneService {
+    - railwayNetworkRepository: RailwayNetworkRepository
+    + calculateMinimalBackbone(): Graph<Station, TrackConnection>
+    + kruskalMST(): Graph<Station, TrackConnection>
+    + generateDotFile(graph: Graph, filename: String): String
+    + generateSvgFromDot(dotFilePath: String, outputSvgPath: String): boolean
+    + generateMinimalBackboneVisualization(baseFilename: String): String
+}
+
+class RailwayNetworkRepository {
+    - instance: RailwayNetworkRepository
+    - networkGraph: Graph<Station, TrackConnection>
+    - dataLoaded: boolean
+    + getInstance(): RailwayNetworkRepository
+    + getNetworkGraph(): Graph<Station, TrackConnection>
+    + isDataLoaded(): boolean
+}
+
+interface Graph<V, E> {
+    + vertices(): Collection<V>
+    + edges(): Collection<Edge<V, E>>
+    + addVertex(v: V): boolean
+    + addEdge(vOrig: V, vDest: V, weight: E): boolean
+    + numVertices(): int
+    + numEdges(): int
+    + validVertex(v: V): boolean
+}
+
+class MapGraph<V, E> {
+    - vertices: Map<V, MapVertex<V, E>>
+    + vertices(): Collection<V>
+    + edges(): Collection<Edge<V, E>>
+    + addVertex(v: V): boolean
+    + addEdge(vOrig: V, vDest: V, weight: E): boolean
+    + numVertices(): int
+    + numEdges(): int
+    + validVertex(v: V): boolean
+}
+
+class Edge<V, E> {
+    - vOrig: V
+    - vDest: V
+    - weight: E
+    + getVOrig(): V
+    + getVDest(): V
+    + getWeight(): E
+}
+
+class Station {
+    - name: String
+    - coordX: double
+    - coordY: double
+    + getName(): String
+    + getCoordX(): double
+    + getCoordY(): double
+}
+
+class TrackConnection {
+    - distance: double
+    - cost: double
+    + getDistance(): double
+    + getCost(): double
+}
+
+class Algorithms {
+    {static} + DepthFirstSearch(g: Graph<V, E>, vert: V): LinkedList<V>
+}
+
+MinimalBackboneService --> RailwayNetworkRepository : uses
+MinimalBackboneService ..> Graph : uses
+MinimalBackboneService ..> Algorithms : uses
+MinimalBackboneService ..> Edge : uses
+MinimalBackboneService ..> Station : uses
+MinimalBackboneService ..> TrackConnection : uses
+
+RailwayNetworkRepository --> Graph : manages
+
+MapGraph ..|> Graph : implements
+
+Graph --> Edge : contains
+Graph --> Station : vertices
+Graph --> TrackConnection : edge weights
+
+Edge --> Station : vOrig, vDest
+Edge --> TrackConnection : weight
+
+@enduml

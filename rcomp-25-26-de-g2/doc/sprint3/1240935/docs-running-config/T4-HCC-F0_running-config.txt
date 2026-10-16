@@ -1,0 +1,61 @@
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T4-HCC-F0
+!
+!
+!
+ptp clock transparent domain 0 profile default
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+ switchport mode trunk
+!
+interface FastEthernet1/1
+ switchport mode trunk
+!
+interface FastEthernet2/1
+ switchport mode trunk
+!
+interface FastEthernet3/1
+ switchport mode trunk
+!
+interface FastEthernet4/1
+ switchport mode trunk
+!
+interface FastEthernet5/1
+ switchport mode trunk
+!
+interface FastEthernet9/1
+ switchport access vlan 770
+ switchport mode access
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan770
+ ip address 10.61.170.102 255.255.254.0
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+

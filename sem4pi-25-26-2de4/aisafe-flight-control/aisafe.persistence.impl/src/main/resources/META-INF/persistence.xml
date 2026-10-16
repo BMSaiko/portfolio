@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd" version="2.2">
+  <persistence-unit name="aisafePU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>eapli.aisafe.usermanagement.domain.User</class>
+    <class>eapli.aisafe.usermanagement.domain.Email</class>
+    <class>eapli.aisafe.usermanagement.domain.Role</class>
+    <class>eapli.aisafe.enginemanagement.domain.EngineModel</class>
+    <class>eapli.aisafe.enginemanagement.domain.EngineModelId</class>
+    <class>eapli.aisafe.aircraftmodelmanagement.domain.AircraftModel</class>
+    <class>eapli.aisafe.aircraftmodelmanagement.domain.AircraftModelId</class>
+    <class>eapli.aisafe.aircontrolmanagement.domain.AirControlArea</class>
+    <class>eapli.aisafe.airportmanagement.domain.Airport</class>
+    <class>eapli.aisafe.weather.domain.WeatherData</class>
+    <class>eapli.aisafe.organization.domain.AirTransportCompany</class>
+    <class>eapli.aisafe.organization.domain.CustomerCollaborator</class>
+    <class>eapli.aisafe.fleetmanagement.domain.Aircraft</class>
+    <class>eapli.aisafe.flightplanmanagement.domain.FlightPlan</class>
+    <class>eapli.aisafe.flightplanmanagement.domain.FlightPlanId</class>
+    <class>eapli.aisafe.flightplanmanagement.domain.FlightLeg</class>
+    <class>eapli.aisafe.flightplanmanagement.domain.FlightSegment</class>
+    <class>eapli.aisafe.flightplanmanagement.domain.Waypoint</class>
+    <class>eapli.aisafe.routemanagement.domain.FlightRoute</class>
+    <class>eapli.aisafe.pilotmanagement.domain.Pilot</class>
+    <class>eapli.aisafe.reportmanagement.domain.MonthlyStatistics</class>
+
+    <!-- Weather Value Objects -->
+    <class>eapli.aisafe.generic.domain.TimePeriod</class>
+    <class>eapli.aisafe.weather.domain.Temperature</class>
+    <class>eapli.aisafe.weather.domain.WindSpeed</class>
+    <class>eapli.aisafe.weather.domain.WindDirection</class>
+    <class>eapli.aisafe.weather.domain.Humidity</class>
+    <class>eapli.aisafe.weather.domain.Pressure</class>
+
+    <properties>
+      <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver" />
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:./database/aisafe;DB_CLOSE_DELAY=-1" />
+      <property name="jakarta.persistence.jdbc.user" value="sa" />
+      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.format_sql" value="false" />
+        <property name="hibernate.hbm2ddl.auto" value="create" />
+    </properties>
+  </persistence-unit>
+</persistence>

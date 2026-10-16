@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operation_type_list>
+	<operation_type id="5647">
+		<operation_desc>"Disc cutting"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4578"</workstation_type>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5649">
+		<operation_desc>"Initial pot base pressing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5651">
+		<operation_desc>"Final pot base pressing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5653">
+		<operation_desc>"Pot base finishing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"C5637"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5655">
+		<operation_desc>"Lid pressing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5657">
+		<operation_desc>"Lid finishing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"C5637"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5659">
+		<operation_desc>"Pot handles riveting"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"S3271"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5661">
+		<operation_desc>"Lid handle screw"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"T3452"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5663">
+		<operation_desc>"Pot test and packaging"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"K3675"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5665">
+		<operation_desc>"Handle welding"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"D9123"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5667">
+		<operation_desc>"Lid polishing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"Q3547"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5669">
+		<operation_desc>"Pot base polishing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"Q3547"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5671">
+		<operation_desc>"Teflon painting"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"Q5478"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5681">
+		<operation_desc>"Initial pan base pressing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5682">
+		<operation_desc>"Final pan base pressing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"A4588"</workstation_type>
+			<workstation_type>"A4598"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5683">
+		<operation_desc>"Pan base finishing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"C5637"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5685">
+		<operation_desc>"Handle gluing"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"D9123"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+	<operation_type id="5688">
+		<operation_desc>"Pan test and packaging"</operation_desc>
+		<workstation_type_list>
+			<workstation_type>"K3675"</workstation_type>
+		</workstation_type_list>
+	</operation_type>
+</operation_type_list>
+
+

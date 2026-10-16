@@ -1,0 +1,454 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+' === SESSION MANAGEMENT ===
+class ApplicationSession
+{
+    - ApplicationSession()
+    + {static} getInstance()
+    + getCurrentSession()
+}
+
+class UserSession
+{
+    + getPlayer()
+    + getCurrentDate() : Date
+}
+
+class Player {
+    - id : String
+    - name : String
+    - budget : double
+
+    + updateBudget(amount)
+}
+
+' === STATION DOMAIN WITH POLYMORPHISM ===
+abstract class Station {
+    - id : String
+    - name : String
+    - buildings : List<BuildingUpgrade>
+
+    + addUpgrade(buildingUpgrade : BuildingUpgrade) : boolean
+    + {abstract} validateUpgrade(buildingUpgrade : BuildingUpgrade) : boolean
+    + {abstract} getCompatibleBuildingTypes() : List<String>
+    + {abstract} getMaxBuildingsAllowed() : int
+    + {abstract} getType() : String
+    + getBuildings() : List<BuildingUpgrade>
+    + canAffordUpgrade(upgrade : BuildingUpgrade, budget : double) : boolean
+}
+
+class DepotStation extends Station {
+    + validateUpgrade(buildingUpgrade : BuildingUpgrade) : boolean
+    + getCompatibleBuildingTypes() : List<String>
+    + getMaxBuildingsAllowed() : int
+    + getType() : String
+}
+
+class PassengerStation extends Station {
+    + validateUpgrade(buildingUpgrade : BuildingUpgrade) : boolean
+    + getCompatibleBuildingTypes() : List<String>
+    + getMaxBuildingsAllowed() : int
+    + getType() : String
+}
+
+class TerminalStation extends Station {
+    + validateUpgrade(buildingUpgrade : BuildingUpgrade) : boolean
+    + getCompatibleBuildingTypes() : List<String>
+    + getMaxBuildingsAllowed() : int
+    + getType() : String
+}
+
+' === BUILDING UPGRADE HIERARCHY WITH POLYMORPHISM ===
+abstract class BuildingUpgrade {
+    - id : String
+    - name : String
+    - cost : double
+    - availableFrom : Date
+    - description : String
+
+    + BuildingUpgrade(id, name, cost, availableFrom, description)
+    + {abstract} getType() : String
+    + {abstract} getMaintenanceCost() : double
+    + {abstract} getRevenue() : double
+    + {abstract} isCompatibleWith(stationType : String) : boolean
+    + {abstract} conflictsWith(other : BuildingUpgrade) : boolean
+    + getCost() : double
+    + getAvailableFrom() : Date
+    + isAvailableAt(date : Date) : boolean
+}
+
+' === COMMUNICATION BUILDINGS ===
+class TelegraphBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+class TelephoneBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+' === HOSPITALITY BUILDINGS ===
+class SmallCafeBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+class LargeCafeBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+class SmallHotelBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+class LargeHotelBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+' === SERVICE BUILDINGS ===
+class CustomsBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+class PostOfficeBuilding extends BuildingUpgrade {
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+}
+
+' === STORAGE BUILDINGS ===
+class SiloBuilding extends BuildingUpgrade {
+    - storageCapacity : int
+
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+    + getStorageCapacity() : int
+}
+
+class LiquidStorageBuilding extends BuildingUpgrade {
+    - liquidCapacity : int
+
+    + getType() : String
+    + getMaintenanceCost() : double
+    + getRevenue() : double
+    + isCompatibleWith(stationType : String) : boolean
+    + conflictsWith(other : BuildingUpgrade) : boolean
+    + getLiquidCapacity() : int
+}
+
+' === FACTORY PATTERN FOR BUILDING CREATION ===
+interface BuildingUpgradeFactory {
+    + createBuilding(id : String, name : String, cost : double, availableFrom : Date, description : String) : BuildingUpgrade
+    + getSupportedType() : String
+}
+
+class TelegraphBuildingFactory implements BuildingUpgradeFactory {
+    + createBuilding(id : String, name : String, cost : double, availableFrom : Date, description : String) : BuildingUpgrade
+    + getSupportedType() : String
+}
+
+class CafeBuildingFactory implements BuildingUpgradeFactory {
+    + createBuilding(id : String, name : String, cost : double, availableFrom : Date, description : String) : BuildingUpgrade
+    + getSupportedType() : String
+}
+
+class HotelBuildingFactory implements BuildingUpgradeFactory {
+    + createBuilding(id : String, name : String, cost : double, availableFrom : Date, description : String) : BuildingUpgrade
+    + getSupportedType() : String
+}
+
+class StorageBuildingFactory implements BuildingUpgradeFactory {
+    + createBuilding(id : String, name : String, cost : double, availableFrom : Date, description : String) : BuildingUpgrade
+    + getSupportedType() : String
+}
+
+class BuildingUpgradeFactoryProvider {
+    + {static} getFactory(buildingType : String) : BuildingUpgradeFactory
+    + {static} getSupportedTypes() : List<String>
+}
+
+' === DTOs ===
+class StationUpgradeRequestDTO {
+    - stationId : String
+    - upgradeId : String
+    - playerBudget : double
+
+    + StationUpgradeRequestDTO(stationId, upgradeId, playerBudget)
+}
+
+class AvailableUpgradeDTO {
+    - id : String
+    - name : String
+    - type : String
+    - cost : double
+    - description : String
+    - maintenanceCost : double
+    - expectedRevenue : double
+    - isAffordable : boolean
+    - conflictsWithExisting : List<String>
+
+    + AvailableUpgradeDTO(upgrade : BuildingUpgrade, isAffordable : boolean, conflicts : List<String>)
+}
+
+class StationDTO {
+    - id : String
+    - name : String
+    - type : String
+    - installedUpgrades : List<InstalledUpgradeDTO>
+    - availableUpgradeSlots : int
+
+    + StationDTO(station : Station)
+
+}
+
+class InstalledUpgradeDTO {
+    - id : String
+    - name : String
+    - type : String
+    - maintenanceCost : double
+    - currentRevenue : double
+
+    + InstalledUpgradeDTO(upgrade : BuildingUpgrade)
+}
+
+class UpgradeResultDTO {
+    - success : boolean
+    - message : String
+    - updatedStation : StationDTO
+    - newBudget : double
+
+    + UpgradeResultDTO(success, message, station, budget)
+    + isSuccess() : boolean
+}
+
+class PlayerDTO {
+    - id : String
+    - name : String
+    - budget : double
+
+    + PlayerDTO(player : Player)
+}
+
+' === REPOSITORY INTERFACES (PROTECTED VARIATIONS) ===
+interface IStationRepository {
+    + getStations() : List<Station>
+    + getStationById(stationId : String) : Station
+    + updateStation(station : Station) : void
+    + getStationsByType(stationType : String) : List<Station>
+}
+
+interface IBuildingUpgradeRepository {
+    + getAvailableUpgrades(station : Station, currentDate : Date) : List<BuildingUpgrade>
+    + getUpgradeById(upgradeId : String) : BuildingUpgrade
+    + getAllUpgrades() : List<BuildingUpgrade>
+    + getUpgradesByType(buildingType : String) : List<BuildingUpgrade>
+}
+
+' === REPOSITORY IMPLEMENTATIONS ===
+class StationRepository implements IStationRepository {
+    + getStations() : List<Station>
+    + getStationById(stationId : String) : Station
+    + updateStation(station : Station) : void
+    + getStationsByType(stationType : String) : List<Station>
+}
+
+class BuildingUpgradeRepository implements IBuildingUpgradeRepository {
+    + getAvailableUpgrades(station : Station, currentDate : Date) : List<BuildingUpgrade>
+    + getUpgradeById(upgradeId : String) : BuildingUpgrade
+    + getAllUpgrades() : List<BuildingUpgrade>
+    + getUpgradesByType(buildingType : String) : List<BuildingUpgrade>
+    - filterByCompatibility(upgrades : List<BuildingUpgrade>, station : Station) : List<BuildingUpgrade>
+    - filterByDate(upgrades : List<BuildingUpgrade>, currentDate : Date) : List<BuildingUpgrade>
+    - filterByConflicts(upgrades : List<BuildingUpgrade>, existingUpgrades : List<BuildingUpgrade>) : List<BuildingUpgrade>
+}
+
+' === REPOSITORIES FACTORY ===
+class Repositories {
+    - Repositories()
+    + {static} getInstance()
+    + getStationRepository() : IStationRepository
+    + getBuildingUpgradeRepository() : IBuildingUpgradeRepository
+}
+
+' === ENHANCED CONTROLLER ===
+class UpgradeStationController {
+    - stationRepository : IStationRepository
+    - buildingUpgradeRepository : IBuildingUpgradeRepository
+
+    + UpgradeStationController()
+    + getStations() : List<StationDTO>
+    + getAvailableUpgrades(stationId : String) : List<AvailableUpgradeDTO>
+    + applyUpgrade(request : StationUpgradeRequestDTO) : UpgradeResultDTO
+    + getPlayerInfo() : PlayerDTO
+    - validateUpgradeCompatibility(station : Station, buildingUpgrade : BuildingUpgrade) : boolean
+    - calculateAffordability(upgrade : BuildingUpgrade, budget : double) : boolean
+    - findConflictingUpgrades(station : Station, newUpgrade : BuildingUpgrade) : List<String>
+}
+
+class UpgradeStationUI {
+    + displayStations(stations : List<StationDTO>) : void
+    + selectStation() : String
+    + displayAvailableUpgrades(upgrades : List<AvailableUpgradeDTO>) : void
+    + selectUpgrade() : String
+    + getUpgradeRequest() : StationUpgradeRequestDTO
+    + displayUpgradeResult(result : UpgradeResultDTO) : void
+    + displayPlayerInfo(player : PlayerDTO) : void
+}
+
+class StationMapper {
+    + toDTO(station : Station) : StationDTO
+}
+
+class UpgradeMapper {
+    + toDTO(upgrade : BuildingUpgrade, budget : double, conflicts : List<String>) : AvailableUpgradeDTO
+    + toInstalledDTO(upgrade : BuildingUpgrade) : InstalledUpgradeDTO
+}
+
+class UpgradeResultMapper {
+    + toDTO(success : boolean, station : Station, newBudget : double, message : String) : UpgradeResultDTO
+}
+
+class PlayerMapper {
+    + toDTO(player : Player) : PlayerDTO
+}
+
+
+' === RELATIONSHIPS ===
+UpgradeStationUI .> UpgradeStationController
+UpgradeStationUI ..> StationUpgradeRequestDTO
+UpgradeStationUI ..> AvailableUpgradeDTO
+UpgradeStationUI ..> StationDTO
+UpgradeStationUI ..> UpgradeResultDTO
+UpgradeStationUI ..> PlayerDTO
+
+UpgradeStationController ..> ApplicationSession
+UpgradeStationController ..> UserSession
+UpgradeStationController ..> IStationRepository
+UpgradeStationController ..> IBuildingUpgradeRepository
+UpgradeStationController ..> StationUpgradeRequestDTO
+UpgradeStationController ..> AvailableUpgradeDTO
+UpgradeStationController ..> StationDTO
+UpgradeStationController ..> UpgradeResultDTO
+UpgradeStationController ..> PlayerDTO
+UpgradeStationController .> Repositories
+UpgradeStationController ..> StationMapper
+UpgradeStationController ..> UpgradeMapper
+UpgradeStationController ..> UpgradeResultMapper
+UpgradeStationController ..> PlayerMapper
+
+
+Repositories -> "1" Repositories : instance
+Repositories --> "1" IStationRepository : stationRepository
+Repositories --> "1" IBuildingUpgradeRepository : buildingUpgradeRepository
+
+ApplicationSession -> "1" ApplicationSession : instance
+ApplicationSession ..> UserSession
+
+StationRepository --> "*" Station : stations
+BuildingUpgradeRepository --> "*" BuildingUpgrade : buildingUpgrades
+
+Station --> "*" BuildingUpgrade : buildings
+UserSession --> "1" Player : player
+
+StationDTO --> "*" InstalledUpgradeDTO : installedUpgrades
+UpgradeResultDTO --> "1" StationDTO : updatedStation
+
+' === FACTORY RELATIONSHIPS ===
+BuildingUpgradeFactoryProvider ..> BuildingUpgradeFactory
+BuildingUpgradeFactoryProvider ..> TelegraphBuildingFactory
+BuildingUpgradeFactoryProvider ..> CafeBuildingFactory
+BuildingUpgradeFactoryProvider ..> HotelBuildingFactory
+BuildingUpgradeFactoryProvider ..> StorageBuildingFactory
+
+TelegraphBuildingFactory ..> TelegraphBuilding
+TelegraphBuildingFactory ..> TelephoneBuilding
+CafeBuildingFactory ..> SmallCafeBuilding
+CafeBuildingFactory ..> LargeCafeBuilding
+HotelBuildingFactory ..> SmallHotelBuilding
+HotelBuildingFactory ..> LargeHotelBuilding
+StorageBuildingFactory ..> SiloBuilding
+StorageBuildingFactory ..> LiquidStorageBuilding
+
+' === NOTES ===
+note right of UpgradeStationController
+    Now uses DTOs for clean data transfer
+    and interfaces for repository access.
+    Validation logic distributed across
+    polymorphic station and building types.
+end note
+
+note bottom of IBuildingUpgradeRepository
+    Interface provides protection against
+    implementation changes. Filtering logic
+    handles compatibility, date availability,
+    and conflict resolution.
+end note
+
+note right of BuildingUpgrade
+    Abstract class enables polymorphism.
+    Each building type implements specific
+    behavior for compatibility, conflicts,
+    costs, and revenue generation.
+end note
+
+note bottom of BuildingUpgradeFactory
+    Factory pattern protects against
+    building creation complexity and
+    enables easy addition of new
+    building types.
+end note
+
+note right of Station
+    Polymorphic validation allows each
+    station type to define its own
+    upgrade compatibility rules and
+    building limits.
+end note
+
+note right of StationMapper
+    Converts Station domain objects into DTOs for UI.
+    Keeps the controller free of transformation logic.
+end note
+
+
+@enduml

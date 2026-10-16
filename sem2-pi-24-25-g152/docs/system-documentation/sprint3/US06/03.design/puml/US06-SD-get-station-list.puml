@@ -1,0 +1,36 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":UpgradeStationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "stationRepository\n:StationRepository" as STATION_REPO
+
+autonumber 3
+-> CTRL : getStations()
+
+autonumber 3.1
+activate CTRL
+    group Get Stations List
+        CTRL -> REPOS : getInstance()
+        activate REPOS
+            REPOS --> CTRL: repositories
+        deactivate REPOS
+
+        CTRL -> REPOS_SINGLETON : getStationRepository()
+        activate REPOS_SINGLETON
+            REPOS_SINGLETON --> CTRL: stationRepository
+        deactivate REPOS_SINGLETON
+
+        CTRL -> STATION_REPO : getStations()
+        activate STATION_REPO
+            STATION_REPO --> CTRL : stationsList
+        deactivate STATION_REPO
+    end
+
+    autonumber 4
+    <-- CTRL : stationsList
+deactivate CTRL
+@enduml

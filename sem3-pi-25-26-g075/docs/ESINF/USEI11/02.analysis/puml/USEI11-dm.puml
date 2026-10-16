@@ -1,0 +1,45 @@
+@startuml USEI11 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+class Station {
+    name
+    stationId
+}
+
+class TrackConnection {
+    distance
+    cost
+}
+
+
+
+class UpgradePlanResult {
+    hasCycles
+    topologicalOrder
+    cycleStations
+    cycleEdges
+    verticesCount
+    edgesCount
+}
+
+class CycleInfo {
+    stations
+    edges
+}
+
+
+' Relationships
+Station "*" -- "*" Station : "has dependency on >"
+TrackConnection "*" -- "2" Station : "connects"
+
+UpgradePlanResult --> Station : "orders/cycles"
+UpgradePlanResult --> CycleInfo : "contains"
+CycleInfo --> Station : "identifies"
+
+@enduml

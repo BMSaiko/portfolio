@@ -1,0 +1,123 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T3-Router
+!
+!
+!
+enable secret 5 $1$mERr$9KGTUJ5fxWV9TYoQ7c2lc/
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+username admin privilege 15 password 0 isep2026
+!
+!
+license udi pid CISCO2811/K9 sn FTX1017909L-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name rcomp.isep.ipp.pt
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description Trunk to T3-IC Fa8/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.769
+ encapsulation dot1Q 769
+ ip address 10.61.174.3 255.255.255.0
+!
+interface FastEthernet0/0.775
+ encapsulation dot1Q 775
+ ip address 10.61.156.1 255.255.252.0
+!
+interface FastEthernet0/0.776
+ encapsulation dot1Q 776
+ ip address 10.61.136.1 255.255.248.0
+!
+interface FastEthernet0/0.777
+ encapsulation dot1Q 777
+ ip address 10.61.166.1 255.255.254.0
+!
+interface FastEthernet0/0.778
+ encapsulation dot1Q 778
+ ip address 10.61.172.1 255.255.255.0
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ network 10.61.174.0 0.0.0.255 area 0
+ network 10.61.156.0 0.0.3.255 area 3
+ network 10.61.136.0 0.0.7.255 area 3
+ network 10.61.166.0 0.0.1.255 area 3
+ network 10.61.172.0 0.0.0.255 area 3
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.61.174.2 
+ip route 10.61.128.0 255.255.248.0 10.61.174.2 
+ip route 10.61.152.0 255.255.252.0 10.61.174.2 
+ip route 10.61.164.0 255.255.254.0 10.61.174.2 
+ip route 10.61.173.128 255.255.255.128 10.61.174.2 
+ip route 10.61.144.0 255.255.248.0 10.61.174.4 
+ip route 10.61.160.0 255.255.252.0 10.61.174.4 
+ip route 10.61.168.0 255.255.254.0 10.61.174.4 
+ip route 10.61.173.0 255.255.255.128 10.61.174.4 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+!
+end
+

@@ -1,0 +1,13 @@
+ActivKey,descr,duration,duration-unit,tot-cost,predecessors
+A,High level analysis,1,week,30,
+B,Order Hardware platform,4,week,2500,
+C,Installation and commissioning of hardware,2,week,1250,B
+D,Detailed analysis of core modules,3,week,30,A
+E,Detailed analysis of supporting modules,2,week,30,D
+F,Programming of core modules,4,week,20,"C,D"
+G,Programming of supporting modules,3,week,20,"E,F"
+H,Quality assurance of core modules,2,week,30,F
+I,Quality assurance of supporting modules,1,week,30,G
+J,Application Manual,1,week,550,G
+K,User Manual,1,week,750,G
+L,Core and supporting module training,2,week,1500,"H,I,K"

@@ -1,0 +1,38 @@
+@startuml USEI13 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+class Station {
+    name
+    stationId
+    coordX
+    coordY
+}
+
+class TrackConnection {
+    distance
+    cost
+    capacity
+}
+
+class HubScoreResult {
+    stationId
+    stationName
+    degree
+    betweenness
+    harmonicCloseness
+    hubScore
+}
+
+' Relationships
+Station "*" -- "*" Station : "connected to >"
+TrackConnection "*" -- "2" Station : "connects"
+
+HubScoreResult --> Station : "analyzes"
+
+@enduml

@@ -1,0 +1,210 @@
+@startuml US09-SD-Fixed
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Player" as PLAYER
+participant ":BuyLocomotiveUI" as UI
+participant ":BuyLocomotiveController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "locomotiveRepository\n:ILocomotiveRepository" as LOCOMOTIVE_REPO
+participant "trainRepository\n:ITrainRepository" as TRAIN_REPO
+participant "railwayNetworkRepository\n:IRailwayNetworkRepository" as NETWORK_REPO
+participant "ApplicationSession" as APP_SESSION
+participant "appSession\n:ApplicationSession" as APP_SESSION_SINGLETON
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+participant "player\n:Player" as PLAYER_OBJ
+participant "locomotive\n:Locomotive" as LOCOMOTIVE
+participant "newTrain\n:Train" as TRAIN
+participant ":LocomotiveMapper" as LOC_MAPPER
+participant ":TrainMapper" as TRAIN_MAPPER
+participant ":PurchaseResultMapper" as RESULT_MAPPER
+
+activate PLAYER
+
+    PLAYER -> UI : requests locomotive list
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : getAvailableLocomotives()
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL: repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getLocomotiveRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: locomotiveRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> APP_SESSION : getInstance()
+            activate APP_SESSION
+                APP_SESSION --> CTRL : appSession
+            deactivate APP_SESSION
+
+            CTRL -> APP_SESSION_SINGLETON : getCurrentSession()
+            activate APP_SESSION_SINGLETON
+                APP_SESSION_SINGLETON --> CTRL : currentSession
+            deactivate APP_SESSION_SINGLETON
+
+            CTRL -> CURRENT_SESSION : getCurrentDate()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : currentDate
+            deactivate CURRENT_SESSION
+
+            CTRL -> CURRENT_SESSION : getPlayer()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : player
+            deactivate CURRENT_SESSION
+
+            CTRL -> LOCOMOTIVE_REPO : getAvailableLocomotives(currentDate)
+            activate LOCOMOTIVE_REPO
+                LOCOMOTIVE_REPO --> CTRL : availableLocomotives
+            deactivate LOCOMOTIVE_REPO
+
+            loop for each locomotive in availableLocomotives
+                CTRL -> CTRL : calculateAffordability(locomotive, player.getFunds())
+                activate CTRL
+                    CTRL --> CTRL : isAffordable
+                deactivate CTRL
+
+                CTRL -> LOC_MAPPER : toDTO(locomotive, isAffordable)
+                activate LOC_MAPPER
+                    LOC_MAPPER --> CTRL : availableLocomotiveDTO
+                deactivate LOC_MAPPER
+            end
+
+            CTRL --> UI : List<AvailableLocomotiveDTO>
+        deactivate CTRL
+
+        UI -> UI : displayAvailableLocomotives(locomotiveDTOs)
+        activate UI
+            UI --> UI :
+        deactivate UI
+
+        UI --> PLAYER : shows available locomotives
+    deactivate UI
+
+    PLAYER -> UI : selects locomotive and confirms purchase
+    activate UI
+        UI -> UI : getPurchaseRequest()
+        activate UI
+            UI --> UI : purchaseRequest (LocomotivePurchaseRequestDTO)
+        deactivate UI
+
+        UI -> CTRL : buyLocomotive(purchaseRequest)
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL: repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getLocomotiveRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: locomotiveRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> REPOS_SINGLETON : getTrainRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: trainRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> REPOS_SINGLETON : getRailwayNetworkRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: railwayNetworkRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> LOCOMOTIVE_REPO : getLocomotiveById(purchaseRequest.getLocomotiveId())
+            activate LOCOMOTIVE_REPO
+                LOCOMOTIVE_REPO --> CTRL : locomotive
+            deactivate LOCOMOTIVE_REPO
+
+            CTRL -> APP_SESSION : getInstance()
+            activate APP_SESSION
+                APP_SESSION --> CTRL : appSession
+            deactivate APP_SESSION
+
+            CTRL -> APP_SESSION_SINGLETON : getCurrentSession()
+            activate APP_SESSION_SINGLETON
+                APP_SESSION_SINGLETON --> CTRL : currentSession
+            deactivate APP_SESSION_SINGLETON
+
+            CTRL -> CURRENT_SESSION : getPlayer()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : player
+            deactivate CURRENT_SESSION
+
+            CTRL -> CTRL : validatePurchase(player, locomotive)
+            activate CTRL
+                CTRL -> PLAYER_OBJ : canAfford(locomotive.getPrice())
+                activate PLAYER_OBJ
+                    PLAYER_OBJ --> CTRL : true
+                deactivate PLAYER_OBJ
+
+                CTRL -> LOCOMOTIVE : isAvailableAt(currentDate)
+                activate LOCOMOTIVE
+                    LOCOMOTIVE --> CTRL : true
+                deactivate LOCOMOTIVE
+
+                CTRL --> CTRL : true (validation passed)
+            deactivate CTRL
+
+
+            CTRL -> CURRENT_SESSION : updateFunds(-locomotive.getPrice())
+            activate CURRENT_SESSION
+                CURRENT_SESSION -> PLAYER_OBJ : updateFunds(-locomotive.getPrice())
+                activate PLAYER_OBJ
+                    PLAYER_OBJ --> CURRENT_SESSION : newFunds
+                deactivate PLAYER_OBJ
+                CURRENT_SESSION --> CTRL : newFunds
+            deactivate CURRENT_SESSION
+
+            CTRL -> CTRL : createTrainFromLocomotive(locomotive)
+            activate CTRL
+                CTRL -> PLAYER_OBJ : addLocomotive(locomotive)
+                activate PLAYER_OBJ
+                    PLAYER_OBJ --> CTRL : newTrain
+                deactivate PLAYER_OBJ
+                CTRL --> CTRL : newTrain
+            deactivate CTRL
+
+            CTRL -> TRAIN_REPO : saveTrainToFleet(newTrain)
+            activate TRAIN_REPO
+                TRAIN_REPO --> CTRL : true
+            deactivate TRAIN_REPO
+
+            CTRL -> NETWORK_REPO : addTrainToNetwork(newTrain)
+            activate NETWORK_REPO
+                NETWORK_REPO --> CTRL : true
+            deactivate NETWORK_REPO
+
+            CTRL -> TRAIN_MAPPER : toDTO(newTrain)
+            activate TRAIN_MAPPER
+                TRAIN_MAPPER --> CTRL : trainDTO
+            deactivate TRAIN_MAPPER
+
+            CTRL -> RESULT_MAPPER : toDTO(true, "Purchase successful", newTrain, newFunds)
+            activate RESULT_MAPPER
+                RESULT_MAPPER --> CTRL : purchaseResultDTO
+            deactivate RESULT_MAPPER
+
+            CTRL --> UI : purchaseResultDTO
+        deactivate CTRL
+
+        UI -> UI : displayPurchaseResult(purchaseResultDTO)
+        activate UI
+            UI --> UI :
+        deactivate UI
+
+        UI --> PLAYER : displays purchase confirmed with train details
+    deactivate UI
+
+deactivate PLAYER
+
+
+@enduml

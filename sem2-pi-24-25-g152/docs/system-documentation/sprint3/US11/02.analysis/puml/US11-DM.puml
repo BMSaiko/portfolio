@@ -1,0 +1,45 @@
+@startuml US11-DM
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Domain Model (DM) - US11 List Trains
+
+class Train {
+  - name: String
+  - locomotiveType: String
+  - currentCargoes: List<Cargo>
+}
+
+class Locomotive {
+  - type: String
+  - specifications: String
+}
+
+class Cargo {
+  - type: String
+  - quantity: int
+  - status: CargoStatus
+}
+
+class Route {
+  - stations: List<Station>
+  - path: Path
+}
+
+class Station {
+  - name: String
+}
+
+class Path {
+  - segments: List<Segment>
+}
+
+' Relationships
+Train "1" -- "1" Locomotive : has >
+Train "1" -- "0..*" Cargo : carries >
+Train "1" -- "0..1" Route : follows >
+Route "1" -- "1..*" Station : contains >
+Route "1" -- "1" Path : defined by >
+
+@enduml 

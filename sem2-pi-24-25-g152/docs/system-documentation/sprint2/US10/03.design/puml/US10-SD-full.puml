@@ -1,0 +1,65 @@
+@startuml US10-SD
+skinparam packageStyle rectangle
+skinparam shadowing false
+autonumber
+
+actor "Player" as PLAYER
+participant ":AssignTrainUI" as UI
+participant ":TrainAssignmentController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "trainRepository\n:TrainRepository" as TRAIN_REPO
+participant "routeRepository\n:RouteRepository" as ROUTE_REPO
+participant "stationRepository\n:StationRepository" as STATION_REPO
+participant "cargoRepository\n:CargoRepository" as CARGO_REPO
+participant "train\n:Train" as TRAIN
+
+activate PLAYER
+
+    PLAYER -> UI : assign train to route
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : assignTrainToRoute(trainId, routeId)
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL : repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getTrainRepository()
+            REPOS_SINGLETON --> CTRL : trainRepository
+
+            CTRL -> TRAIN_REPO : getTrainById(trainId)
+            TRAIN_REPO --> CTRL : train
+
+            CTRL -> REPOS_SINGLETON : getRouteRepository()
+            REPOS_SINGLETON --> CTRL : routeRepository
+
+            CTRL -> ROUTE_REPO : getRouteById(routeId)
+            ROUTE_REPO --> CTRL : route
+
+            CTRL -> TRAIN : assignRoute(route)
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            REPOS_SINGLETON --> CTRL : stationRepository
+
+            CTRL -> STATION_REPO : getStationsByRoute(routeId)
+            STATION_REPO --> CTRL : list of stations
+
+            CTRL -> REPOS_SINGLETON : getCargoRepository()
+            REPOS_SINGLETON --> CTRL : cargoRepository
+
+            CTRL -> CARGO_REPO : getCargoesByStations(stations)
+            CARGO_REPO --> CTRL : cargoesPerStation
+
+            CTRL -> TRAIN : assignCargoes(cargoesPerStation)
+
+            CTRL --> UI : success confirmation
+        deactivate CTRL
+
+        UI --> PLAYER : train assigned to route
+    deactivate UI
+
+deactivate PLAYER
+@enduml

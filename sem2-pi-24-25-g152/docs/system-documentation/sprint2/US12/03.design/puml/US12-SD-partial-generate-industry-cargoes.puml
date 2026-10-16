@@ -1,0 +1,18 @@
+@startuml US12-SD-partial-generate-industry-cargoes
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US12 - Generate Industry Cargoes - Partial Sequence Diagram
+
+participant ":CargoGenerationController" as CTRL
+participant "station:Station" as STATION
+participant ":IndustryService" as INDSERVICE
+participant "industryCargoes:List<Cargo>" as IND_CARGOES
+group Generate Industry Cargoes
+CTRL -> INDSERVICE : generateCargoForStation(station)
+activate INDSERVICE
+    INDSERVICE --> CTRL : industryCargoes
+deactivate INDSERVICE
+end group
+@enduml

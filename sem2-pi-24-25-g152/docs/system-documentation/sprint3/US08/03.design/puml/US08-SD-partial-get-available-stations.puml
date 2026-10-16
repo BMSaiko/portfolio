@@ -1,0 +1,34 @@
+@startuml US08-SD-partial-get-available-stations
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US08 - Get Available Stations - Partial Sequence Diagram
+
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant ":StationMapper" as STATIONMAPPER
+participant ":GameRepository" as GAMEREPO
+participant ":StationRepository" as STATIONREPO
+participant "stationList :List<Station>" as STATIONLIST
+
+UI -> CTRL : getAvailableStations()
+activate CTRL
+    group Get Available Stations
+    CTRL -> GAMEREPO : getStationRepository()
+    activate GAMEREPO
+        GAMEREPO --> CTRL : stationRepository
+    deactivate GAMEREPO
+    CTRL -> STATIONREPO : getAllStations()
+    activate STATIONREPO
+        STATIONREPO --> CTRL : stationList
+    deactivate STATIONREPO
+    
+    CTRL -> STATIONMAPPER : toDTOList(stationList)
+    activate STATIONMAPPER
+        STATIONMAPPER --> CTRL : stationDTOList
+    deactivate STATIONMAPPER
+    end group
+    CTRL --> UI : stationDTOList
+deactivate CTRL
+@enduml

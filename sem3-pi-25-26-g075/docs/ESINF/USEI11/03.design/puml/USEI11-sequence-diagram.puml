@@ -1,0 +1,101 @@
+@startuml USEI11-sequence-diagram
+
+actor "Infrastructure Planner" as IP
+participant ":RailwayUpgradeService" as RUS
+participant ":RailwayNetworkRepository" as RNR
+participant "graph:Graph<Station,\nTrackConnection>" as GRAPH
+participant ":UpgradePlanResult" as RESULT
+participant "inDegree:Map" as INDEGREE
+participant "queue:Queue" as QUEUE
+
+== Compute Upgrade Plan ==
+
+IP -> RUS : computeUpgradePlan()
+activate RUS
+
+RUS -> RUS : buildInternalStructures()
+activate RUS
+
+RUS -> RNR : getNetworkGraph()
+activate RNR
+RNR --> RUS : graph
+deactivate RNR
+
+RUS -> INDEGREE : clear()
+RUS -> INDEGREE : initialize all stations with 0
+
+loop for each vertex
+    RUS -> GRAPH : outgoingEdges(vertex)
+    activate GRAPH
+    GRAPH --> RUS : edges
+    deactivate GRAPH
+    
+    loop for each edge
+        RUS -> INDEGREE : increment in-degree of destination
+    end
+end
+
+RUS --> RUS : structures built
+deactivate RUS
+
+RUS -> RESULT : create()
+activate RESULT
+
+RUS -> RUS : copy inDegree to tempInDegree
+
+loop for each station
+    alt in-degree == 0
+        RUS -> QUEUE : add(station)
+    end
+end
+
+loop while queue not empty
+    RUS -> QUEUE : poll()
+    QUEUE --> RUS : current station
+    
+    RUS -> RESULT : add to topologicalOrder
+    
+    loop for each neighbor
+        RUS -> INDEGREE : decrement in-degree
+        
+        alt new in-degree == 0
+            RUS -> QUEUE : add(neighbor)
+        end
+    end
+end
+
+alt topologicalOrder.size() != numVertices
+    RUS -> RUS : findCycleStations(tempInDegree)
+    activate RUS
+    RUS --> RUS : cycleStations
+    deactivate RUS
+    
+    RUS -> RUS : findCycleEdges(tempInDegree)
+    activate RUS
+    
+    loop for each cycle station pair
+        RUS -> GRAPH : edge(from, to)
+        activate GRAPH
+        
+        alt edge exists
+            GRAPH --> RUS : edge
+            RUS -> RUS : add to cycleEdges
+        end
+        deactivate GRAPH
+    end
+    
+    RUS --> RUS : cycleEdges
+    deactivate RUS
+    
+    RUS -> RESULT : setCycleStations(cycleStations)
+    RUS -> RESULT : setCycleEdges(cycleEdges)
+    RUS -> RESULT : setHasCycles(true)
+else no cycles
+    RUS -> RESULT : setHasCycles(false)
+end
+
+RUS --> IP : result
+deactivate RESULT
+deactivate RUS
+
+@enduml

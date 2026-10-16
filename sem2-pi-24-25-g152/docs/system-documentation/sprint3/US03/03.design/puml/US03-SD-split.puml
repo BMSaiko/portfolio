@@ -1,0 +1,72 @@
+@startuml US03-SD-split
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US03 Add City to Map - Split
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant "selectedMap:Map" as MAP
+participant "city:City" as CITY
+
+activate EDITOR
+
+    EDITOR -> UI : asks to add a city
+    activate UI
+        UI -> CTRL : getCurrentUserRole()
+        activate CTRL
+            CTRL --> UI : roles
+        deactivate CTRL
+        
+        UI -> UI : validateRole("Editor")
+        
+        ref over UI, CTRL
+            Get Maps List
+        end ref
+        
+        UI --> EDITOR : shows map list and asks to select one
+    deactivate UI
+
+    EDITOR -> UI : selects map
+    activate UI
+        UI --> EDITOR : requests city data (name, coordinates, house blocks count)
+    deactivate UI
+
+    EDITOR -> UI : provides city data
+    activate UI
+        ref over UI, CTRL
+            Validate City Data
+        end ref
+        
+        UI --> EDITOR : requests block assignment method (manual/automatic)
+    deactivate UI
+
+    EDITOR -> UI : selects block assignment method
+    activate UI
+
+    alt manual placement
+        UI --> EDITOR : requests coordinates for each house block
+        deactivate UI
+        EDITOR -> UI : provides coordinates for each block
+        activate UI
+    else automatic placement
+        UI --> EDITOR : confirms automatic placement using normal distribution
+    end
+
+    UI -> UI : collectCityData()
+    note right : Creates AddCityRequestDTO
+    
+    ref over UI, CTRL, MAP, CITY
+        Create City
+    end ref
+    
+    UI --> EDITOR : confirms successful addition with population summary
+    deactivate UI
+
+deactivate EDITOR
+
+@enduml

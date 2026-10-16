@@ -1,0 +1,28 @@
+@startuml US12-SSD
+autonumber
+
+actor "Product Owner" as PO
+participant "System" as S
+
+PO -> S: Access cargo generation simulator
+S --> PO: Display simulator configuration options
+
+PO -> S: Configure simulation parameters (optional)
+S --> PO: Display updated configuration
+
+PO -> S: Start cargo simulation
+S --> PO: Confirm simulation started
+
+PO -> S: Request cargo generation status
+S --> PO: Display current cargo generation statistics
+
+PO -> S: View generated cargoes
+S --> PO: Display list of generated cargoes
+
+PO -> S: Adjust simulation parameters (optional)
+S --> PO: Confirm parameter adjustments
+
+PO -> S: Pause/stop simulation (optional)
+S --> PO: Confirm simulation status change
+
+@enduml

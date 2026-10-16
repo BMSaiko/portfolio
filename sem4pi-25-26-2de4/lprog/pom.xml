@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>pt.isep.sem4pi</groupId>
+        <artifactId>sem4pi2526</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>lprog</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr4.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- ANTLR4 grammar compilation — always active -->
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>${antlr4.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/antlr4</sourceDirectory>
+                    <includes>
+                        <include>**/*.g4</include>
+                    </includes>
+                    <visitor>true</visitor>
+                    <listener>true</listener>
+                </configuration>
+            </plugin>
+
+            <!-- Pass C binary path to tests — always active -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <flight.tester.path>
+                            ${project.basedir}/src/main/c/flight_tester/bin/flight_tester
+                        </flight.tester.path>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+        C component compilation is in a separate profile so that
+        'mvn install' works on any machine without requiring 'make'.
+
+        To compile C locally, run either:
+            mvn compile -Pwith-c
+        or directly:
+            cd lprog/src/main/c/flight_tester && make
+    -->
+    <profiles>
+        <profile>
+            <id>with-c</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>compile-c-component</id>
+                                <phase>compile</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>make</executable>
+                                    <workingDirectory>
+                                        ${project.basedir}/src/main/c/flight_tester
+                                    </workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>clean-c-component</id>
+                                <phase>clean</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>make</executable>
+                                    <arguments>
+                                        <argument>clean</argument>
+                                    </arguments>
+                                    <workingDirectory>
+                                        ${project.basedir}/src/main/c/flight_tester
+                                    </workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,0 +1,61 @@
+@startuml USEI07-dm
+
+hide methods
+hide circle
+skinParam lineType ortho
+left to right direction
+skinParam classPadding 10
+skinParam nodesep 80
+skinParam ranksep 80
+
+interface KDTreeNodeInterface {
+  getCoords()
+}
+
+class Station {
+  name
+  timeZoneGroup
+  country
+  isCity
+  isMainStation
+  isAirport
+}
+
+class Coordinates {
+  latitude
+  longitude
+}
+
+class TimeZone {
+  country
+  zone
+  group
+}
+
+class "KDTree<E>" as KDTree {
+}
+
+class "KDNode<E>" as KDNode {
+  coords
+}
+
+class "BalancedTreeBuilder" as TreeBuilder {
+  buildBalancedKDTree()
+  buildOptimizedBalancedKDTree()
+}
+
+class "CoordinateStationKey" as CoordinateKey {
+  coordinates
+  stationName
+}
+
+Station ..|> KDTreeNodeInterface : implements
+Station "1" -- "1" Coordinates : has
+Station "1" -- "1" TimeZone : has
+KDTree "1" -- "*" KDNode : contains
+KDNode "1" -- "1" KDTreeNodeInterface : stores
+TreeBuilder "1" -- "1" KDTree : builds
+CoordinateKey "1" -- "1" Coordinates : wraps
+CoordinateKey "1" -- "1" Station : references
+
+@enduml

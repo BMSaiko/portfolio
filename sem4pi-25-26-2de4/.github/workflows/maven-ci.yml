@@ -1,0 +1,42 @@
+name: AlSafe CI Build
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Run Tests with Maven
+        run: mvn -B clean verify --file eapli.base/pom.xml
+
+      - name: Publicar Relatórios de Testes (Surefire)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-testes
+          path: 'eapli.base/**/target/surefire-reports/*.xml'
+
+      - name: Publicar Métricas de Cobertura (JaCoCo)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-cobertura
+          path: 'eapli.base/**/target/site/jacoco/'

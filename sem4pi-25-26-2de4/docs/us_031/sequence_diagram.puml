@@ -1,0 +1,111 @@
+@startuml US031_Register_User_Sequence
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam sequence {
+    ParticipantBorderColor #2C3E50
+    ParticipantBackgroundColor #ECF0F1
+    ArrowColor #2C3E50
+}
+
+title US031 - Register User Sequence Diagram
+
+actor "Admin User" as Admin
+participant "MainMenu" as Menu
+participant "UsersMenuUI" as UsersMenu
+participant "RegisterUserUI" as UI
+participant "RegisterUserController" as Ctrl
+participant "AuthService" as Auth
+participant "User" as CurrentUser
+participant "JpaUserRepository" as Repo
+database "H2 DB" as DB
+participant "User (new)" as NewUser
+participant "PasswordHasher" as Hash
+
+== Navigate to User Registration ==
+
+Admin -> Menu : selects "Users" option
+activate Menu
+note right of Menu : MainMenu checks\nhasRole(ADMIN)
+Menu -> UsersMenu : new UsersMenuUI(...).show()
+activate UsersMenu
+UsersMenu -> Admin : "1. List users\n2. Register user\n3. Enable/Disable user\n0. Back"
+Admin -> UsersMenu : selects "2"
+UsersMenu -> UI : new RegisterUserUI(controller).show()
+activate UI
+
+== Collect User Data ==
+
+UI -> Admin : "Email:"
+Admin -> UI : enters email
+UI -> Admin : "Password (min 8 chars, one digit, one uppercase):"
+Admin -> UI : enters password
+UI -> Admin : "Full name:"
+Admin -> UI : enters full name
+UI -> Admin : "Phone number:"
+Admin -> UI : enters phone number
+
+== Role Selection ==
+
+UI -> Admin : display MAIN_ROLES list\n(ADMIN, BACKOFFICE_OPERATOR,\nCOLLABORATOR, PILOT, WEATHER_PERSON)
+Admin -> UI : enters role number
+UI -> UI : processRoleSelection(selected, roles)
+note right of UI : If COLLABORATOR selected,\nprompt for subtype selection\n(AIR_TRANSPORT_COMPANY_COLLABORATOR\nor FLIGHT_CONTROL_OPERATOR)
+UI -> Admin : "Role number (0 to finish):"
+Admin -> UI : enters 0 (finish)
+UI -> Admin : "Final roles: [BACKOFFICE_OPERATOR]"
+
+== Controller Registration ==
+
+UI -> Ctrl : registerUser(email, password,\n  name, phone, roles)
+activate Ctrl
+
+Ctrl -> Auth : ensureHasAnyRole(Role.ADMIN)
+activate Auth
+Auth -> Auth : ensureAuthenticated()
+Auth -> CurrentUser : hasRole(ADMIN)
+activate CurrentUser
+CurrentUser --> Auth : true
+deactivate CurrentUser
+Auth --> Ctrl : (authorized)
+deactivate Auth
+
+Ctrl -> Ctrl : new Email(emailStr)
+Ctrl -> Repo : existsByEmail(email)
+activate Repo
+Repo -> DB : SELECT u FROM User u\nWHERE u.email = :email
+DB --> Repo : (empty)
+Repo --> Ctrl : false
+deactivate Repo
+
+Ctrl -> NewUser : new User(email, password,\n  name, phone, roles)
+activate NewUser
+NewUser -> NewUser : validate password\n(>= 8 chars, digit, uppercase)
+NewUser -> Hash : hashPassword(password)
+activate Hash
+Hash -> Hash : generateSalt()\npbkdf2(pwd, salt, 10000, 256)
+Hash --> NewUser : "iterations:salt:hash"
+deactivate Hash
+NewUser --> Ctrl : User (active=true)
+deactivate NewUser
+
+Ctrl -> Repo : save(newUser)
+activate Repo
+Repo -> DB : INSERT INTO T_USER ...
+DB --> Repo : persisted
+Repo --> Ctrl : (void)
+deactivate Repo
+
+Ctrl --> UI : (void)
+deactivate Ctrl
+
+UI -> Admin : "User registered successfully."
+
+== Error: Duplicate Email ==
+
+note over UI, DB : If email already exists:\nCtrl -> Repo : existsByEmail(email) -> true\nCtrl throws IllegalArgumentException\nUI catches and shows "Error: Email already registered"
+
+== Error: Non-Admin Attempt ==
+
+note over UI, Auth : If current user is not ADMIN:\nAuth.ensureHasAnyRole(ADMIN) throws\nSecurityException("User does not have required role")\nUI catches and shows the error message
+
+@enduml

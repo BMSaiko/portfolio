@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AISafe – Active Sessions</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0f1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            color: #3fb950;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        nav a:hover { background: #21262d; }
+
+        .container { padding: 28px 32px; }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #3fb950;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        #session-count {
+            margin-left: auto;
+            background: #0d4429;
+            border: 1px solid #238636;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.8rem;
+            color: #3fb950;
+        }
+
+        .table-wrapper {
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        thead tr {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+        }
+
+        th {
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #8b949e;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #21262d;
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #161b22; }
+
+        td { padding: 10px 14px; }
+
+        .online-dot {
+            display: inline-block;
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #3fb950;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .service-tag {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #79c0ff;
+        }
+
+        #empty-msg {
+            text-align: center;
+            padding: 48px;
+            color: #484f58;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🟢 AISafe — Active Sessions</h1>
+    <nav><a href="/">← All Logs</a></nav>
+</header>
+
+<div class="container">
+    <div class="status-bar">
+        <div class="dot"></div>
+        <span>Live – auto-refreshing every 3 seconds</span>
+        <span id="session-count">0 active</span>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Client IP</th>
+                <th>Port</th>
+                <th>Service</th>
+                <th>Login Time</th>
+            </tr>
+            </thead>
+            <tbody id="sessions-body">
+            <tr><td colspan="5" id="empty-msg">No active sessions.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function fetchSessions() {
+        fetch('/api/active')
+            .then(r => r.json())
+            .then(data => {
+                const tbody = document.getElementById('sessions-body');
+                document.getElementById('session-count').textContent = data.length + ' active';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" id="empty-msg">No active sessions.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(s => `
+                    <tr>
+                        <td><span class="online-dot"></span>${s.username}</td>
+                        <td>${s.clientIp}</td>
+                        <td>${s.clientPort}</td>
+                        <td><span class="service-tag">${s.service}</span></td>
+                        <td>${s.loginTime}</td>
+                    </tr>`).join('');
+            })
+            .catch(() => {});
+    }
+
+    fetchSessions();
+    setInterval(fetchSessions, 3000);
+</script>
+</body>
+</html>

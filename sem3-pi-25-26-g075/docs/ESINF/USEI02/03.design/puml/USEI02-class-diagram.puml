@@ -1,0 +1,135 @@
+@startuml USEI02-class-diagram
+
+class MenuController {
+    - scanner: Scanner
+    - dataInitService: DataInitializationService
+    - warehouseService: WarehouseManagementService
+    - warehouse: Warehouse
+    - lastAllocationResult: AllocationResult
+    + handleProcessOrders(): void
+}
+
+class WarehouseManagementService {
+    - orderAllocationService: OrderAllocationService
+    + processOrders(orders: List<Order>, warehouse: Warehouse, mode: EligibilityMode): AllocationResult
+}
+
+class OrderAllocationService {
+    + allocateOrders(orders: List<Order>, warehouse: Warehouse, mode: EligibilityMode): AllocationResult
+    - createInventorySnapshot(warehouse: Warehouse): Map<String, List<BoxAllocation>>
+    - allocateLine(line: OrderLine, snapshot: Map): List<AllocationFragment>
+    - determineEligibilityStatus(allocatedQty: int, requestedQty: int, mode: EligibilityMode): AllocationStatus
+}
+
+enum EligibilityMode {
+    STRICT
+    PARTIAL
+}
+
+class Order {
+    - orderId: String
+    - dueDate: LocalDate
+    - priority: int
+    - lines: List<OrderLine>
+    + getOrderId(): String
+    + getDueDate(): LocalDate
+    + getPriority(): int
+    + getLines(): List<OrderLine>
+    + compareTo(other: Order): int
+}
+
+class OrderLine {
+    - lineNo: int
+    - sku: String
+    - requestedQty: int
+    + getLineNo(): int
+    + getSku(): String
+    + getRequestedQty(): int
+    + compareTo(other: OrderLine): int
+}
+
+class AllocationFragment {
+    - orderId: String
+    - lineNo: int
+    - sku: String
+    - qty: int
+    - boxId: String
+    - aisle: int
+    - bay: int
+    + getOrderId(): String
+    + getLineNo(): int
+    + getSku(): String
+    + getQty(): int
+    + getBoxId(): String
+    + getAisle(): int
+    + getBay(): int
+}
+
+class LineEligibility {
+    - orderId: String
+    - lineNo: int
+    - status: AllocationStatus
+    - requestedQty: int
+    - allocatedQty: int
+    + getOrderId(): String
+    + getLineNo(): int
+    + getStatus(): AllocationStatus
+    + getRequestedQty(): int
+    + getAllocatedQty(): int
+}
+
+enum AllocationStatus {
+    ELIGIBLE
+    PARTIAL
+    UNDISPATCHABLE
+}
+
+class AllocationResult {
+    - eligibilities: List<LineEligibility>
+    - allocations: List<AllocationFragment>
+    + getEligibilities(): List<LineEligibility>
+    + getAllocations(): List<AllocationFragment>
+    + addEligibility(eligibility: LineEligibility): void
+    + addAllocation(fragment: AllocationFragment): void
+}
+
+class Warehouse {
+    - bays: Map<String, Bay>
+    - skuToBays: Map<String, List<Bay>>
+    + getInventoryBySku(): Map<String, List<Box>>
+}
+
+class CsvImportService {
+    - orders: Map<String, Order>
+    + importOrders(InputStream): void
+    + importOrderLines(InputStream): void
+    + getOrdersList(): List<Order>
+}
+
+MenuController --> WarehouseManagementService
+MenuController --> CsvImportService
+MenuController --> Warehouse
+MenuController --> AllocationResult
+
+WarehouseManagementService --> OrderAllocationService
+
+OrderAllocationService --> Warehouse
+OrderAllocationService --> Order
+OrderAllocationService --> AllocationResult
+OrderAllocationService ..> AllocationFragment : creates
+OrderAllocationService ..> LineEligibility : creates
+OrderAllocationService --> EligibilityMode
+
+Order "1" *-- "many" OrderLine : contains
+
+AllocationResult "1" *-- "many" LineEligibility : contains
+AllocationResult "1" *-- "many" AllocationFragment : contains
+
+LineEligibility --> AllocationStatus
+OrderLine --> AllocationFragment : generates
+AllocationFragment --> Box : references
+
+CsvImportService ..> Order : creates
+CsvImportService ..> OrderLine : creates
+
+@enduml

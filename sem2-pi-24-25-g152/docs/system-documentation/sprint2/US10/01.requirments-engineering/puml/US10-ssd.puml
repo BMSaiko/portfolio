@@ -1,0 +1,22 @@
+@startuml
+actor Player
+participant "System" as System
+
+Player -> System: Select train
+System -> System: Validate train selection
+
+Player -> System: Select route
+System -> System: Validate route selection
+
+Player -> System: Select station
+System -> System: Validate station
+
+Player -> System: Select cargo list
+System -> System: Validate cargo list
+
+Player -> System: Assign train to route
+System -> System: Update game state
+
+System -> Player: Confirmation message
+
+@enduml

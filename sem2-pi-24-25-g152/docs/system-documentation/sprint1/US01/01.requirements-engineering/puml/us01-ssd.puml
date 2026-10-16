@@ -1,0 +1,17 @@
+@startuml
+
+title System Sequence Diagram for Map Creation
+
+actor Editor
+participant "System" as System
+
+Editor -> System: Request to create a map
+System -> Editor: Request map name
+Editor -> System: Provide map name
+System -> Editor: Request map size (width, height)
+Editor -> System: Provide map size
+System -> System: Validate map name and size
+System -> System: Create and save map
+System -> Editor: Confirm map creation success
+
+@enduml

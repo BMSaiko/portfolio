@@ -1,0 +1,255 @@
+@startuml
+allowmixing
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+' ============================================================
+'  AISafe Domain Model v3
+'  Aligned with code implementation & requirements
+' ============================================================
+
+package "User Aggregate" {
+    class User <<entity>><<root>> {
+        email <<id>> <<embedded>>
+        passwordHash
+        name
+        phoneNumber
+        securityClearanceExpiry
+        lastSkillsAssessment
+        active
+        version
+    }
+    class Email <<value object>> {
+        address
+    }
+    enum Role {
+        ADMIN
+        BACKOFFICE_OPERATOR
+        COLLABORATOR
+        AIR_TRANSPORT_COMPANY_COLLABORATOR
+        PILOT
+        FLIGHT_CONTROL_OPERATOR
+        WEATHER_PERSON
+    }
+}
+
+package "Organisation Aggregate" {
+    class AirTransportCompany <<entity>><<root>> {
+        companyName
+        iataCode
+        icaoCode
+    }
+    class CustomerCollaborator <<entity>> {
+        customerCode
+        userEmail
+        position
+    }
+}
+
+package "AircraftModel Aggregate" {
+    class AircraftModel <<entity>> {
+        aircraftType
+        emptyWeight
+        mtow
+        mzfw
+        maxFuelCapacity
+        serviceCeiling
+        cruiseSpeedMach
+        wingArea
+        wingSpan
+        aspectRatio
+        oswaldFactor
+        dragCoefficient
+        liftCoefficient
+        numberOfEngines
+        maxPassengerCapacity
+        maxRange
+    }
+    class AircraftModelId <<value object>> {
+        modelId
+        makerName
+    }
+    enum AircraftType {
+        PASSENGER
+        CARGO
+        MIXED
+    }
+}
+
+package "EngineModel Aggregate" {
+    class EngineModel <<entity>><<root>> {
+        engineType
+        thrustAtStandstill
+        thrustAtCruiseSpeed
+        cruiseSpeedMach
+        tsfc
+        lapseRateFactor
+        fuelType
+    }
+    class EngineModelId <<value object>> {
+        name
+        makerId
+    }
+    enum EngineType {
+        TURBOPROP
+        TURBOFAN
+        TURBOJET
+        RAMJET
+        ELECTRIC_PROPELLER
+    }
+    enum FuelType {
+        JET_A1
+        JET_A
+        AVGAS
+    }
+}
+
+package "Aircraft Aggregate" {
+    class Aircraft <<entity>><<root>> {
+        registration
+        country
+        manufacturingYear
+    }
+    class CabinConfiguration <<value object>> {
+        firstClassSeats
+        businessSeats
+        economySeats
+    }
+    enum OperationalStatus {
+        ACTIVE
+        RETIRED
+    }
+}
+
+package "AirControlArea Aggregate" {
+    class AirControlArea <<entity>><<root>> {
+        name
+        minimumFuelRequired
+    }
+    class AirControlAreaCode <<value object>> {
+        code
+    }
+    class GeoBoundary <<value object>> {
+        northLatitude
+        southLatitude
+        eastLongitude
+        westLongitude
+    }
+}
+
+package "Airport Aggregate" {
+    class Airport <<entity>><<root>> {
+        name
+        town
+        country
+    }
+    class IataCode <<value object>> {
+        code
+    }
+    class IcaoCode <<value object>> {
+        code
+    }
+    class Coordinates <<value object>> {
+        latitude
+        longitude
+        altitude
+    }
+}
+
+package "FlightPlan Aggregate" {
+    class FlightPlan <<entity>><<root>> {
+        route
+        departureAirport
+        arrivalAirport
+        totalDistance
+        estimatedFuel
+        departureDateTime
+    }
+    class FlightPlanId <<value object>> {
+        id
+    }
+    enum FlightPlanStatus {
+        DRAFT
+        VALIDATED
+        APPROVED
+    }
+    class FlightLeg <<entity>> {
+        departureAirport
+        arrivalAirport
+        fuel
+    }
+    class FlightSegment <<value object>> {
+        mode
+        startCoordinate
+        endCoordinate
+        minAltitude
+        maxAltitude
+        width
+        windDirection
+        windSpeed
+    }
+}
+
+package "Weather Aggregate" {
+    class WeatherData <<entity>><<root>> {
+        id <<generated>>
+        timestamp
+        temperature
+        windSpeed
+        windDirection
+        humidity
+        pressure
+    }
+}
+
+
+' ============================================================
+'  Relationships
+' ============================================================
+
+' -- User Aggregate --
+User "1" *-- "1" Email : "identity @EmbeddedId"
+User "1" *-- "1..*" Role : "roles @ElementCollection"
+
+' -- Organisation --
+AirTransportCompany "1" --> "0..*" CustomerCollaborator : "has collaborators"
+CustomerCollaborator "1" --> "1" Email : "userEmail @Embedded"
+
+' -- AircraftModel --
+AircraftModel "1" *-- "1" AircraftModelId : "identity @EmbeddedId"
+AircraftModel "1" *-- "1" AircraftType : "classified as"
+AircraftModel "1" --> "1..*" EngineModel : "certifiedEngines @ManyToMany"
+
+' -- EngineModel --
+EngineModel "1" *-- "1" EngineModelId : "identity @EmbeddedId"
+EngineModel "1" *-- "1" EngineType : "classified as"
+EngineModel "1" *-- "1" FuelType : "uses"
+
+' -- Aircraft --
+Aircraft "1" *-- "1" CabinConfiguration : "has @Embedded"
+Aircraft "1" *-- "1" OperationalStatus : "has @Enumerated"
+Aircraft "1" --> "1" AircraftModel : "model @ManyToOne"
+Aircraft "1" --> "1" AirTransportCompany : "company @ManyToOne"
+
+' -- AirControlArea --
+AirControlArea "1" *-- "1" AirControlAreaCode : "identity @EmbeddedId"
+AirControlArea "1" *-- "1" GeoBoundary : "bounded by @Embedded"
+AirControlArea "1" --> "0..*" CustomerCollaborator : "employs"
+
+' -- Airport --
+Airport "1" *-- "1" IataCode : "identity @EmbeddedId"
+Airport "1" *-- "1" IcaoCode : "has @Embedded"
+Airport "1" *-- "1" Coordinates : "located at @Embedded"
+Airport "1" --> "1" AirControlArea : "belongs to @ManyToOne"
+
+FlightPlan "1" *-- "1" FlightPlanId : "identity @EmbeddedId"
+FlightPlan "1" *-- "1" FlightPlanStatus : "has @Enumerated"
+FlightPlan "1" *-- "1..*" FlightLeg : "legs @OneToMany cascade"
+FlightPlan "1" --> "1" AircraftModel : "aircraftModel @ManyToOne"
+FlightLeg "1" *-- "1..*" FlightSegment : "segments @ElementCollection"
+
+' -- Weather --
+WeatherData "1" --> "1" AirControlArea : "valid for @ManyToOne"
+
+
+@enduml

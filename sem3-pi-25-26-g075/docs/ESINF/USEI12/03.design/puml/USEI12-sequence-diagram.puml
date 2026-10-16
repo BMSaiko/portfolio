@@ -1,0 +1,127 @@
+@startuml USEI12-sequence-diagram
+
+actor "Infrastructure Planner" as IP
+participant ":MinimalBackboneService" as MBS
+participant ":RailwayNetworkRepository" as RNR
+participant "railwayGraph:Graph<Station,\nTrackConnection>" as RG
+participant "mst:MapGraph<Station,\nTrackConnection>" as MST
+participant ":Algorithms" as ALG
+participant ":FileWriter" as FW
+participant ":ProcessBuilder" as PB
+
+== Calculate Minimal Backbone ==
+
+IP -> MBS : calculateMinimalBackbone()
+activate MBS
+
+MBS -> RNR : isDataLoaded()
+activate RNR
+RNR --> MBS : true
+deactivate RNR
+
+MBS -> MBS : kruskalMST()
+activate MBS
+
+MBS -> RNR : getNetworkGraph()
+activate RNR
+RNR --> MBS : railwayGraph
+deactivate RNR
+
+MBS -> MST : create()
+activate MST
+MST --> MBS : mst
+deactivate MST
+
+loop for each vertex in railwayGraph
+    MBS -> RG : vertices()
+    activate RG
+    RG --> MBS : station
+    deactivate RG
+    
+    MBS -> MST : addVertex(station)
+    activate MST
+    deactivate MST
+end
+
+MBS -> RG : edges()
+activate RG
+RG --> MBS : edgesList
+deactivate RG
+
+MBS -> MBS : removeIf(duplicate edges)
+MBS -> MBS : sort(edges by distance)
+
+loop for each edge in sorted edges
+    MBS -> ALG : DepthFirstSearch(mst, vOrig)
+    activate ALG
+    ALG --> MBS : connectedVertices
+    deactivate ALG
+    
+    alt !connectedVertices.contains(vDest)
+        MBS -> MST : addEdge(vOrig, vDest, trackConnection)
+        activate MST
+        MST --> MBS : true
+        deactivate MST
+    end
+end
+
+MBS --> MBS : mst
+deactivate MBS
+
+MBS --> IP : mst
+deactivate MBS
+
+== Generate DOT File ==
+
+IP -> MBS : generateDotFile(mst, "minimal_backbone")
+activate MBS
+
+MBS -> FW : create("minimal_backbone.dot")
+activate FW
+
+MBS -> FW : write("graph MinimalBackbone {\\n")
+MBS -> FW : write("layout=neato;\\n")
+
+loop for each edge in mst
+    MBS -> MST : edges()
+    activate MST
+    MST --> MBS : edge
+    deactivate MST
+    
+    MBS -> MBS : collect connected stations
+end
+
+loop for each connected station
+    MBS -> FW : write(station with coordinates)
+end
+
+loop for each processed edge
+    MBS -> FW : write(edge with cost label)
+end
+
+MBS -> FW : write("}\\n")
+MBS -> FW : close()
+deactivate FW
+
+MBS --> IP : "minimal_backbone.dot"
+deactivate MBS
+
+== Generate SVG ==
+
+IP -> MBS : generateSvgFromDot("minimal_backbone.dot", "minimal_backbone.svg")
+activate MBS
+
+MBS -> PB : create("neato", "-Tsvg", dotPath, "-o", svgPath)
+activate PB
+
+MBS -> PB : start()
+PB --> MBS : process
+
+MBS -> PB : waitFor()
+PB --> MBS : exitCode = 0
+deactivate PB
+
+MBS --> IP : true
+deactivate MBS
+
+@enduml

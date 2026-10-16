@@ -1,0 +1,27 @@
+@startuml US05-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US05 As a Player, I want to build a station.
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":System" as SYSTEM
+
+activate PLAYER
+
+    PLAYER -> SYSTEM : requests to build a station (location, type)
+    activate SYSTEM
+
+        SYSTEM --> PLAYER : notifies if location is occupied (if applicable)
+    deactivate SYSTEM
+
+        PLAYER -> SYSTEM : selects a different location (if applicable)
+    activate SYSTEM
+        SYSTEM --> PLAYER : confirms station creation success
+    deactivate SYSTEM
+
+deactivate PLAYER
+@enduml

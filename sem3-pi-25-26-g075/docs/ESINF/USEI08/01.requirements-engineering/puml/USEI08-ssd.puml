@@ -1,0 +1,30 @@
+@startuml USEI08-ssd
+
+autonumber
+
+actor "Planner" as Planner
+participant ":System" as System
+
+activate Planner
+
+    Planner -> System : requests range query for stations
+    activate System
+    
+        System --> Planner : requests coordinate bounds\n(minLat, maxLat, minLon, maxLon)
+    deactivate System
+    
+    Planner -> System : provides coordinate range
+    activate System
+    
+        System --> Planner : requests optional filters\n(isCity, isMainStation, country)
+    deactivate System
+    
+    Planner -> System : provides filter criteria (or none)
+    activate System
+    
+        System --> Planner : displays stations in range\nmatching filters
+    deactivate System
+
+deactivate Planner
+
+@enduml

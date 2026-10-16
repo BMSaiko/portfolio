@@ -1,0 +1,52 @@
+@startuml
+title Sequence Diagram - US108 Semaphore Step Synchronization
+
+participant "Parent Process\nmain simulation loop" as Parent
+participant "step_go_sem[i]" as GoSem
+participant "Flight Process i" as Flight
+participant "Pipe i" as Pipe
+participant "step_done_sem[i]" as DoneSem
+participant "US106 Safety Detection\nThread" as Detection
+participant "US107/US111 Report\nThread" as Report
+
+Parent -> Parent: create_step_semaphores(flight i)
+Parent -> Flight: fork()
+
+loop each simulation time step
+    Parent -> GoSem: sem_post()
+    activate GoSem
+    GoSem --> Flight: step released
+    deactivate GoSem
+
+    Flight -> GoSem: sem_wait()
+    Flight -> Flight: compute one PositionUpdate
+    Flight -> Pipe: write(PositionUpdate)
+    Flight -> DoneSem: sem_post()
+
+    Parent -> DoneSem: sem_timedwait()
+    DoneSem --> Parent: flight completed step
+    Parent -> Pipe: read(PositionUpdate)
+    Parent -> Parent: process_position_update()
+
+    Parent -> Detection: pthread_cond_signal(step ready)
+    activate Detection
+    Detection -> Detection: check_safety_violations()
+
+    alt violation detected
+        Detection -> Report: notify_violation()\ncondition variable signal
+        activate Report
+        Report -> Report: consume violation event
+        deactivate Report
+    end
+
+    Detection --> Parent: pthread_cond_signal(scan done)
+    deactivate Detection
+
+    Parent -> Parent: advance to next time step
+end
+
+Parent -> Parent: cleanup_flight_semaphores()
+Parent -> Detection: signal simulation finished
+Parent -> Report: notifier_signal_finished()
+
+@enduml

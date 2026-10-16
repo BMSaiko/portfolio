@@ -1,0 +1,101 @@
+@startuml USEI13-class-diagram
+
+class HubCentralityAnalysisService {
+    - graph: Graph<Station, TrackConnection>
+    - railwayNetworkRepository: RailwayNetworkRepository
+    + HubCentralityAnalysisService()
+    + HubCentralityAnalysisService(graph: Graph)
+    + betweennessCentrality(): Map<Station, Double>
+    + closenessCentrality(): Map<Station, Double>
+    + centrality(): Map<Station, Integer>
+    + computeHubRanking(): List<HubScoreResult>
+    - normalize(values: Map<Station, Double>): Map<Station, Double>
+    - normalizeInt(values: Map<Station, Integer>): Map<Station, Double>
+}
+
+class RailwayNetworkRepository {
+    - {static} instance: RailwayNetworkRepository
+    - networkGraph: Graph<Station, TrackConnection>
+    - dataLoaded: boolean
+    + {static} getInstance(): RailwayNetworkRepository
+    + getNetworkGraph(): Graph<Station, TrackConnection>
+    + setNetworkGraph(graph: Graph): void
+    + isDataLoaded(): boolean
+}
+
+interface Graph<V, E> {
+    + vertices(): ArrayList<V>
+    + edges(): Collection<Edge<V, E>>
+    + vertex(key: int): V
+    + outgoingEdges(vert: V): Collection<Edge<V, E>>
+    + incomingEdges(vert: V): Collection<Edge<V, E>>
+    + numVertices(): int
+    + numEdges(): int
+    + outDegree(vert: V): int
+    + inDegree(vert: V): int
+}
+
+class MapGraph<V, E> {
+    - mapVertices: Map<V, MapVertex>
+    + vertices(): ArrayList<V>
+    + edges(): Collection<Edge>
+    + vertex(key: int): V
+    + outgoingEdges(vert: V): Collection<Edge>
+    + incomingEdges(vert: V): Collection<Edge>
+}
+
+class Edge<V, E> {
+    - vOrig: V
+    - vDest: V
+    - weight: E
+}
+
+class Station {
+    - stationId: int
+    - name: String
+    - coordX: double
+    - coordY: double
+}
+
+class TrackConnection {
+    - distance: double
+    - capacity: int
+    - cost: double
+    + getDistance(): double
+}
+
+class HubScoreResult {
+    - stationId: int
+    - stationName: String
+    - degree: int
+    - betweenness: double
+    - harmonicCloseness: double
+    - hubScore: double
+    + compareTo(other: HubScoreResult): int
+    + getHubScore(): double
+}
+
+class Algorithms {
+    + {static} shortestPaths(g: Graph, vOrig: V, \n    ce: Comparator, sum: BinaryOperator, \n    zero: E, paths: ArrayList, dists: ArrayList): boolean
+}
+
+HubCentralityAnalysisService --> RailwayNetworkRepository : uses
+HubCentralityAnalysisService ..> HubScoreResult : creates
+HubCentralityAnalysisService --> Station : analyzes
+HubCentralityAnalysisService ..> Graph : uses
+HubCentralityAnalysisService --> Algorithms : uses
+
+RailwayNetworkRepository --> Graph : manages
+
+MapGraph ..|> Graph : implements
+
+Graph --> Edge : contains
+Graph --> Station : vertices
+Graph --> TrackConnection : edge weights
+
+Edge --> Station : vOrig, vDest
+Edge --> TrackConnection : weight
+
+HubScoreResult --> Station : references
+
+@enduml

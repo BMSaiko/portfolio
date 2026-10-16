@@ -1,0 +1,42 @@
+@startuml
+
+title Create Map System Design
+
+class Map {
+    - String name
+    - int width
+    - int height
+    + Map(String, int, int)
+    + String getName()
+    + int getWidth()
+    + int getHeight()
+}
+
+class MapService {
+    - MapRepository mapRepository
+    + Map createMap(String, int, int)
+    - boolean isNameUnique(String)
+}
+
+class MapRepository {
+    - List<Map> maps
+    + void save(Map)
+    + boolean existsByName(String)
+}
+
+class CreateMapUI {
+    + void openInterface()
+    + void requestInput()
+    + void displaySuccess()
+}
+
+class CreateMapController {
+    + void submitMapCreationRequest()
+}
+
+MapService --> Map
+MapService --> MapRepository
+CreateMapController --> MapService
+CreateMapUI --> CreateMapController
+
+@enduml

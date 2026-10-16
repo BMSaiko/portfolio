@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuyLocomotiveController" as CTRL
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+participant "locomotive\n:Locomotive" as LOCOMOTIVE
+
+autonumber 7.9
+-> CTRL : [purchase is valid]
+
+autonumber 7.9.1
+activate CTRL
+    group Complete Purchase
+        CTRL -> CURRENT_SESSION : updateBudget(-price)
+        activate CURRENT_SESSION
+            CURRENT_SESSION --> CTRL : newBudget
+        deactivate CURRENT_SESSION
+
+        CTRL -> CURRENT_SESSION : addLocomotiveToFleet(locomotive)
+        activate CURRENT_SESSION
+            CURRENT_SESSION --> CTRL : success (true)
+        deactivate CURRENT_SESSION
+    end
+
+    autonumber 7.10
+    <-- CTRL : success (true)
+deactivate CTRL
+@enduml

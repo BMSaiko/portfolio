@@ -1,0 +1,26 @@
+@startuml US05-SD-GenerateStationName
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuildStationController" as CTRL
+participant "currentMap\n:Map" as CURRENT_MAP
+
+autonumber 13
+-> CTRL : generateStationName(x, y)
+autonumber 13.1
+activate CTRL
+    group Generate Station Name
+        CTRL -> CURRENT_MAP : findClosestCity(x, y)
+        activate CURRENT_MAP
+            CURRENT_MAP --> CTRL : closestCity
+        deactivate CURRENT_MAP
+
+        ' Create the station name based on closest city and station type
+        ' e.g. "Porto Terminal", "Lisboa Station", "Faro Depot"
+    end
+    autonumber 14
+    <-- CTRL : proposedName
+deactivate CTRL
+
+@enduml

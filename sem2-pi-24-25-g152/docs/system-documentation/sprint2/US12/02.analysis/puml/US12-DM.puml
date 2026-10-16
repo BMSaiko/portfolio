@@ -1,0 +1,99 @@
+@startuml US12-DM
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+hide circle
+hide methods
+
+title Domain Model (DM) - US12 Cargo Generation Simulator
+
+class Element {
+  position
+  type
+}
+
+class "Station" {
+  name
+  location
+  type
+}
+
+class "RailwayLine" {
+  constructionCost
+  distance
+}
+
+class "Industry" {
+  type
+  name
+  productionRate
+  producedCargoTypes
+  consumedCargoTypes
+}
+
+class "City" {
+  name
+  population
+  type
+  demandFactors
+}
+
+class "CargoSimulator" {
+  simulationInterval
+  lastSimulationTime
+}
+
+class "Scenario" {
+  name
+  startTime
+  endTime
+}
+
+class "Cargo" {
+  type
+  quantity
+  value
+  priority
+  creationTime
+  expirationTime
+}
+
+class "CargoType" {
+  name
+  handlingRequirements
+  baseValuePerUnit
+}
+
+class "Player" {
+  funds
+  name
+}
+
+Element <|-- Station
+Element <|-- RailwayLine
+
+CargoSimulator "1" -- "*" Cargo : generates >
+CargoSimulator -- Scenario : operates within >
+
+Cargo "*" -- "1" CargoType : is of type >
+Cargo "*" -- "1" Station : originates from >
+Cargo "*" -- "1" Station : destined for >
+
+Station "1" -- "*" Industry : connected to >
+Station "1" -- "*" City : serves >
+Station "1" -- "*" Cargo : stores >
+
+RailwayLine "*" -- "2" Station : connects >
+
+Industry "*" -- "*" CargoType : produces/consumes >
+City "*" -- "*" CargoType : demands >
+
+Player "1" -- "*" RailwayLine : owns >
+Scenario "1" -- "1..*" Industry : includes >
+Scenario "1" -- "1..*" City : includes >
+
+' Reordering models while keeping left to right direction
+left to right direction
+
+@enduml

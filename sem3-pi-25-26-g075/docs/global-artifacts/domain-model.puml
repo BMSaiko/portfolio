@@ -1,0 +1,406 @@
+@startuml Railway System - Domain Model
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+skinparam packageStyle rectangle
+left to right direction
+
+package "Railway" {
+  class RailwayLine {
+    name
+    startEndpoint
+    endEndpoint
+  }
+
+  class LineSegment {
+    maxWeight
+    speedLimit
+    trackType
+    isElectrified
+    length
+    numberOfTracks
+    limitingFactor
+  }
+
+  class "Station/Terminal" as Station {
+    name
+    type
+    hasWarehouse
+    hasRefrigeratedArea
+    hasSiding
+    hasGrainSilo
+    isHub
+    hubScore
+  }
+
+  class LineOwner {
+    name
+  }
+
+  class Gauge {
+    size
+    description
+  }
+
+  class StationTrack {
+      trackNumber
+      state
+      isElectrified
+    }
+
+  class Sensor {
+      type (Humidity/Temp)
+      value
+    }
+
+  class LightSignal {
+      state
+    }
+
+  class Siding {
+    length
+    id
+  }
+
+}
+
+package "Operations" {
+  class Train {
+    code
+    plannedDepartureTime
+    status
+    calculatedSpeed
+    maxLength
+  }
+
+  class Locomotive {
+    make
+    model
+    yearsOfService
+    power
+    accelaration
+    dimensions
+    maxWeight
+    totalWeight
+    status
+  }
+
+  class Wagon {
+    payloadCapacity
+    volumeCapacity
+    dimensions
+    tare
+    state
+  }
+
+  class Route {
+    isSimple
+  }
+
+  class Freight {
+    origin
+    destination
+    DepartureDate
+    arrivalDate
+    weight
+  }
+
+  class RailwayOperator {
+    name
+    type
+  }
+
+  class LocomotiveType {
+    typeName
+    powerSource
+  }
+
+  class DieselLocomotive {
+    fuelCapacity
+  }
+
+  class ElectricLocomotive {
+    voltage
+    frequency
+  }
+
+  class Bogie {
+    numberOfWheels
+    weightOnTrack
+  }
+
+  class WagonType {
+    typeName
+    description
+  }
+
+  class BoxcarWagon {
+    doorType
+  }
+
+  class FlatcarWagon {
+    containerType
+    supportedContainerSizes
+  }
+
+  class TankcarWagon {
+    tankType
+    pressureRating
+  }
+
+  class HoppercarWagon {
+    dischargeType
+  }
+
+  class RefrigeratedWagon {
+    temperatureRange
+    coolingSystem
+  }
+
+  class RollingStock {
+    id
+    weight
+  }
+
+}
+
+package "Warehouse Package" {
+  class Warehouse {
+    name
+    location
+  }
+
+  class Aisle {
+    coordinates
+  }
+
+  class Bay {
+    capacityOfBoxes
+    coordinates
+  }
+
+  class Box {
+    quantity
+    expiryDate
+    receivedAt
+    boxId
+  }
+
+  class Item {
+    name
+    category
+    unit
+    volume
+    unitWeight
+  }
+
+  class SKU {
+    skuCode
+  }
+}
+
+package "Orders" {
+  class Order {
+    status
+    dueDate
+    priority
+  }
+
+  class OrderLine {
+    requestedQty
+    status
+    allocatedQty
+  }
+
+  class Allocation {
+    quantity
+    status
+  }
+}
+
+
+package "Picking & Returns" {
+  class PickingPlan {
+    strategy
+    totalDistance
+  }
+
+  class Trolley {
+    capacityWeight
+    usedWeight
+  }
+
+  class Return {
+    quantity
+    reason
+    timestamp
+    expiryDate
+    status
+    returnId
+  }
+}
+
+package "Roles" {
+  class TrainDriver {
+    name
+    licenseNumber
+  }
+
+  class StationMaster {
+    name
+  }
+
+  class StationStoreManager {
+    name
+  }
+
+  class FreightManager {
+    name
+  }
+
+  class Planner {
+    name
+  }
+
+  class Picker {
+    name
+  }
+
+  class "Quality Operator" as QualityOperator {
+    name
+  }
+}
+
+
+
+
+
+package "Scheduling" {
+    class Path {
+      isEmpty
+      orderedStations
+    }
+
+    class PathSegment {
+      sequenceNumber
+      mustStop
+    }
+
+    class TrainPassage {
+      plannedArrivalTime
+      actualArrivalTime
+      plannedDepartureTime
+      actualDepartureTime
+      sequenceNumber
+    }
+
+    class Crossing {
+      location
+      plannedTime
+    }
+
+}
+
+
+' Relationships
+
+RailwayLine "1" -- "1..*" LineSegment : contains
+Station "1..*" -- "1..*" LineSegment : connects
+RailwayLine "1" -- "2..*" Station : serves
+RailwayLine "*" -- "1" LineOwner : owned by
+
+Station "1" *-- "1..99" StationTrack : has
+StationTrack "1" -- "1" LightSignal : equipped with
+Station "1" -- "1..*" Sensor : monitors
+
+Locomotive "0..*" -- "0..1" Station : parked at
+Wagon "0..*" -- "0..1" Station : parked at
+Train "1" -- "1..*" Locomotive : formed by
+Train "1" -- "0..*" Wagon : pulls
+Train "*" -- "1" RailwayOperator : operated by
+Wagon "1" -- "0..*" Box : carries
+Wagon "*" -- "1" RailwayOperator : owned by
+
+Route "1" -- "1..*" Train : schedules
+Route "1" -- "1" Path : uses
+Route "1" -- "1..*" Freight : transports
+Path "1" -- "2..*" PathSegment : composed of
+PathSegment "*" -- "1" Station : stops at
+
+Freight "1" -- "1..*" Wagon : transports
+Freight "1" -- "1" Route : follows
+
+Order "1" *-- "1..*" OrderLine : contains
+Order "1" -- "0..1" PickingPlan : generates
+OrderLine "1" -- "0..*" Box : fulfilled by
+
+Box "*" -- "1" Bay : stored in
+Box "*" -- "0..1" Wagon : loaded on
+Box "*" -- "1" Item : contains
+
+Bay "1" -- "0..1" Trolley : accessed via
+Bay "*" -- "1" Aisle : located in
+Aisle "*" -- "1" Warehouse : part of
+
+Return "1" -- "1" Box : returns
+Return "*" -- "1" QualityOperator : processed by
+
+PickingPlan "1" -- "1..*" Trolley : uses
+PickingPlan "*" -- "1" Picker : assigned to
+PickingPlan "*" -- "1" Planner : created by
+
+TrainDriver "1" -- "0..*" Train : operates
+StationMaster "1" -- "1..*" Station : manages
+StationStoreManager "1" -- "1..*" Warehouse : manages
+FreightManager "1" -- "0..*" Freight : coordinates
+Planner "1" -- "0..*" Route : plans
+
+RailwayOperator "1" -- "0..*" RailwayLine : operates
+RailwayOperator "1" -- "0..*" Locomotive : maintains
+RailwayOperator "1" -- "0..*" Wagon : maintains
+
+Allocation "*" -- "1" Box : allocates from
+Allocation "*" -- "1" OrderLine : fulfills
+
+LineSegment "*" -- "1" LineOwner : maintained by
+LineSegment "1" *-- "0..*" Siding : has
+
+LocomotiveType <|-- DieselLocomotive
+LocomotiveType <|-- ElectricLocomotive
+Locomotive "*" -- "1" LocomotiveType : is of type
+
+WagonType <|-- BoxcarWagon
+WagonType <|-- FlatcarWagon
+WagonType <|-- TankcarWagon
+WagonType <|-- HoppercarWagon
+WagonType <|-- RefrigeratedWagon
+Wagon "*" -- "1" WagonType : is of type
+
+Locomotive "1" -- "2..*" Bogie : has
+
+SKU "*" -- "1" Item : identifies
+Box "*" -- "1" SKU : contains
+OrderLine "1" -- "1" SKU : requests
+Return "1" -- "1" SKU : involves
+
+LineSegment "*" -- "1" Gauge : has
+Locomotive "*" -- "1..*" Gauge : supports
+Wagon "*" -- "1" Gauge : has
+
+Path "1" -- "2..*" PathSegment : contains
+PathSegment "*" -- "1" Station : passes through
+Train "1" -- "0..*" TrainPassage : records
+TrainPassage "*" -- "1" Station : at
+Route "1" -- "1..*" Path : follows
+
+Crossing "0..*" -- "2" Train : involves
+Crossing "*" -- "1" Station : occurs at
+
+Route "1" *-- "1..*" LineSegment : uses
+Train "1" -- "0..1" Route : follows scheduled
+Path "1" -- "1..*" Station : passes through
+
+
+@enduml

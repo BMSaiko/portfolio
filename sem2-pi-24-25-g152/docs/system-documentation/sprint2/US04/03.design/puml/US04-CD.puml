@@ -1,0 +1,123 @@
+@startuml US04-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US04 - Class Diagram - Create a Scenario for a Selected Map
+
+class CreateScenarioUI {
+  - controller: CreateScenarioController
+  + createScenario(): void
+  - validateRole(role: String): boolean
+  - saveSelectedMap(map: Map): void
+  - saveData(name: String, startTime: Date, endTime: Date): void
+  - saveSelectedLocomotiveTypes(types: List<LocomotiveType>): void
+  - saveSelectedIndustryTypes(types: List<IndustryType>): void
+  - saveHistoricalEvents(events: List<HistoricalEvent>): void
+}
+
+class CreateScenarioController {
+  + getCurrentUserRole(): String
+  + getMapList(): List<Map>
+  + getLocomotiveTypeList(): List<LocomotiveType>
+  + getIndustryTypeList(): List<IndustryType>
+  + createScenario(map: Map, name: String, startTime: Date, endTime: Date, locomotiveTypes: List<LocomotiveType>, industryTypes: List<IndustryType>, historicalEvents: List<HistoricalEvent>): Scenario
+}
+
+class MapRepository {
+  + getAllMaps(): List<Map>
+}
+
+class LocomotiveTypeRepository {
+  + getAllLocomotiveTypes(): List<LocomotiveType>
+}
+
+class IndustryTypeRepository {
+  + getAllIndustryTypes(): List<IndustryType>
+}
+
+class ScenarioRepository {
+  + saveScenario(scenario: Scenario): void
+}
+
+class ScenarioService {
+  + validateScenario(scenario: Scenario): boolean
+}
+
+class GameRepository {
+  + getMapRepository(): MapRepository
+}
+
+class AuthenticationService {
+  + getCurrentUserSession(): UserSession
+}
+
+class UserSession {
+  + getUserRoles(): List<String>
+}
+
+class Map {
+  - id: Long
+  - name: String
+  - width: int
+  - height: int
+  - regions: List<Object>
+  - scenarios: List<Scenario>
+  - stations: List<Station>
+  - industries: List<Industry>
+  - cities: List<City>
+  + createScenario(name: String, startTime: Date, endTime: Date, locomotiveTypes: List<LocomotiveType>, industryTypes: List<IndustryType>, historicalEvents: List<HistoricalEvent>): Scenario
+}
+
+class Scenario {
+  - name: String
+  - startTime: Date
+  - endTime: Date
+  - allowedLocomotiveTypes: List<LocomotiveType>
+  - allowedIndustryTypes: List<IndustryType>
+  - historicalEvents: List<HistoricalEvent>
+  + validateData(): boolean
+}
+
+class LocomotiveType {
+  - name: String
+  - speed: double
+  - power: double
+  - cost: double
+}
+
+class IndustryType {
+  - name: String
+  - productionRate: double
+  - consumptionRate: double
+}
+
+class HistoricalEvent {
+  - name: String
+  - description: String
+  - date: Date
+  - impact: Object
+}
+
+class Editor {
+  - id: String
+  - name: String
+  - role: String
+}
+
+CreateScenarioUI --> CreateScenarioController
+CreateScenarioController --> AuthenticationService
+CreateScenarioController --> UserSession
+CreateScenarioController --> GameRepository
+GameRepository --> MapRepository
+CreateScenarioController --> MapRepository
+CreateScenarioController --> LocomotiveTypeRepository
+CreateScenarioController --> IndustryTypeRepository
+CreateScenarioController --> ScenarioService
+CreateScenarioController --> ScenarioRepository
+Map "1" *-- "0..*" Scenario : has
+Scenario "1" *-- "1..*" LocomotiveType : allows
+Scenario "1" *-- "1..*" IndustryType : allows
+Scenario "1" *-- "0..*" HistoricalEvent : includes
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml US11-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Class Diagram (CD) - US11 List Trains
+
+class TrainController {
+  - trainService: TrainService
+  + getAllTrains(): ResponseEntity
+}
+
+class TrainService {
+  - trainRepository: TrainRepository
+  - trainMapper: TrainMapper
+  + getAllTrainsGrouped(): List<TrainDTO>
+  - groupByLocomotiveType(List<Train>)
+  - sortTrains(List<TrainDTO>)
+}
+
+class TrainRepository {
+  + findAll(): List<Train>
+}
+
+class Train {
+  - id: Long
+  - name: String
+  - locomotiveType: LocomotiveType
+  + getName(): String
+  + getLocomotiveType(): LocomotiveType
+  + getCargoes(): List<Cargo>
+  + getRoute(): Route
+}
+
+class TrainDTO {
+  - name: String
+  - locomotiveType: String
+  - cargoes: List<CargoDTO>
+  + getName(): String
+  + getLocomotiveType(): String
+  + getCargoes(): List<CargoDTO>
+  + getRoute(): RouteDTO
+}
+
+class TrainMapper {
+  + toDTO(Train): TrainDTO
+  + toDTOList(List<Train>): List<TrainDTO>
+}
+
+' Relationships
+TrainController --> TrainService : uses
+TrainService --> TrainRepository : uses
+TrainService --> TrainMapper : uses
+TrainController ..> TrainDTO : returns
+TrainRepository ..> Train : returns
+TrainMapper ..> TrainDTO : creates
+TrainMapper --> Train : uses
+
+@enduml 

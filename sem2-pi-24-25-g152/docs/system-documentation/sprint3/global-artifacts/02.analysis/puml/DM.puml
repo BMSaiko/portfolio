@@ -1,0 +1,274 @@
+@startuml Enhanced Domain Model
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam padding 4
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam defaultTextAlignment center
+
+hide circle
+hide methods
+
+title Domain Model (DM) - Enhanced General Domain Model
+
+' User classes (top left)
+class Editor {
+  name
+  email
+}
+
+class Player {
+  id
+  name
+  funds
+}
+
+
+
+' Map and scenario classes (top center)
+class Map {
+  name
+  width
+  height
+  scale
+}
+
+class Scenario {
+  name
+  startTime
+  endTime
+  portBehaviors
+  modificationRates
+}
+
+class Location {
+  x
+  y
+}
+
+' Map elements classes (top right)
+class City {
+  name
+  population
+  numberOfHouseBlocks
+}
+
+class Industry {
+  name
+  generationRate
+}
+
+enum IndustryType {
+  MINE
+  FARM
+  BAKERY
+  TEXTILE
+  AUTOMOBILE
+  STEEL_MILL
+  PORT
+}
+
+' Railway infrastructure classes (middle)
+class RailwayNetwork {
+  stations
+  railwayLines
+}
+
+class Station {
+  name
+  type
+  radius
+  cost
+  buildings
+  demandSupplyData
+}
+
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
+}
+
+class Building {
+  name
+  availableFrom
+  availableUntil
+  mutuallyExclusive
+}
+
+class RailwayLine {
+  length
+  trackType
+  electrified
+  cost
+}
+
+enum TrackType {
+  SINGLE
+  DOUBLE
+}
+
+class Path {
+  segments
+}
+
+' Train and cargo classes (bottom)
+class Train {
+  id
+  status
+}
+
+class Locomotive {
+  id
+  type
+  power
+  speed
+  acceleration
+  cost
+  fuelCost
+  maintenanceCost
+  availableFrom
+  availableUntil
+}
+
+enum LocomotiveType {
+  STEAM
+  DIESEL
+  ELECTRIC
+}
+
+class Carriage {
+  id
+  cargoType
+}
+
+class Cargo {
+  type
+  quantity
+  status
+  baseValue
+}
+
+enum CargoType {
+  PASSENGERS
+  MAIL
+  COAL
+  IRON_ORE
+  STEEL
+  CARS
+  VEGETABLES
+  CEREALS
+  WOOL
+  COFFEE
+  RUBBER
+  CATTLE
+  BAUXITE
+  NITRATE
+}
+
+class Route {
+  pointsOfRoute
+}
+
+class PointOfRoute {
+  station
+  cargosToPickup
+  cargoMode
+}
+
+enum CargoMode {
+  FULL
+  HALF
+  AVAILABLE
+}
+
+enum BuildingType {
+  TELEGRAPH
+  TELEPHONE
+  SMALL_CAFE
+  LARGE_CAFE
+  CUSTOMS
+  POST_OFFICE
+  SMALL_HOTEL
+  LARGE_HOTEL
+  SILO
+  LIQUID_STORAGE
+}
+
+class DemandSupply {
+  cargoType
+  demandLevel
+  supplyLevel
+}
+
+class Simulator {
+  currentTime
+  running
+}
+
+
+
+' New relationships for missing concepts
+Editor "1" --> "*" Map : creates
+Editor "1" --> "*" Scenario : creates
+Player "1" --> "1" Simulator : uses
+
+Scenario "1" --> "1" Map : is defined for
+Scenario "*" --> "*" LocomotiveType : makes available
+Scenario "*" --> "*" IndustryType : makes available
+
+Map "1" --> "*" Industry : contains
+Map "1" --> "*" City : contains
+Map "1" --> "0..*" Station : contains
+
+' Enhanced relationships
+Industry "1" --> "1" Location : has position
+Industry "*" --> "1" IndustryType : has type
+Industry "1" --> "*" CargoType : produces/consumes
+
+City "1" --> "1" Location : has central position
+City "1" --> "*" CargoType : generates/consumes
+
+' Station relationships
+Station "1" --> "1" Location : has position
+Station "1" --> "0..*" Building : has
+Station "*" --> "1" StationType : has type
+Station "1" --> "*" DemandSupply : has
+
+' Railway network
+RailwayNetwork "1" --> "0..*" Station : manages
+RailwayNetwork "1" --> "0..*" RailwayLine : contains
+RailwayNetwork "1" --> "0..*" Train : manages
+
+RailwayLine "2" --> "2" Station : connects
+RailwayLine "*" --> "1" TrackType : has type
+
+' Player actions
+Player "1" --> "0..*" Station : can build/upgrade
+Player "1" --> "0..*" Train : can own
+Player "1" --> "0..*" RailwayLine : can build
+
+' Train composition and routing
+Train "1" --> "1" Locomotive : has
+Train "1" --> "1..*" Carriage : consists of
+Train "1" --> "0..*" Cargo : carries
+Train "1" --> "0..1" Route : follows
+
+Route "1" --> "1..*" PointOfRoute : contains
+Route "1" --> "1" Path : defined by
+
+PointOfRoute "*" --> "1" Station : references
+PointOfRoute "*" --> "1" CargoMode : has
+
+Locomotive "*" --> "1" LocomotiveType : is of type
+Carriage "*" --> "1" CargoType : carries
+Building "1" --> "1" BuildingType : is of type
+
+DemandSupply "*" --> "1" CargoType : for
+
+@enduml

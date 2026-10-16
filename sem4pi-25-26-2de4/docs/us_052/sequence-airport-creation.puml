@@ -1,0 +1,125 @@
+@startuml
+title Sequence Diagram - US052: Register Airport
+
+actor "Backoffice Operator" as BO
+participant "RegisterAirportUI" as UI
+participant "RegisterAirportController" as Controller
+participant "AuthService" as Auth
+participant "AirportRepository" as AirportRepo
+participant "AirControlAreaRepository" as AreaRepo
+participant "IataCode" as Iata
+participant "IcaoCode" as Icao
+participant "Coordinates" as Coords
+participant "GeoBoundary" as Boundary
+participant "Airport" as Aggregate
+
+BO -> UI: enter(iata, icao, name, town, country, lat, lon, alt, areaCode)
+activate UI
+
+UI -> Controller: registerAirport(iata, icao, name, town, country, lat, lon, alt, areaCode)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt not authenticated or wrong role
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: SecurityException
+    UI --> BO: error: "Access denied"
+else authorized
+    Auth --> Controller: ok
+    deactivate Auth
+
+    Controller -> Iata: of(iata)
+    activate Iata
+    alt invalid format (not 3 uppercase letters)
+        Iata --> Controller: throw IllegalArgumentException
+        Controller --> UI: IllegalArgumentException
+        UI --> BO: error: "IATA code must be exactly 3 uppercase letters"
+    else valid
+        Iata --> Controller: iataCode
+        deactivate Iata
+
+        Controller -> Icao: of(icao)
+        activate Icao
+        alt invalid format (not 4 uppercase letters)
+            Icao --> Controller: throw IllegalArgumentException
+            Controller --> UI: IllegalArgumentException
+            UI --> BO: error: "ICAO code must be exactly 4 uppercase letters"
+        else valid
+            Icao --> Controller: icaoCode
+            deactivate Icao
+
+            Controller -> AirportRepo: findByIataCode(iataCode)
+            activate AirportRepo
+            AirportRepo --> Controller: Optional<Airport>
+            deactivate AirportRepo
+
+            alt IATA already exists
+                Controller --> UI: throw IllegalStateException
+                UI --> BO: error: "IATA code already exists"
+            else IATA is unique
+
+                Controller -> AirportRepo: findByIcaoCode(icaoCode)
+                activate AirportRepo
+                AirportRepo --> Controller: Optional<Airport>
+                deactivate AirportRepo
+
+                alt ICAO already exists
+                    Controller --> UI: throw IllegalStateException
+                    UI --> BO: error: "ICAO code already exists"
+                else ICAO is unique
+
+                    Controller -> AreaRepo: findByCode(areaCode)
+                    activate AreaRepo
+                    AreaRepo --> Controller: Optional<AirControlArea>
+                    deactivate AreaRepo
+
+                    alt area does not exist
+                        Controller --> UI: throw IllegalStateException
+                        UI --> BO: error: "Air Control Area does not exist"
+                    else area exists
+
+                        Controller -> Boundary: contains(lat, lon)
+                        activate Boundary
+                        Boundary --> Controller: boolean
+                        deactivate Boundary
+
+                        alt coordinates outside boundary
+                            Controller --> UI: throw IllegalStateException
+                            UI --> BO: error: "Coordinates are outside the Air Control Area boundary"
+                        else coordinates inside boundary
+
+                            Controller -> Coords: new Coordinates(lat, lon, alt)
+                            activate Coords
+                            alt invalid lat/lon/alt values
+                                Coords --> Controller: throw IllegalArgumentException
+                                Controller --> UI: IllegalArgumentException
+                                UI --> BO: error: "Invalid coordinate values"
+                            else valid
+                                Coords --> Controller: coordinates
+                                deactivate Coords
+
+                                Controller -> Aggregate: new Airport(iataCode, icaoCode, name, town, country, coordinates, area)
+                                activate Aggregate
+                                Aggregate --> Controller: airport
+                                deactivate Aggregate
+
+                                Controller -> AirportRepo: save(airport)
+                                activate AirportRepo
+                                AirportRepo --> Controller: saved
+                                deactivate AirportRepo
+
+                                Controller --> UI: airport
+                                UI --> BO: success: "Airport registered successfully"
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

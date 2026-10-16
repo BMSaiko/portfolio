@@ -1,0 +1,43 @@
+@startuml USLP09 - System Sequence Diagram
+
+autonumber
+actor "Traffic Manager" as Manager
+participant ":System" as System
+
+activate Manager
+
+Manager -> System : initiates train assembly process
+activate System
+System --> Manager : requests starting facility ID
+deactivate System
+
+
+Manager -> System : enters start facility ID (e.g., "11")
+activate System
+    note right of System
+        System retrieves locomotives and wagons
+        available at or near the location
+    end note
+System --> Manager : displays list of available vehicles (SelectableVehicle)
+deactivate System
+
+
+loop while adding vehicles
+    Manager -> System : selects vehicle by ID
+    activate System
+    System --> Manager : validates and adds to composition
+    deactivate System
+end
+
+
+Manager -> System : confirms composition and departure time
+activate System
+    note right of System
+        System creates Train, TrainLocomotive,
+        and TrainWagonCargo entries
+    end note
+System --> Manager : confirms operation and displays new Train ID
+deactivate System
+
+deactivate Manager
+@enduml

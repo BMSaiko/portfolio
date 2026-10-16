@@ -1,0 +1,28 @@
+@startuml US02-SD-partial-get-industry-subtypes-list
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US02 - Get Industry Subtypes List - Partial Sequence Diagram
+
+participant ":AddIndustryUI" as UI
+participant ":AddIndustryController" as CTRL
+participant ":IndustryTypeRepository" as INDUSTRYREPO
+participant ":IndustryTypeMapper" as INDUSTRYMAPPER
+
+UI -> CTRL : getIndustrySubtypeList(typeId)
+activate CTRL
+    group Get Industry Subtypes List
+    CTRL -> INDUSTRYREPO : getSubtypesByTypeId(typeId)
+    activate INDUSTRYREPO
+        INDUSTRYREPO --> CTRL : industrySubtypeList
+    deactivate INDUSTRYREPO
+    
+    CTRL -> INDUSTRYMAPPER : subtypeToDTOList(industrySubtypeList)
+    activate INDUSTRYMAPPER
+        INDUSTRYMAPPER --> CTRL : industrySubtypeDTOList
+    deactivate INDUSTRYMAPPER
+    end group
+    CTRL --> UI : industrySubtypeDTOList
+deactivate CTRL
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+title Sequence Diagram - Flight Creation Validation (Flight Aggregate)
+
+actor "Pilot" as Pilot
+participant "FlightController" as Controller
+participant "FlightService" as Service
+participant "FlightRouteRepository" as RouteRepo
+participant "AircraftRepository" as AircraftRepo
+participant "FlightRepository" as FlightRepo
+participant "Flight" as Aggregate
+
+Pilot -> Controller: createFlight(designator, type, routeId, aircraftId, departureDay, scheduledArrival, passengerCount, cargoWeight)
+activate Controller
+
+Controller -> Service: createFlight(flightData)
+activate Service
+
+Service -> RouteRepo: findById(routeId)
+activate RouteRepo
+RouteRepo --> Service: flightRoute
+deactivate RouteRepo
+
+Service -> AircraftRepo: findById(aircraftId)
+activate AircraftRepo
+AircraftRepo --> Service: aircraft
+deactivate AircraftRepo
+
+Service -> FlightRepo: findByDesignator(designator)
+activate FlightRepo
+FlightRepo --> Service: existingFlight (or null)
+deactivate FlightRepo
+
+alt designator already exists
+    Service --> Controller: throw DuplicateFlightDesignatorException
+    Controller --> Pilot: error: "Flight designator already exists"
+else
+    Service -> Aggregate: new Flight(designator, type, route, aircraft, departureDay, scheduledArrival, passengerCount, cargoWeight)
+    activate Aggregate
+    note right of Aggregate
+        **Invariants enforced inside constructor:**
+        - FlightDesignator format must be valid
+          (xxn(n)(n)(n)(a) format)
+        - FlightType must be REGULAR or CHARTER
+        - aircraft must not be decommissioned
+        - passengerCount <= aircraft.cabinConfig total seats
+        - departureDay must be a valid date/time
+        - scheduledArrival must be after departureDay
+        - route origin and destination must be
+          different airports
+    end note
+
+    alt any invariant violated
+        Aggregate --> Service: throw FlightInvariantException
+        Service --> Controller: throw FlightInvariantException
+        Controller --> Pilot: error: "Flight data violates domain rules"
+    else all invariants satisfied
+        Aggregate --> Service: flight
+        deactivate Aggregate
+
+        Service -> FlightRepo: save(flight)
+        activate FlightRepo
+        FlightRepo --> Service: saved
+        deactivate FlightRepo
+
+        Service --> Controller: flight
+        Controller --> Pilot: success: "Flight created successfully"
+    end
+end
+
+deactivate Service
+deactivate Controller
+@enduml

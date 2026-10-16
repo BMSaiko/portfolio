@@ -1,0 +1,34 @@
+@startuml
+
+title Sequence Diagram for Map Creation
+
+actor Editor
+participant "CreateMapUI" as UI
+participant "MapController" as Controller
+participant "MapService" as Service
+participant "MapRepository" as Repository
+participant "GameMap" as Domain
+participant "MapDTO" as DTO
+
+Editor -> UI: Open map creation interface
+UI -> Editor: Request map name, width, height
+Editor -> UI: Input map name, width, height
+UI -> Controller: createMap(name, width, height)
+Controller -> Controller: Create MapDTO(name, width, height)
+Controller -> Service: createMap(mapDTO)
+Service -> Repository: existsByName(mapDTO.getName())
+Repository --> Service: nameIsUnique
+alt name is not unique
+    Service --> Controller: throw IllegalArgumentException
+    Controller --> UI: Error: Map name must be unique
+    UI --> Editor: Display error message
+else name is unique
+    Service -> Domain: new GameMap(name, width, height)
+    Service -> Repository: saveGameMap(map)
+    Service -> Service: convertToDTO(map)
+    Service --> Controller: Return MapDTO
+    Controller --> UI: Return MapDTO
+    UI --> Editor: Show map creation success
+end
+
+@enduml

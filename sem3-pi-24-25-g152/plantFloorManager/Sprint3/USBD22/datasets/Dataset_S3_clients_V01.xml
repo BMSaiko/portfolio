@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client_list>
+	<client ID = "456">
+		<name>"Carvalho &amp; Carvalho, Lda"</name>
+		<vatin>"PT501245987"</vatin>
+		<adress>"Tv. Augusto Lessa 23"</adress>
+		<zip>"4200-047"</zip>
+		<town>"Porto"</town>
+		<country>"Portugal"</country>
+		<email>"idont@care.com"</email>
+		<phone>003518340500</phone>
+	</client>
+	<client ID = "785">
+		<name>"Tudo para a casa, Lda"</name>
+		<vatin>"PT501245488"</vatin>
+		<adress>"R. Dr. Barros 93"</adress>
+		<zip>"4465-219"</zip>
+		<town>"São Mamede de Infesta"</town>
+		<country>"Portugal"</country>
+		<email>"me@neither.com"</email>
+		<phone>003518340500</phone>
+	</client>
+	<client ID = "657">
+		<name>"Sair de Cena"</name>
+		<vatin>"PT501242417"</vatin>
+		<adress>"EDIFICIO CRISTAL lj18, R. António Correia de Carvalho 88"</adress>
+		<zip>"4400-023"</zip>
+		<town>"Vila Nova de Gaia"</town>
+		<country>"Portugal"</country>
+		<email>"some@email.com"</email>
+		<phone>003518340500</phone>
+	</client>
+	<client ID = "348">
+		<name>"U Fleku"</name>
+		<vatin>"CZ6451237810"</vatin>
+		<adress>"Křemencova 11"</adress>
+		<zip>"110 00"</zip>
+		<town>"Nové Město"</town>
+		<country>"Czechia"</country>
+		<email>"some.random@email.cz"</email>
+		<phone>004201234567</phone>
+	</client>
+</client_list>

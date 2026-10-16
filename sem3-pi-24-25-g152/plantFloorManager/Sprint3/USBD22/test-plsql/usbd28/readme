@@ -1,0 +1,51 @@
+### Summary of the User Story Analysis
+
+**User Story:**
+> As a Production Manager, I want to have a list of all reserved materials and components, their quantity, and the ID of the supplier, so I can easily track and manage our inventory needs.
+
+**What Was Done:**
+1. **Schema Review and Data Setup:**  
+   We started by examining the given database schema and the related entities. The schema includes tables for parts (`Part`, `ExternalPart`, `InternalPart`), suppliers (`Supplier`, `Offer`), and inventory-related data. The `ExternalPart` table has a `Reserved` column, which indicates reserved materials or components. The `Offer` table links parts to suppliers.
+
+2. **Identifying Key Columns:**
+   - To find **reserved materials**, we look for `ExternalPart` records where `Reserved > 0`.
+   - To find the **supplier ID**, we join `ExternalPart` with `Offer` using `PartID`.
+
+3. **Creating the Retrieval Logic (Scenario Code):**  
+   A PL/SQL anonymous block was provided that:
+   - Selects all parts from `ExternalPart` with `Reserved > 0`.
+   - Left-joins with `Offer` to find supplier IDs.
+   - Prints out `PartID`, `Reserved Qty`, and `SupplierID`.
+
+4. **BDD Scenario:**
+   - **Feature:** Retrieving reserved materials and components.
+   - **Scenario:** Verifying that parts with a positive reserved quantity are listed along with their supplier details.
+
+5. **Testing Approach:**
+   Several tests were devised to confirm the functionality:
+   - **Test 1:** Check a reserved part with a known supplier.
+   - **Test 2:** Check a reserved part with no supplier offers (should show `N/A`).
+   - **Test 3:** Check a reserved part with multiple suppliers (should list multiple lines).
+   - **Test 4:** Check that a non-reserved part does not appear.
+   - **Test 5:** Check that date ranges of offers do not affect listing (no filtering by dates).
+
+Each test includes a setup (e.g., updating `Reserved`) and then running the scenario code block to print the results.
+
+---
+
+### How to Execute Everything:
+
+1. **Initial Setup:**
+   - Run the provided SQL `CREATE TABLE` statements and `ALTER TABLE` constraints.
+   - Insert the provided data blocks (Clients, Addresses, Workstations, Parts, Offers, Orders, etc.) by executing the `BEGIN ... END;` blocks in order.
+
+2. **Run the Scenario Code:**
+   - Execute the main scenario code block provided. Make sure you have `DBMS_OUTPUT` enabled (e.g., in SQL*Plus: `SET SERVEROUTPUT ON`).
+   - The scenario code will print all reserved external parts along with their supplier information.
+
+3. **Run Each Test:**
+   - Execute the test setup code block (e.g., the `BEGIN ... END;` block that updates `Reserved` fields).
+   - Immediately after, run the scenario code again.
+   - Check the output to see if it matches the expected results mentioned in the test descriptions.
+
+By following these steps, you will confirm that the user story requirements are met: you can retrieve a list of all reserved materials and components, their reserved quantities, and their associated supplier IDs.

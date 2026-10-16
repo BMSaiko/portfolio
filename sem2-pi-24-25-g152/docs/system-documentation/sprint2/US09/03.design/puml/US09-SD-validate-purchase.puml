@@ -1,0 +1,24 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuyLocomotiveController" as CTRL
+
+autonumber 7.7
+-> CTRL : validatePurchase(player, locomotive)
+
+autonumber 7.7.1
+activate CTRL
+    group Validate Purchase
+        ' Logic for validating the purchase
+        ' This could include checking player budget, requirements, etc.
+        CTRL -> CTRL : check if player meets requirements
+        CTRL -> CTRL : check if player has enough budget
+        CTRL -> CTRL : check if locomotive is still available
+    end
+
+    autonumber 7.8
+    <-- CTRL : isValid (boolean)
+deactivate CTRL
+@enduml

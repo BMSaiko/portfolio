@@ -1,0 +1,83 @@
+@startuml
+title Sequence Diagram - Register Engine Model (US056)
+
+actor "Backoffice Operator" as BO
+participant "RegisterEngineModelUI" as UI
+participant "RegisterEngineModelController" as Controller
+participant "AuthService" as Auth
+participant "EngineModelRepository" as Repo
+participant "EngineModel" as Aggregate
+
+BO -> UI: show()
+activate UI
+
+UI -> UI: readEngineType()
+UI -> UI: readFuelType()
+UI -> UI: readPositiveDouble() [thrust, TSFC, etc.]
+
+UI -> Controller: registerEngineModel(name, makerId, engineType,\nthrustSL, thrustCruise, cruiseMach,\ntsfc, lapseFactor, fuelType)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt unauthorized
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: throw SecurityException
+    UI --> BO: ACCESS DENIED
+end
+deactivate Auth
+
+Controller -> Controller: EngineModelId.of(name, makerId)
+alt blank name or makerId
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: invalid input
+end
+
+Controller -> Repo: findById(id)
+activate Repo
+Repo --> Controller: Optional<EngineModel>
+deactivate Repo
+
+alt engine model already exists
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "engine model already exists"
+end
+
+Controller -> Controller: EngineType.fromString(engineType)
+alt unknown engine type
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: "unknown engine type"
+end
+
+Controller -> Aggregate: new EngineModel(id, type,\nthrustSL, thrustCruise, cruiseMach,\ntsfc, lapseFactor, fuelType)
+activate Aggregate
+note right of Aggregate
+    **Invariants enforced in constructor:**
+    - thrustAtStandstill > 0
+    - thrustAtCruiseSpeed > 0
+    - thrustAtCruiseSpeed < thrustAtStandstill
+    - cruiseSpeedMach > 0
+    - tsfc > 0
+    - lapseRateFactor >= 0
+    - fuelType not null
+end note
+
+alt invalid physical parameters
+    Aggregate --> Controller: throw IllegalArgumentException
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: invalid parameters
+end
+Aggregate --> Controller: engineModel
+deactivate Aggregate
+
+Controller -> Repo: save(engineModel)
+activate Repo
+Repo --> Controller: engineModel
+deactivate Repo
+
+Controller --> UI: engineModel
+UI --> BO: Success: engine model registered
+
+deactivate Controller
+deactivate UI
+@enduml

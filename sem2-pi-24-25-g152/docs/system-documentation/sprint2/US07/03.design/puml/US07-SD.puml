@@ -1,0 +1,82 @@
+@startuml US07-SD
+skinparam packageStyle rectangle
+skinparam shadowing false
+autonumber
+
+actor "Player" as PLAYER
+participant ":ViewStationsUI" as UI
+participant ":StationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "stationRepository\n:StationRepository" as STATION_REPO
+participant "station\n:Station" as STATION
+participant "building\n:Building" as BUILDING
+participant "cargo\n:Cargo" as CARGO
+
+activate PLAYER
+
+    PLAYER -> UI : request list of stations
+    activate UI
+        UI --> CTRL** : create()
+        
+        UI -> CTRL : getAllStations()
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL : repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL : stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : getAllStations()
+            activate STATION_REPO
+                STATION_REPO --> CTRL : stationList
+            deactivate STATION_REPO
+
+            CTRL --> UI : stationList
+        deactivate CTRL
+
+        UI --> PLAYER : displays station list
+    deactivate UI
+
+    PLAYER -> UI : selects a station by ID
+    activate UI
+        UI -> CTRL : getStationDetails(stationId)
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL : repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL : stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : getStationById(stationId)
+            activate STATION_REPO
+                STATION_REPO --> CTRL : station
+            deactivate STATION_REPO
+
+            CTRL -> STATION : getDetails()
+            activate STATION
+                STATION -> STATION : getBuildings()
+                STATION --> CTRL : buildingsList
+
+                STATION -> STATION : getCargoes()
+                STATION --> CTRL : cargoesList
+
+                STATION --> CTRL : name, location
+            deactivate STATION
+
+            CTRL --> UI : station details (name, location, buildings, cargoes)
+        deactivate CTRL
+
+        UI --> PLAYER : displays station details
+    deactivate UI
+
+deactivate PLAYER
+@enduml

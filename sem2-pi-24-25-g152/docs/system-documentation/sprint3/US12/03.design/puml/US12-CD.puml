@@ -1,0 +1,172 @@
+@startuml US12-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+left to right direction
+
+title US12 - Class Diagram - Generate Cargoes Automatically
+
+class CargoGenerationUI {
+}
+
+class CargoGenerationController {
+  - simulationService: SimulationService
+  - stationRepository: StationRepository
+  - industryService: IndustryService
+  - cityService: CityService
+  - cargoDistributionService: CargoDistributionService
+  - stationMapper: StationMapper
+  - cargoMapper: CargoMapper
+  - cargoGenerationMapper: CargoGenerationMapper
+  + getStations(): List<StationDTO>
+  + startCargoGeneration(): CargoGenerationResultDTO
+}
+
+' DTOs for UI <- Domain (providing data)
+class StationDTO {
+  + name: String
+  + location: LocationDTO
+  + storageCapacity: double
+  + currentCargoCount: int
+}
+
+class CargoDTO {
+  + type: String
+  + originStationName: String
+  + destinationStationName: String
+  + quantity: double
+}
+
+
+class GenerationStatisticsDTO {
+  + averageCargoPerStation: double
+  + totalVolume: double
+  + distributionEfficiency: double
+}
+
+interface Mapper<T> {
+  + toDTO(type: T): T
+  + toDTOList(type: List<T>): List<T>
+}
+
+' Mappers
+class StationMapper {
+  + toDTO(station: Station): StationDTO
+  + toDTOList(stations: List<Station>): List<StationDTO>
+}
+
+class CargoMapper {
+  + toDTO(cargo: Cargo): CargoDTO
+  + toDTOList(cargos: List<Cargo>): List<CargoDTO>
+}
+
+class CargoGenerationMapper {
+  + toResultDTO(stations: List<Station>, statistics: Object): CargoGenerationResultDTO
+}
+
+class SimulationService {
+  + configureSimulation(): void
+}
+
+class StationRepository {
+  + getAllStations(): List<Station>
+}
+
+class IndustryService {
+  + generateCargoForStation(station: Station): List<Cargo>
+}
+
+class CityService {
+  + generateCargoForStation(station: Station): List<Cargo>
+}
+
+class Station {
+  - name: String
+  - location: Object
+  - storageCapacity: double
+  - currentCargoes: List<Cargo>
+}
+
+class Cargo {
+  - type: String
+  - origin: Station
+  - destination: Station
+  - quantity: double
+  + validateData(): boolean
+}
+
+class CargoRepository {
+  + saveCargo(cargo: Cargo): void
+}
+
+class CargoDistributionService {
+  + calculateStatistics(): void
+}
+
+class Industry {
+  - name: String
+  - type: String
+  - location: Location
+  - productionRate: double
+}
+
+class City {
+  - name: String
+  - population: int
+  - location: Location
+  - demandFactors: Location
+  - houseBlocks: List<HouseBlock>
+}
+
+class Map {
+  - name: String
+  - width: int
+  - height: int
+  - regions: List<Object>
+  - scenarios: List<Scenario>
+  - stations: List<Station>
+  - industries: List<Industry>
+  - cities: List<City>
+}
+
+' UI uses DTOs, not domain objects
+CargoGenerationUI --> CargoGenerationController
+CargoGenerationUI ..> StationDTO : displays
+CargoGenerationUI ..> CargoGenerationResultDTO : displays
+
+' Controller uses mappers to convert domain to DTOs
+CargoGenerationController --> StationMapper
+CargoGenerationController --> CargoMapper
+CargoGenerationController --> CargoGenerationMapper
+CargoGenerationController --> SimulationService
+CargoGenerationController --> StationRepository
+CargoGenerationController --> IndustryService
+CargoGenerationController --> CityService
+CargoGenerationController --> CargoDistributionService
+
+StationMapper ..|> Mapper : implements
+CargoMapper ..|> Mapper : implements
+CargoGenerationMapper ..|> Mapper : implements
+
+' Mappers convert between domain and DTOs
+StationMapper ..> Station : converts from
+StationMapper ..> StationDTO : converts to
+CargoMapper ..> Cargo : converts from
+CargoMapper ..> CargoDTO : converts to
+
+StationRepository --> Station
+IndustryService --> Industry
+CityService --> City
+Station "1" *-- "0..*" Cargo : stores >
+Station --> CargoRepository
+CargoRepository --> Cargo
+
+' Relationships based on domain knowledge (not explicitly in rationale steps but implied)
+Map "1" *-- "0..*" Station
+Map "1" *-- "0..*" Industry
+Map "1" *-- "0..*" City
+Station "1" -- "0..*" Industry : serves >
+Station "1" -- "0..*" City : serves >
+
+@enduml

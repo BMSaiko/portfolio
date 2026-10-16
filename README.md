@@ -15,6 +15,11 @@ Academic projects developed during my Computer Engineering studies at ISEP (Inst
 | [biblioteca-ermesinde](biblioteca-ermesinde) | C# · ASP.NET Core · SQL Server · Docker · Jenkins | Library management API with CI/CD, SonarQube and tests (CTESP final project) |
 | [porto-on-wheels](porto-on-wheels) | PHP · MySQL · Bootstrap | Car/bike/scooter rental website with admin back-office |
 | [rentacar](rentacar) | Java · JavaFX · Gradle · SQL Server | Car rental management desktop app |
+| [rcomp-25-26-de-g2](rcomp-25-26-de-g2) | Cisco Packet Tracer · Networking | Campus network design and Packet Tracer simulations |
+| [sem2-pi-24-25-g152](sem2-pi-24-25-g152) | Java · Maven · Jupyter (MATCP) · UML | Railway-building game (LEI 2nd-semester integrative project) |
+| [sem3-pi-24-25-g152](sem3-pi-24-25-g152) | Oracle PL/SQL · C · Assembly · Arduino · Java | Plant floor management: Oracle, C/Assembly, Java (LEI 3rd semester, 2024/25) |
+| [sem3-pi-25-26-g075](sem3-pi-25-26-g075) | Java · Oracle SQL · Scrum | Railway stations/warehouses logistics with Oracle (LEI 3rd semester, 2025/26) |
+| [sem4pi-25-26-2de4](sem4pi-25-26-2de4) | Java · EAPLI · Maven · C · PlantUML | AISafe flight-control platform (LEI 4th semester) |
 
 Each folder has its own `README.md` (English) and `README.pt.md` (Portuguese).
 

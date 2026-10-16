@@ -1,0 +1,58 @@
+@startuml Railway Network Simulator Use Cases
+
+left to right direction
+
+actor "Editor" as ED
+actor "Player" as PL
+actor "Product Owner" as PO
+
+rectangle "Railway Network Simulator" {
+  ' Map & Scenario Management
+  usecase "Create Map" as UC1
+  usecase "Add Industry to Map" as UC2
+  usecase "Add City to Map" as UC3
+  usecase "Create Scenario" as UC4
+  
+  ' Station Management
+  usecase "Build Station" as UC5
+  usecase "Upgrade Station" as UC6
+  usecase "List Stations" as UC7
+  
+  ' Railway & Train Management
+  usecase "Build Railway Line" as UC8
+  usecase "Buy Locomotive" as UC9
+  usecase "Assign Train to Route" as UC10
+  usecase "List Trains" as UC11
+  
+  ' Simulation
+  usecase "Run Simulator" as UC12
+  usecase "Generate Cargo" as UC13
+  usecase "Start/Pause Simulation" as UC14
+}
+
+' Relationships for Editor
+ED --> UC1
+ED --> UC2
+ED --> UC3
+ED --> UC4
+
+' Relationships for Player
+PL --> UC5
+PL --> UC6
+PL --> UC7
+PL --> UC8
+PL --> UC9
+PL --> UC10
+PL --> UC11
+
+' Relationships for Product Owner
+PO --> UC12
+
+' Include relationships
+UC12 ..> UC13 : <<include>>
+UC12 ..> UC14 : <<include>>
+
+' Extensions
+UC5 <.. UC6 : <<extend>>
+
+@enduml

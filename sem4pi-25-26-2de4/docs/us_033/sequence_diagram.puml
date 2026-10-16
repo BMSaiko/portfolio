@@ -1,0 +1,68 @@
+@startuml US033_List_Users_Sequence
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam sequence {
+    ParticipantBorderColor #2C3E50
+    ParticipantBackgroundColor #ECF0F1
+    ArrowColor #2C3E50
+}
+
+title US033 - List Users Sequence Diagram
+
+actor "Admin User" as Admin
+participant "MainMenu" as Menu
+participant "UsersMenuUI" as UsersMenu
+participant "ListUsersUI" as UI
+participant "ManageUserController" as Ctrl
+participant "AuthService" as Auth
+participant "User" as CurrentUser
+participant "JpaUserRepository" as Repo
+database "H2 DB" as DB
+
+== Navigate to List Users ==
+
+Admin -> Menu : selects "Users" option
+activate Menu
+note right of Menu : MainMenu checks\nhasRole(ADMIN)
+Menu -> UsersMenu : new UsersMenuUI(...).show()
+activate UsersMenu
+UsersMenu -> Admin : "1. List users\n2. Register user\n3. Enable/Disable user\n0. Back"
+Admin -> UsersMenu : selects "1"
+UsersMenu -> UI : new ListUsersUI(controller).show()
+activate UI
+
+== Fetch and Display All Users ==
+
+UI -> Ctrl : findAllUsers()
+activate Ctrl
+Ctrl -> Auth : ensureHasAnyRole(Role.ADMIN)
+activate Auth
+Auth -> Auth : ensureAuthenticated()
+Auth -> CurrentUser : hasRole(ADMIN)
+activate CurrentUser
+CurrentUser --> Auth : true
+deactivate CurrentUser
+Auth --> Ctrl : (authorized)
+deactivate Auth
+Ctrl -> Repo : findAll()
+activate Repo
+Repo -> DB : SELECT u FROM User u\n(LEFT JOIN FETCH u.roles)
+DB --> Repo : all users with roles
+Repo --> Ctrl : Iterable<User>
+deactivate Repo
+Ctrl --> UI : users
+deactivate Ctrl
+
+UI -> Admin : print table header\n(Email, Name, Phone, Roles, Status)
+loop for each user
+    UI -> Admin : print row\n(email, name, phone, roles, ACTIVE/DISABLED)
+end
+UI -> Admin : "Total users: N"
+
+note over UI, DB : findAll() uses JOIN FETCH to eagerly\nload roles, avoiding LazyInitializationException\nwhen UI accesses user.roles() outside the transaction
+
+== Error: Non-Admin Attempt ==
+
+note over UI, Auth : If current user is not ADMIN:\nAuth.ensureHasAnyRole(ADMIN) throws\nSecurityException("User does not have required role")
+
+@enduml

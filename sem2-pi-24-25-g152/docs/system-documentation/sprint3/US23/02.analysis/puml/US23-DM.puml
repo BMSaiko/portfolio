@@ -1,0 +1,94 @@
+@startuml US23-DM
+
+!theme plain
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+title US23 - Save Game Domain Model
+
+class SaveGameData {
+    - metadata: SaveGameMetadata
+    - player: Player
+    - scenario: Scenario
+    - simulationTime: LocalDateTime
+    - trains: List<Train>
+    - stations: List<Station>
+    - gameProgress: GameProgress
+}
+
+class SaveGameMetadata {
+    - saveName: String
+    - playerName: String
+    - saveDate: LocalDateTime
+    - gameVersion: String
+    - description: String
+}
+
+class GameProgress {
+    - currentLevel: int
+    - score: long
+    - completedObjectives: List<String>
+    - gameTimeElapsed: Duration
+}
+
+class Player {
+    - name: String
+    - funds: double
+    - id: String
+}
+
+class Scenario {
+    - name: String
+    - description: String
+    - difficulty: String
+    - objectives: List<String>
+}
+
+class Train {
+    - id: String
+    - name: String
+    - position: Position
+    - speed: double
+    - capacity: int
+}
+
+class Station {
+    - id: String
+    - name: String
+    - position: Position
+    - type: StationType
+    - connections: List<Station>
+}
+
+class Position {
+    - x: double
+    - y: double
+}
+
+enum StationType {
+    TERMINAL
+    JUNCTION
+    REGULAR
+}
+
+' Relationships
+SaveGameData ||--|| SaveGameMetadata : contains
+SaveGameData ||--|| GameProgress : contains
+SaveGameData ||--|| Player : contains
+SaveGameData ||--|| Scenario : contains
+SaveGameData ||--o{ Train : contains
+SaveGameData ||--o{ Station : contains
+
+Train ||--|| Position : has
+Station ||--|| Position : has
+Station ||--|| StationType : has
+Station }o--o{ Station : connects to
+
+'note top of SaveGameData : "Main aggregate containing\nall game state information"
+'note top of SaveGameMetadata : "Metadata about the\nsave file itself"
+'note top of GameProgress : "Player's progress and\nachievements in the game"
+
+@enduml

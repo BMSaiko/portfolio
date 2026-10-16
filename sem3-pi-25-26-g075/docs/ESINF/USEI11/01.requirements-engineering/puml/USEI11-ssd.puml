@@ -1,0 +1,16 @@
+@startuml USEI11 - System Sequence Diagram
+
+actor "Infrastructure Planner" as Planner
+participant ":System" as System
+
+Planner -> System : request upgrade order computation
+activate System
+System --> Planner : upgrade order or cycle information
+deactivate System
+
+Planner -> System : request cycle analysis
+activate System
+System --> Planner : cycle details (stations and edges)
+deactivate System
+
+@enduml

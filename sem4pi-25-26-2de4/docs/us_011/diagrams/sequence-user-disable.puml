@@ -1,0 +1,58 @@
+@startuml
+title Sequence Diagram - User Disable Prevention (User Aggregate)
+
+actor "Administrator" as Admin
+participant "UserController" as Controller
+participant "UserService" as Service
+participant "UserRepository" as UserRepo
+participant "User" as Aggregate
+participant "FlightPlanRepository" as FlightRepo
+
+Admin -> Controller: disableUser(userId)
+activate Controller
+
+Controller -> Service: disableUser(userId)
+activate Service
+
+Service -> UserRepo: findById(userId)
+activate UserRepo
+UserRepo --> Service: user
+deactivate UserRepo
+
+Service -> FlightRepo: findActiveFlightPlansByPilot(userId)
+activate FlightRepo
+note right of FlightRepo
+    **Cross-aggregate query:**
+    Checks for flight plans with:
+    - status = "ACTIVE" or "SCHEDULED"
+    - departure date >= today
+end note
+FlightRepo --> Service: activeFlightPlans (list)
+deactivate FlightRepo
+
+alt activeFlightPlans is not empty
+    Service --> Controller: throw UserHasActiveFlightsException
+    Controller --> Admin: error: "Cannot disable user: pilot has active flight plans"
+else no active flight plans
+    Service -> Aggregate: disable()
+    activate Aggregate
+    note right of Aggregate
+        **Invariant enforced inside aggregate:**
+        - User must be currently ENABLED
+        - Security clearance must be valid (optional check)
+    end note
+    Aggregate --> Service: updatedUser
+    deactivate Aggregate
+    
+    Service -> UserRepo: save(user)
+    activate UserRepo
+    UserRepo --> Service: saved
+    deactivate UserRepo
+    
+    Service --> Controller: success
+    Controller --> Admin: success: "User disabled successfully"
+end
+
+deactivate Service
+deactivate Controller
+@enduml

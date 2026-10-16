@@ -1,0 +1,59 @@
+T2 L1 200x200m aproximadamente 12.2x12.2cm
+
+escala: 50m aproximadamente 3.1cm
+
+comprimento x altura
+
+sala1: 1.7x1cm
+sala2: 1.3x1cm
+sala3: 2x1cm
+sala4: 2.3x1cm
+sala5: 2x1cm
+sala6: .5x.7cm
+sala7: 1.7x1cm
+sala8: 1.7x1cm
+sala9: 1.5x1.2cm
+sala10: 1.5x1.2cm
+sala11: 0.7x0.7cm
+sala12: 0.7x0.7cm
+
+T2 L4 200x200m aproximadamente 12.2x12.2cm
+
+escala: 50m aproximadamente 3.1cm
+
+comprimento x altura
+
+sala1: 1.4x.7cm
+sala2: 1.4x.7cm
+sala3: 1.2x.7cm
+sala4: 1.2x.7cm
+sala5: 2.4x.9cm
+sala6: 2x.9cm
+sala7: 2.2x.9cm
+sala8: .5x.9cm
+sala9: .8x1.2cm
+sala10: 1.2x.8cm
+sala11: .8x1.2cm
+sala12: .8x1.2cm
+sala13: .8x1.2cm
+sala14: .8x.8cm
+sala15: 1.2x1.7cm
+sala16: 1.2x1.7cm
+sala17: .7x.7cm
+sala18: .7x.7cm
+
+
+AirportPlan
+
+escala: 100m aproximadamente 0.8cm
+
+comprimento x altura
+
+T2: 1.6x1.6cm
+T3: 1.6x1.6cm
+T4: 1.6x.8cm
+T5: 1.2x3.4cm
+
+T4 <-> T2 4.4cm
+T2 <-> T3 2 + 2.3cm
+T3 <-> T5 1.8 + 6 + .9cm 

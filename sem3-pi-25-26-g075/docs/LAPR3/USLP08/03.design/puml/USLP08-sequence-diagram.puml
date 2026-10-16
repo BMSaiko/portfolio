@@ -1,0 +1,241 @@
+@startuml USLP08-sequence-diagram
+
+title USLP08 - Freight Route Planning and Assignment
+
+actor "Freight Manager" as Manager
+participant ":FreightManagerMenuController" as Controller
+participant ":FreightRoutePlannerService" as Service
+participant ":FreightRepository" as Repository
+participant ":FreightRoute" as Route
+participant ":RouteStop" as Stop
+database "Oracle DB\n(PL/SQL)" as DB
+
+== Scenario 1: Plan Simple Route ==
+
+Manager -> Controller : handlePlanRouteSimple()
+activate Controller
+
+Controller -> Controller : requestFreightId()
+Manager -> Controller : enters freightId
+
+Controller -> Service : getFreightById(freightId)
+activate Service
+
+Service -> Repository : getFreightById(freightId)
+activate Repository
+
+Repository -> DB : { ? = call get_freight_by_id(?) }
+activate DB
+DB --> Repository : ResultSet (freight data)
+deactivate DB
+
+Repository -> Repository : extractFreightFromResultSet(rs)
+Repository --> Service : Freight
+deactivate Repository
+
+Service --> Controller : Freight
+deactivate Service
+
+Controller -> Service : isFreightPending(freightId)
+activate Service
+
+Service -> Repository : isFreightPending(freightId)
+activate Repository
+
+Repository -> DB : { ? = call is_freight_pending(?) }
+activate DB
+DB --> Repository : 1 (true) or 0 (false)
+deactivate DB
+
+Repository --> Service : boolean
+deactivate Repository
+Service --> Controller : boolean
+deactivate Service
+
+alt freight is pending
+    
+    Controller -> Service : planSimpleRoute(freight)
+    activate Service
+    
+    Service -> Route ** : create("Route for Freight #...", "SIMPLE")
+    
+    Service -> Stop ** : create(1, freight.getOrigin())
+    Service -> Stop : addFreightToLoad(freight)
+    Service -> Route : addStop(originStop)
+    
+    Service -> Stop ** : create(2, freight.getDestination())
+    Service -> Stop : addFreightToUnload(freight)
+    Service -> Route : addStop(destStop)
+    
+    Service --> Controller : FreightRoute
+    deactivate Service
+    
+    Controller -> Service : displayRoute(route)
+    activate Service
+    Service -> Manager : show route plan
+    deactivate Service
+    
+else freight already assigned
+    Controller -> Manager : ✗ Freight already assigned
+end
+
+deactivate Controller
+
+== Scenario 2: Plan Complex Route ==
+
+Manager -> Controller : handlePlanComplexRoute()
+activate Controller
+
+Controller -> Service : getPendingFreights()
+activate Service
+
+Service -> Repository : getPendingFreights()
+activate Repository
+
+Repository -> DB : { ? = call get_pending_freights() }
+activate DB
+DB --> Repository : ResultSet (cursor)
+deactivate DB
+
+Repository -> Repository : extractFreightFromResultSet(rs)
+loop for each row
+    Repository -> Repository : create Freight objects
+end
+
+Repository --> Service : List<Freight>
+deactivate Repository
+
+Service --> Controller : List<Freight>
+deactivate Service
+
+Controller -> Service : displayFreights(freights)
+activate Service
+Service -> Manager : show pending freights
+deactivate Service
+
+Controller -> Controller : requestFreightIds()
+Manager -> Controller : enters freightIds (e.g., "2001,2002,2003")
+
+Controller -> Controller : parse and validate IDs
+loop for each freightId
+    Controller -> Service : getFreightById(freightId)
+    activate Service
+    Service -> Repository : getFreightById(freightId)
+    activate Repository
+    Repository -> DB : { ? = call get_freight_by_id(?) }
+    activate DB
+    DB --> Repository : ResultSet
+    deactivate DB
+    Repository --> Service : Freight
+    deactivate Repository
+    Service --> Controller : Freight
+    deactivate Service
+    
+    Controller -> Service : isFreightPending(freightId)
+    activate Service
+    Service -> Repository : isFreightPending(freightId)
+    activate Repository
+    Repository -> DB : { ? = call is_freight_pending(?) }
+    activate DB
+    DB --> Repository : 1 (pending)
+    deactivate DB
+    Repository --> Service : true
+    deactivate Repository
+    Service --> Controller : true
+    deactivate Service
+    
+    Controller -> Controller : add to selectedFreights
+end
+
+Controller -> Service : planComplexRoute(selectedFreights)
+activate Service
+
+Service -> Route ** : create("Complex Route for N Freights", "COMPLEX")
+
+Service -> Service : create facilityStops Map
+
+loop for each freight in selectedFreights
+    Service -> Service : group by origin facility
+    Service -> Stop : addFreightToLoad(freight)
+    
+    Service -> Service : group by destination facility
+    Service -> Stop : addFreightToUnload(freight)
+end
+
+Service -> Service : sort stops (loads first, then unloads)
+
+loop for each orderedStop
+    Service -> Stop ** : create(stopOrder, facility)
+    Service -> Stop : copy load operations
+    Service -> Stop : copy unload operations
+    Service -> Route : addStop(stop)
+end
+
+Service --> Controller : FreightRoute
+deactivate Service
+
+Controller -> Service : displayRoute(route)
+activate Service
+Service -> Manager : show optimized route plan
+deactivate Service
+
+deactivate Controller
+
+== Scenario 3: Assign Route to Train ==
+
+Manager -> Controller : handleRouteAssignment(route)
+activate Controller
+
+Controller -> Controller : requestTrainId()
+Manager -> Controller : enters trainId
+
+Controller -> Service : validateRoutePendingStatus(route)
+activate Service
+
+loop for each freight in route
+    Service -> Repository : isFreightPending(freightId)
+    activate Repository
+    Repository -> DB : { ? = call is_freight_pending(?) }
+    activate DB
+    DB --> Repository : 1 or 0
+    deactivate DB
+    Repository --> Service : boolean
+    deactivate Repository
+end
+
+Service --> Controller : alreadyAssignedList
+deactivate Service
+
+alt all freights are pending
+    
+    Controller -> Service : assignRouteToTrain(route, trainId)
+    activate Service
+    
+    Service -> Service : collect all freightIds from route
+    
+    Service -> Repository : assignMultipleFreightsToTrain(trainId, freightIds)
+    activate Repository
+    
+    Repository -> Repository : convert List to comma-separated String
+    
+    Repository -> DB : { call assign_multiple_freights_to_train(?, ?) }
+    activate DB
+
+    DB --> Repository : success
+    deactivate DB
+    
+    Repository --> Service : void
+    deactivate Repository
+    
+    Service --> Controller : freightCount
+    deactivate Service
+    
+    Controller -> Manager : ✓ Successfully assigned N freights
+    
+else some freights already assigned
+    Controller -> Manager : ✗ Cannot assign - freights already assigned
+end
+
+deactivate Controller
+
+@enduml

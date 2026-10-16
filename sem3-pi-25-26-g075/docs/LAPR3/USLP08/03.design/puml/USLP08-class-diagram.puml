@@ -1,0 +1,151 @@
+@startuml USLP08-class-diagram
+
+' Controller Layer
+class FreightManagerMenuController {
+    - scanner: Scanner
+    - routePlannerService: FreightRoutePlannerService
+    - freightRepository: FreightRepository
+    + show(): void
+    - handlePlanRoute(): void
+    - handlePlanRouteSimple(): void
+    - handlePlanComplexRoute(): void
+    - handleViewPendingFreights(): void
+    - handleViewAllFreights(): void
+    - handleRouteAssignment(route: FreightRoute): void
+}
+
+' Service Layer
+class FreightRoutePlannerService {
+    - freightRepository: FreightRepository
+    + getPendingFreights(): List<Freight>
+    + getFreightById(freightId: int): Freight
+    + isFreightPending(freightId: int): boolean
+    + planSimpleRoute(freight: Freight): FreightRoute
+    + planComplexRoute(freights: List<Freight>): FreightRoute
+    + displayRoute(route: FreightRoute): void
+    + displayFreights(freights: List<Freight>): void
+    + assignRouteToTrain(route: FreightRoute, trainId: int): int
+    + validateRoutePendingStatus(route: FreightRoute): List<Integer>
+}
+
+' Repository Layer
+class FreightRepository {
+    - connection: Connection
+    + getPendingFreights(): List<Freight>
+    + getAllFreights(): List<Freight>
+    + getFreightById(freightId: int): Freight
+    + isFreightPending(freightId: int): boolean
+    + assignMultipleFreightsToTrain(trainId: int, freightIds: List<Integer>): void
+    - extractFreightFromResultSet(rs: ResultSet): Freight
+}
+
+' Domain Layer - Freight Package
+class FreightRoute {
+    - routeName: String
+    - routeType: String
+    - stops: List<RouteStop>
+    - totalDistance: int
+    + addStop(stop: RouteStop): void
+    + getFreightCount(): int
+    + isSimple(): boolean
+    + isComplex(): boolean
+    + getRouteName(): String
+    + getRouteType(): String
+    + getStops(): List<RouteStop>
+}
+
+class RouteStop {
+    - stopOrder: int
+    - facility: Facility
+    - freightsToLoad: List<Freight>
+    - freightsToUnload: List<Freight>
+    - cumulativeDistance: int
+    + addFreightToLoad(freight: Freight): void
+    + addFreightToUnload(freight: Freight): void
+    + hasLoadOperations(): boolean
+    + hasUnloadOperations(): boolean
+    + getStopOrder(): int
+    + getFacility(): Facility
+    + getFreightsToLoad(): List<Freight>
+    + getFreightsToUnload(): List<Freight>
+}
+
+class Freight {
+    - freightId: int
+    - freightDate: LocalDate
+    - origin: Facility
+    - destination: Facility
+    + getFreightId(): int
+    + getFreightDate(): LocalDate
+    + getOrigin(): Facility
+    + getDestination(): Facility
+}
+
+' Domain Layer - Railway Package
+class Facility {
+    - id: int
+    - name: String
+    - isIntermodal: boolean
+    + getId(): int
+    + getName(): String
+    + isIntermodal(): boolean
+}
+
+' Database Interface
+interface Connection <<JDBC>> {
+    + prepareCall(sql: String): CallableStatement
+}
+
+interface CallableStatement <<JDBC>> {
+    + registerOutParameter(index: int, type: int): void
+    + setInt(index: int, value: int): void
+    + setString(index: int, value: String): void
+    + execute(): boolean
+    + getObject(index: int): Object
+    + getInt(index: int): int
+}
+
+' Relationships
+
+' Controller Dependencies
+FreightManagerMenuController --> FreightRoutePlannerService : uses
+FreightManagerMenuController --> FreightRepository : uses
+
+' Service Dependencies
+FreightRoutePlannerService --> FreightRepository : uses
+FreightRoutePlannerService ..> FreightRoute : creates
+FreightRoutePlannerService ..> Freight : uses
+
+' Repository Dependencies
+FreightRepository --> Connection : uses
+FreightRepository --> CallableStatement : uses
+FreightRepository ..> Freight : creates
+FreightRepository ..> Facility : creates
+
+' Domain Relationships
+FreightRoute "1" o-- "2..*" RouteStop : contains
+RouteStop "1" o-- "0..*" Freight : loads/unloads
+RouteStop "*" --> "1" Facility : located at
+Freight "*" --> "1" Facility : origin
+Freight "*" --> "1" Facility : destination
+
+' Notes
+note top of FreightRepository
+  All database access uses
+  PL/SQL functions via
+  CallableStatement (AC2)
+end note
+
+note right of FreightRoutePlannerService
+  Plans simple routes (2 stops)
+  and complex routes (optimized
+  multi-stop with grouping)
+end note
+
+note bottom of FreightRoute
+  Represents planned route
+  with sequence of stops
+  (satisfies AC1)
+end note
+
+@enduml

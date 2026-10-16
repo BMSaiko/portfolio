@@ -1,0 +1,36 @@
+@startuml US12-SD-partial-store-cargoes
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US12 - Store Cargoes - Partial Sequence Diagram
+
+participant ":CargoGenerationController" as CTRL
+participant "station:Station" as STATION
+participant "cargoes:List<Cargo>" as CARGOES
+participant "cargo:Cargo" as CARGO
+participant ":CargoRepository" as CARGOREPO
+
+CTRL -> STATION : addCargoes(cargoes)
+activate STATION
+    group Store Cargoes
+    loop for each cargoData in cargoes
+        STATION -> CARGO** : create(cargoData)
+        STATION -> CARGO : validateData()
+        activate CARGO
+            CARGO --> STATION : validationResult
+        deactivate CARGO
+
+        ' Assuming validation passes
+        STATION -> CARGOREPO : saveCargo(cargo)
+        activate CARGOREPO
+            CARGOREPO --> STATION : savedCargo
+        deactivate CARGOREPO
+
+        STATION -> STATION : updateStorage(cargo) // Internal update
+    end
+    end group
+    STATION --> CTRL : addedCargoesResult
+deactivate STATION
+
+@enduml

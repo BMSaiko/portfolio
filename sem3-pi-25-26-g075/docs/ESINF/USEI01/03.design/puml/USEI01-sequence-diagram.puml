@@ -1,0 +1,79 @@
+@startuml USEI01-sequence-diagram
+
+actor "Station Storage Manager" as SSM
+participant ":MenuController" as MC
+participant ":DataInitializationService" as DIS
+participant ":CsvImportService" as CSV
+participant ":WarehouseAllocator" as WA
+participant ":Warehouse" as WH
+participant ":Bay" as BAY
+
+SSM -> MC : run()
+activate MC
+
+MC -> DIS : initializeWarehouse()
+activate DIS
+
+DIS -> CSV : importItems(itemsInputStream)
+activate CSV
+CSV --> DIS : items
+deactivate CSV
+
+DIS -> CSV : importBays(baysInputStream)
+activate CSV
+CSV --> DIS : bays
+deactivate CSV
+
+DIS -> WH : create()
+activate WH
+
+DIS -> WH : addBay(bay)
+loop for each bay
+    WH -> WH : bays.put(locationCode, bay)
+end
+
+DIS -> CSV : importWagons(wagonsInputStream)
+activate CSV
+CSV --> DIS : boxes
+deactivate CSV
+
+DIS -> WA : allocateBoxesToWarehouse(boxes, warehouse)
+activate WA
+
+WA -> WA : filterDuplicateBoxIds(boxes)
+
+loop for each SKU
+    WA -> WA : sortBoxesByFEFO_FIFO()
+    
+    loop for each box
+        WA -> WH : allocateBox(box)
+        activate WH
+        
+        WH -> WH : checkBoxIdUniqueness(boxId)
+        
+        alt boxId is unique
+            WH -> BAY : addBox(box)
+            activate BAY
+            BAY -> BAY : storedBoxes.add(box)
+            BAY -> BAY : sortBoxes()
+            BAY --> WH : true
+            deactivate BAY
+            WH --> WA : true
+        else boxId is duplicate
+            WH --> WA : false
+        end
+        deactivate WH
+    end
+end
+
+WA --> DIS : allocation complete
+deactivate WA
+
+DIS --> MC : warehouse
+deactivate DIS
+deactivate WH
+
+MC --> SSM : warehouse ready
+deactivate MC
+
+@enduml

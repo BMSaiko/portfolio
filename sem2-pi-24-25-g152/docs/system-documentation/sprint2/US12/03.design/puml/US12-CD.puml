@@ -1,0 +1,103 @@
+@startuml US12-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US12 - Class Diagram - Generate Cargoes Automatically
+
+class CargoGenerationUI {
+  + startCargoGeneration(): void
+}
+
+class CargoGenerationController {
+  + startCargoGeneration(): void
+}
+
+class SimulationService {
+  + configureSimulation(): void
+}
+
+class StationRepository {
+  + getAllStations(): List<Station>
+}
+
+class IndustryService {
+  + generateCargoForStation(station: Station): List<Cargo>
+}
+
+class CityService {
+  + generateCargoForStation(station: Station): List<Cargo>
+}
+
+class Station {
+  - name: String
+  - location: Object
+  - storageCapacity: double
+  - currentCargoes: List<Cargo>
+}
+
+class Cargo {
+  - type: String
+  - origin: Station
+  - destination: Station
+  - quantity: double
+  + validateData(): boolean
+}
+
+class CargoRepository {
+  + saveCargo(cargo: Cargo): void
+}
+
+class CargoDistributionService {
+  + calculateStatistics(): void
+}
+
+class Industry {
+  - name: String
+  - type: String
+  - location: Location
+  - productionRate: double
+}
+
+class City {
+  - name: String
+  - population: int
+  - location: Location
+  - demandFactors: Location
+  - houseBlocks: List<HouseBlock>
+}
+
+class Map {
+  - name: String
+  - width: int
+  - height: int
+  - regions: List<Object>
+  - scenarios: List<Scenario>
+  - stations: List<Station>
+  - industries: List<Industry>
+  - cities: List<City>
+}
+
+CargoGenerationUI --> CargoGenerationController
+CargoGenerationController --> SimulationService
+CargoGenerationController --> StationRepository
+CargoGenerationController --> IndustryService
+CargoGenerationController --> CityService
+CargoGenerationController --> Station
+CargoGenerationController --> CargoDistributionService
+
+StationRepository --> Station
+IndustryService --> Industry
+CityService --> City
+Station "1" *-- "0..*" Cargo : stores >
+Station --> CargoRepository
+CargoRepository --> Cargo
+
+' Relationships based on domain knowledge (not explicitly in rationale steps but implied)
+Map "1" *-- "0..*" Station
+Map "1" *-- "0..*" Industry
+Map "1" *-- "0..*" City
+Station "1" -- "0..*" Industry : serves >
+Station "1" -- "0..*" City : serves >
+
+@enduml

@@ -1,0 +1,17 @@
+========================================
+  AISAFE - MONTHLY REPORT
+  Period: July 2026 | Generated: 2026-06-12 22:35
+========================================
+
+1. SUMMARY: 0 flights | 0 validated | 0 completed | 0 cancelled | 0,0% pass rate
+----------------------------------------
+2. FLEET: 0 active aircraft types | Most used: N/A | Total distance: 0,0 km
+----------------------------------------
+3. SAFETY: 0,0 km avg distance | 0,0 kg avg fuel | 0 cancellations | 0 violations
+----------------------------------------
+4. TOP ROUTES: No routes this period
+----------------------------------------
+
+========================================
+  END OF REPORT - AISAFE Flight Control
+========================================

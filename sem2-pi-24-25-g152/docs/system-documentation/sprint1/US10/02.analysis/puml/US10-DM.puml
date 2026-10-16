@@ -1,0 +1,41 @@
+@startuml
+class Player {
+    playerID
+    name
+}
+
+class Train {
+    trainID
+    name
+    capacity
+}
+
+class Route {
+    routeID
+    name
+}
+
+class Station {
+    stationID
+    name
+    location
+}
+
+class Cargo {
+    cargoID
+    type
+    weight
+}
+
+class TrainCargoAssignment {
+    assignmentID
+    quantity
+}
+
+Player "1" -- "N" Train : owns >
+Train "1" -- "1" Route : assigned to >
+Route "1" -- "N" Station : includes >
+Station "1" -- "N" Cargo : stores >
+Train "N" -- "N" Cargo : transports > TrainCargoAssignment
+
+@enduml

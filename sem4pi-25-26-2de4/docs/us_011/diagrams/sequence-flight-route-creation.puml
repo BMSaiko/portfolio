@@ -1,0 +1,73 @@
+@startuml
+title Sequence Diagram - Flight Route Creation (FlightRoute Aggregate)
+
+actor "Air Transport Company\nCollaborator" as ATCC
+participant "FlightRouteController" as Controller
+participant "FlightRouteService" as Service
+participant "FlightRouteRepository" as RouteRepo
+participant "AirportRepository" as AirportRepo
+participant "FlightRoute" as Aggregate
+
+ATCC -> Controller: createFlightRoute(name, originAirportId, destinationAirportId)
+activate Controller
+
+Controller -> Service: createFlightRoute(routeData)
+activate Service
+
+Service -> AirportRepo: findById(originAirportId)
+activate AirportRepo
+AirportRepo --> Service: originAirport
+deactivate AirportRepo
+
+Service -> AirportRepo: findById(destinationAirportId)
+activate AirportRepo
+AirportRepo --> Service: destinationAirport
+deactivate AirportRepo
+
+alt origin equals destination
+    Service --> Controller: throw SameOriginDestinationException
+    Controller --> ATCC: error: "Origin and destination airports must be different"
+else
+    Service -> RouteRepo: findByName(name)
+    activate RouteRepo
+    RouteRepo --> Service: existingRoute (or null)
+    deactivate RouteRepo
+
+    alt route name already exists
+        Service --> Controller: throw DuplicateRouteNameException
+        Controller --> ATCC: error: "Route name already exists"
+    else
+        Service -> Aggregate: new FlightRoute(name, originAirport, destinationAirport)
+        activate Aggregate
+        note right of Aggregate
+            **Invariants enforced inside constructor:**
+            - Route name must match pattern:
+              2 letters + up to 4 numbers (e.g., TP123)
+            - Origin and destination must be
+              different airports
+            - Route name must be unique
+              across all routes
+        end note
+
+        alt name format invalid
+            Aggregate --> Service: throw InvalidRouteNameException
+            Service --> Controller: throw InvalidRouteNameException
+            Controller --> ATCC: error: "Route name must be 2 letters + up to 4 numbers"
+        else name format is valid
+            Aggregate --> Service: flightRoute
+            deactivate Aggregate
+
+            Service -> RouteRepo: save(flightRoute)
+            activate RouteRepo
+            RouteRepo --> Service: saved
+            deactivate RouteRepo
+
+            Service --> Controller: flightRoute
+            Controller --> ATCC: success: "Flight route created successfully"
+        end
+    end
+end
+
+deactivate Service
+deactivate Controller
+@enduml

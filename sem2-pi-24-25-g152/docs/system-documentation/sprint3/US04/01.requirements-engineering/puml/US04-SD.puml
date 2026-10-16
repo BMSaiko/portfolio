@@ -1,0 +1,59 @@
+@startuml US04-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SD) - US04 As an Editor, I want to create a scenario for a selected map.
+
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":System" as SYSTEM
+
+activate EDITOR
+
+    EDITOR -> SYSTEM : asks to create a scenario
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : shows map list and asks to select one
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects a map
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : requests data (name, start time, end time)
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : types requested data
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : shows available locomotive types and asks to select
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects locomotive types
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : shows available industry types and asks to select
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects industry types
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : asks for historical events
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : adds historical events
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : shows all data and requests confirmation
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : confirms data
+    activate SYSTEM
+
+        SYSTEM --> EDITOR : displays operation success
+    deactivate SYSTEM
+
+deactivate EDITOR
+@enduml

@@ -1,0 +1,212 @@
+@startuml US06-SD
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Player" as PLAYER
+participant ":UpgradeStationUI" as UI
+participant ":UpgradeStationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "stationRepository\n:StationRepository" as STATION_REPO
+participant "ApplicationSession" as APP_SESSION
+participant "appSession\n:ApplicationSession" as APP_SESSION_SINGLETON
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+participant "player\n:Player" as PLAYER_OBJ
+participant "buildingUpgradeRepository\n:BuildingUpgradeRepository" as BUILDING_REPO
+participant "station\n:Station" as STATION
+participant "buildingUpgrade\n:BuildingUpgrade" as BUILDING
+participant "StationMapper" as STATION_MAPPER
+participant "UpgradeMapper" as UPGRADE_MAPPER
+participant "UpgradeResultMapper" as RESULT_MAPPER
+participant "PlayerMapper" as PLAYER_MAPPER
+
+activate PLAYER
+
+    PLAYER -> UI : asks to upgrade a station
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : getPlayerInfo()
+        activate CTRL
+            CTRL -> APP_SESSION : getInstance()
+            activate APP_SESSION
+                APP_SESSION --> CTRL : appSession
+            deactivate APP_SESSION
+
+            CTRL -> APP_SESSION_SINGLETON : getCurrentSession()
+            activate APP_SESSION_SINGLETON
+                APP_SESSION_SINGLETON --> CTRL : currentSession
+            deactivate APP_SESSION_SINGLETON
+
+            CTRL -> CURRENT_SESSION : getPlayer()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : player
+            deactivate CURRENT_SESSION
+
+            CTRL -> PLAYER_MAPPER : toDTO(player)
+            activate PLAYER_MAPPER
+                PLAYER_MAPPER --> CTRL : playerDTO
+            deactivate PLAYER_MAPPER
+
+            CTRL --> UI : playerDTO
+        deactivate CTRL
+
+        UI -> UI : displayPlayerInfo(playerDTO)
+
+        UI -> CTRL : getStations()
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL: repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : getStations()
+            activate STATION_REPO
+                STATION_REPO --> CTRL : stationsList
+            deactivate STATION_REPO
+
+            CTRL -> STATION_MAPPER : toDTO(station) [for each station]
+            activate STATION_MAPPER
+                STATION_MAPPER --> CTRL : stationDTOList
+            deactivate STATION_MAPPER
+
+            CTRL --> UI : stationDTOList
+        deactivate CTRL
+
+        UI -> UI : displayStations(stationDTOList)
+        UI --> PLAYER : shows station list and asks to select one
+    deactivate UI
+
+    PLAYER -> UI : selects a station
+    activate UI
+        UI -> UI : selectStation()
+        UI -> CTRL : getAvailableUpgrades(stationId)
+        activate CTRL
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : getStationById(stationId)
+            activate STATION_REPO
+                STATION_REPO --> CTRL : station
+            deactivate STATION_REPO
+
+            CTRL -> CURRENT_SESSION : getCurrentDate()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : currentDate
+            deactivate CURRENT_SESSION
+
+            CTRL -> REPOS_SINGLETON : getBuildingUpgradeRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: buildingUpgradeRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> BUILDING_REPO : getAvailableUpgrades(station, currentDate)
+            activate BUILDING_REPO
+                BUILDING_REPO --> CTRL : availableUpgrades
+            deactivate BUILDING_REPO
+
+            CTRL -> CTRL : calculateAffordability(upgrade, budget) [for each upgrade]
+            activate CTRL
+                CTRL --> CTRL : isAffordable
+            deactivate CTRL
+
+            CTRL -> CTRL : findConflictingUpgrades(station, upgrade) [for each upgrade]
+            activate CTRL
+                CTRL --> CTRL : conflictsList
+            deactivate CTRL
+
+            CTRL -> UPGRADE_MAPPER : toDTO(upgrade, budget, conflictsList) [for each upgrade]
+            activate UPGRADE_MAPPER
+                UPGRADE_MAPPER --> CTRL : availableUpgradeDTOList
+            deactivate UPGRADE_MAPPER
+
+            CTRL --> UI : availableUpgradeDTOList
+        deactivate CTRL
+
+        UI -> UI : displayAvailableUpgrades(availableUpgradeDTOList)
+        UI --> PLAYER : shows available upgrades and asks to select one
+    deactivate UI
+
+    PLAYER -> UI : selects an upgrade
+    activate UI
+        UI -> UI : selectUpgrade()
+        UI -> UI : getUpgradeRequest()
+        UI -> CTRL : applyUpgrade(stationUpgradeRequestDTO)
+        activate CTRL
+
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : getStationById(stationId)
+            activate STATION_REPO
+                STATION_REPO --> CTRL : station
+            deactivate STATION_REPO
+
+            CTRL -> REPOS_SINGLETON : getBuildingUpgradeRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: buildingUpgradeRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> BUILDING_REPO : getUpgradeById(upgradeId)
+            activate BUILDING_REPO
+                BUILDING_REPO --> CTRL : buildingUpgrade
+            deactivate BUILDING_REPO
+
+            CTRL -> CTRL : validateUpgradeCompatibility(station, buildingUpgrade)
+            activate CTRL
+                CTRL --> CTRL : isCompatible
+            deactivate CTRL
+
+            CTRL -> STATION : addUpgrade(buildingUpgrade)
+            activate STATION
+                STATION -> STATION : validateUpgrade(buildingUpgrade)
+                activate STATION
+                    STATION --> STATION : isValid
+                deactivate STATION
+
+                STATION --> CTRL : success
+            deactivate STATION
+
+            CTRL -> BUILDING : getCost()
+            activate BUILDING
+                BUILDING --> CTRL : cost
+            deactivate BUILDING
+
+            CTRL -> PLAYER_OBJ : updateBudget(-cost)
+            activate PLAYER_OBJ
+                PLAYER_OBJ --> CTRL : newBudget
+            deactivate PLAYER_OBJ
+
+            CTRL -> STATION_REPO : updateStation(station)
+            activate STATION_REPO
+                STATION_REPO --> CTRL : success
+            deactivate STATION_REPO
+
+            CTRL -> RESULT_MAPPER : toDTO(true, station, newBudget, "Upgrade applied successfully")
+            activate RESULT_MAPPER
+                RESULT_MAPPER --> CTRL : upgradeResultDTO
+            deactivate RESULT_MAPPER
+
+            CTRL --> UI : upgradeResultDTO
+        deactivate CTRL
+
+        UI -> UI : displayUpgradeResult(upgradeResultDTO)
+        UI --> PLAYER : displays upgrade confirmed with updated station details
+    deactivate UI
+
+deactivate PLAYER
+@enduml

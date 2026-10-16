@@ -1,0 +1,72 @@
+@startuml USLP09-class-diagram
+
+' --- UI / Controller Layer ---
+
+class TrafficManagerMenuController {
+    - scanner: Scanner
+    - trafficService: TrafficManagerService
+    + show(): void
+    - assembleTrainUI(): void
+}
+
+class TrafficManagerMenu {
+    + run(): void
+}
+
+' --- Service Layer (Pure Fabrication) ---
+
+class TrafficManagerService {
+    - connection: Connection
+    + connect(): void
+    + disconnect(): void
+    + getSelectableVehiclesForAssembly(facilityId: String): List<SelectableVehicle>
+}
+
+' --- Domain / DTO Layer (Data Objects) ---
+
+class SelectableVehicle {
+    - id: String
+    - name: String
+    - inTransit: boolean
+    - locationInfo: String
+    - distance: double
+    + toString(): String
+}
+
+class Facility {
+    - facilityId: String
+    - name: String
+    - location: Location
+}
+
+' --- Underlying Domain Entities (Database Representations) ---
+
+class Locomotive {
+    - locomotiveNumber: String
+    - power: double
+    - type: String
+}
+
+class Wagon {
+    - wagonNumber: String
+    - payload: double
+    - tare: double
+}
+
+' --- Relationships ---
+
+' Controller Dependencies
+TrafficManagerMenuController --> TrafficManagerService : uses to fetch data
+TrafficManagerMenuController ..> TrafficManagerMenu : displays
+TrafficManagerMenuController ..> SelectableVehicle : displays list of
+
+' Service Dependencies
+TrafficManagerService ..> SelectableVehicle : creates/returns
+TrafficManagerService ..> Facility : queries by ID
+
+' Data Representation
+' SelectableVehicle is a projection/view of specific Locomotives or Wagons
+SelectableVehicle <.. Locomotive : represents data from
+SelectableVehicle <.. Wagon : represents data from
+
+@enduml

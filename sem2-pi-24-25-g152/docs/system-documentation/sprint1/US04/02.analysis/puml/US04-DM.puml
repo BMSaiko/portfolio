@@ -1,0 +1,64 @@
+@startuml US04-DM
+
+
+title Domain Model (DM) - US04 As an Editor, I want to create a scenario for a selected map.
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Map {
+  name
+  width
+  height
+}
+
+class Location {
+  x
+  y
+}
+
+class Scenario {
+  name
+  startTime
+  endTime
+}
+
+enum LocomotiveType {
+  STEAM
+  DIESEL
+  ELECTRIC
+}
+
+enum IndustryType {
+  MINE
+  FARM
+  BAKERY
+  TEXTILE
+  AUTOMOBILE
+  STEEL_MILL
+  PORT
+}
+
+class Editor {
+  name
+  email
+}
+
+Map "1" - "1" Location : has >
+Scenario "1" -- "1" Map : is defined for >
+Editor "1" -- "*" Scenario : creates >
+
+Scenario "*" -- "*" LocomotiveType: makes available >
+Scenario "*" -- "*" IndustryType: makes available >
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Player" as PLAYER
+participant ":UpgradeStationUI" as UI
+participant ":UpgradeStationController" as CTRL
+participant "station\n:Station" as STATION
+
+activate PLAYER
+
+    PLAYER -> UI : asks to upgrade a station
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : getStations()
+        activate CTRL
+            ref over CTRL
+                Get Stations List
+            end ref
+            CTRL --> UI : stationsList
+        deactivate CTRL
+
+        UI --> PLAYER : shows station list and asks to select one
+    deactivate UI
+
+    PLAYER -> UI : selects a station
+    activate UI
+        UI -> CTRL : getAvailableUpgrades(stationId)
+        activate CTRL
+            ref over CTRL
+                Get Available Upgrades
+            end ref
+            CTRL --> UI : availableUpgrades
+        deactivate CTRL
+
+        UI --> PLAYER : shows available upgrades and asks to select one
+    deactivate UI
+
+    PLAYER -> UI : selects an upgrade
+    activate UI
+        UI -> CTRL : applyUpgrade(stationId, upgradeId)
+        activate CTRL
+            ref over CTRL
+                Apply Station Upgrade
+            end ref
+            CTRL --> UI : success
+        deactivate CTRL
+
+
+            UI --> PLAYER : displays upgrade confirmed
+    deactivate UI
+
+deactivate PLAYER
+@enduml

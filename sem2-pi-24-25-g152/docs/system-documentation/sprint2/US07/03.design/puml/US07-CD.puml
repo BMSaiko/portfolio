@@ -1,0 +1,49 @@
+@startuml US07-CD
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+
+' Player class
+class Player {
+    -id: int
+    -name: String
+    +listStations(): List<Station>
+    +selectStation(stationId: int): Station
+}
+
+' Station class
+class Station {
+    -id: int
+    -name: String
+    -location: String
+    -buildings: List<Building>
+    -cargoes: List<Cargo>
+    +getDetails(): String
+    +addBuilding(building: Building): void
+    +addCargo(cargo: Cargo): void
+}
+
+' Building class
+class Building {
+    -id: int
+    -type: String
+    -level: int
+    +getDescription(): String
+}
+
+' Cargo class
+class Cargo {
+    -id: int
+    -type: String
+    -quantity: int
+    -demand: int
+    +isInDemand(): boolean
+}
+
+' Relationships
+Player --> "*" Station : views/selects
+Station "1" *-- "0..*" Building : contains
+Station "1" *-- "0..*" Cargo : holds
+
+@enduml

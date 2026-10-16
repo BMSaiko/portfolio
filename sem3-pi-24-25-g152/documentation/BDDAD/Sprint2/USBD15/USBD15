@@ -1,0 +1,55 @@
+CREATE OR REPLACE FUNCTION register_workstation (
+    p_WSID        IN NUMBER,
+    p_Name        IN VARCHAR2,
+    p_Description IN VARCHAR2,
+    p_WTID        IN VARCHAR2
+) RETURN VARCHAR2
+IS
+    v_status VARCHAR2(100);
+BEGIN
+    BEGIN
+        -- Insert the new workstation record
+        INSERT INTO Workstations (WSID, Name, Description, WTID)
+        VALUES (p_WSID, p_Name, p_Description, p_WTID);
+
+        -- If successful, set status to success
+        v_status := 'Success: Workstation registered successfully';
+
+        -- Commit the changes
+        COMMIT;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            -- If a duplicate WSID is inserted, return an appropriate error message
+            v_status := 'Error: Workstation with this WSID already exists';
+            ROLLBACK;
+        WHEN NO_DATA_FOUND THEN
+            -- If the WTID is not found (foreign key violation)
+            v_status := 'Error: Workstation Type (WTID) not found';
+            ROLLBACK;
+        WHEN OTHERS THEN
+            -- Catch-all for any other exceptions
+            v_status := 'Error: ' || SQLERRM;
+            ROLLBACK;
+    END;
+
+    -- Return the status of the operation
+    RETURN v_status;
+END register_workstation;
+/
+
+-- Example usage of the function
+DECLARE
+    v_result VARCHAR2(100);
+BEGIN
+    -- Calling the function to register a workstation
+    v_result := register_workstation(
+        p_WSID        => 1001,
+        p_Name        => 'New Workstation 1001',
+        p_Description => 'Description for Workstation 1001',
+        p_WTID        => 'A4578'
+    );
+
+    -- Display the result
+    DBMS_OUTPUT.PUT_LINE(v_result);
+END;
+/

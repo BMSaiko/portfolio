@@ -1,0 +1,120 @@
+@startuml
+title Sequence Diagram - Remove Engine Model from Aircraft Model (US058)
+
+actor "Backoffice Operator" as BO
+participant "RemoveEngineFromAircraftModelUI" as UI
+participant "RemoveEngineFromAircraftModelController" as Controller
+participant "AuthService" as Auth
+participant "AircraftModelRepository" as AircraftRepo
+participant "AircraftRepository" as FleetRepo
+participant "EngineModelRepository" as EngineRepo
+participant "AircraftModel" as Aggregate
+
+BO -> UI: show()
+activate UI
+
+UI -> Controller: allAircraftModels()
+activate Controller
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+Auth --> Controller: ok
+deactivate Auth
+Controller -> AircraftRepo: findAll()
+activate AircraftRepo
+AircraftRepo --> Controller: Iterable<AircraftModel>
+deactivate AircraftRepo
+Controller --> UI: Iterable<AircraftModel>
+deactivate Controller
+
+UI -> UI: display aircraft list\nwith certified engine count
+BO -> UI: select aircraft model
+
+UI -> UI: display certified engines\nfor selected aircraft model
+
+alt only one engine certified
+    UI --> BO: WARNING: removal not permitted —\nat least one engine must remain
+    UI --> BO: (exits early, no controller call)
+end
+
+BO -> UI: select engine to remove
+BO -> UI: confirm (y/n)
+
+UI -> Controller: removeEngineFromAircraftModel(aircraftModelId, engineModelId)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt unauthorized
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: throw SecurityException
+    UI --> BO: ACCESS DENIED
+end
+deactivate Auth
+
+Controller -> AircraftRepo: findById(aircraftModelId)
+activate AircraftRepo
+AircraftRepo --> Controller: Optional<AircraftModel>
+deactivate AircraftRepo
+
+alt aircraft model not found
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "aircraft model not found"
+end
+
+Controller -> FleetRepo: existsByAircraftModelId(aircraftModelId)
+activate FleetRepo
+FleetRepo --> Controller: boolean
+deactivate FleetRepo
+
+alt actual aircraft exist for this model
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "actual aircraft registered\nunder this model"
+end
+
+Controller -> EngineRepo: findById(engineModelId)
+activate EngineRepo
+EngineRepo --> Controller: Optional<EngineModel>
+deactivate EngineRepo
+
+alt engine model not found
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "engine model not found"
+end
+
+Controller -> Aggregate: removeCertifiedEngine(engine)
+activate Aggregate
+note right of Aggregate
+    **Invariants enforced in removeCertifiedEngine():**
+    - engine must not be null
+    - engine must be currently certified
+      (!certifiedEngines.contains() check)
+    - at least one engine must remain
+      (certifiedEngines.size() == 1 guard)
+end note
+
+alt engine not certified for this model
+    Aggregate --> Controller: throw IllegalStateException
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "engine not certified"
+end
+
+alt removing last certified engine
+    Aggregate --> Controller: throw IllegalStateException
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "cannot remove last engine"
+end
+
+Aggregate --> Controller: (mutated AircraftModel)
+deactivate Aggregate
+
+Controller -> AircraftRepo: save(aircraftModel)
+activate AircraftRepo
+AircraftRepo --> Controller: aircraftModel
+deactivate AircraftRepo
+
+Controller --> UI: updated AircraftModel
+UI --> BO: Success: updated certified engine list
+
+deactivate Controller
+deactivate UI
+@enduml

@@ -1,0 +1,17 @@
+Variable,Range / unit
+Station,"{Berlin, Hamburg, Hannover, Frankfurt, Stuttgart}"
+Year,2015-2024
+Month,1-12
+Arrival of trains,number
+Iron,tons
+Coal,tons
+Steel,tons
+Vegetables,tons
+Cereals,tons
+Wool,tons
+Coffee,tons
+Cattle,tons
+Passengers,number
+Mail,tons
+Revenues,Millions (€)
+Expenses,Millions (€)

@@ -1,0 +1,65 @@
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T2-L1-HC-C
+!
+!
+!
+ptp clock transparent domain 0 profile default
+!
+username admin privilege 15 password 0 isep2026
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet1/1
+ description Trunk to T2-MCC Fa3/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet2/1
+ description Trunk to T2-CP-L1-5 Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet3/1
+ description Trunk to T2-CP-L1-7 Fa1/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+!
+interface FastEthernet9/1
+ description Redundancy link to T2-L1-HC-A Fa9/1
+ switchport trunk allowed vlan 769-782
+ switchport mode trunk
+ spanning-tree cost 100
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan770
+ ip address 10.61.170.4 255.255.254.0
+!
+ip default-gateway 10.61.170.200
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+

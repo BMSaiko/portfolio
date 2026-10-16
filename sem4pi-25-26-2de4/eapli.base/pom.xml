@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>pt.isep.sem4pi</groupId>
+		<artifactId>sem4pi2526</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>eapli</groupId>
+	<artifactId>exemplo</artifactId>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<properties>
+		<!-- automatically run annotation processors within the incremental
+		compilation -->
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
+
+		<eapli.framework.core.version>25.0.0-RELEASE</eapli.framework.core.version>
+		<eapli.framework.authz.version>25.0.0-RELEASE</eapli.framework.authz.version>
+		<eapli.framework.pubsub.version>25.0.0-RELEASE</eapli.framework.pubsub.version>
+
+		<eapli.framework.core.version-snapshot>25.0.1</eapli.framework.core.version-snapshot>
+		<eapli.framework.authz.version-snapshot>22.0.0</eapli.framework.authz.version-snapshot>
+		<eapli.framework.pubsub.version-snapshot>22.1.0</eapli.framework.pubsub.version-snapshot>
+
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+
+		<sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+		<sonar.exclusions>src/main/java/**/*/package-info.java</sonar.exclusions>
+	</properties>
+	<modules>
+		<module>exemplo.app.backoffice.console</module>
+		<module>exemplo.app.user.console</module>
+		<module>exemplo.app.other.console</module>
+		<module>exemplo.app.common.console</module>
+		<module>exemplo.app.bootstrap</module>
+		<module>exemplo.bootstrappers</module>
+		<module>exemplo.core</module>
+		<module>exemplo.infrastructure.application</module>
+		<module>exemplo.persistence.impl</module>
+	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+			<artifactId>eapli.framework.core</artifactId>
+			<version>${eapli.framework.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+			<artifactId>eapli.framework.infrastructure.authz</artifactId>
+			<version>${eapli.framework.authz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bitbucket.pag_isep.eapliframework</groupId>
+			<artifactId>eapli.framework.infrastructure.pubsub</artifactId>
+			<version>${eapli.framework.pubsub.version}</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- keep junit4 engine for now -->
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- support junit5 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>5.10.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- drivers for H2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.2.224</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Project Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies></dependencies>
+	</dependencyManagement>
+	<!-- Nexus repository for EAPLI framwork -->
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<!--
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.6.7</version>
+			</plugin>
+			-->
+			<!-- dependency version helper -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.16.2</version>
+			</plugin>
+			<!-- test coverage -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<aggregate>true</aggregate>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.11</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- lombok -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.13.0</version>
+				<configuration>
+					<release>21</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.30</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<!-- dependency version -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.16.2</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
+
+			<!-- javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.3</version>
+				<configuration>
+					<!-- UML Taglet JDK 8 -->
+					<!-- <source>1.8</source>
+					<javadocVersion>1.8.0</javadocVersion>
+					<taglet>org.jdrupes.taglets.plantUml.Taglet</taglet> 
+						<tagletArtifact> <groupId>org.jdrupes.taglets</groupId>
+					<artifactId>plantuml-taglet</artifactId> 
+						<version>1.0.5</version> </tagletArtifact> -->
+
+					<!-- UML DocLet JDK 9+ -->
+					<doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
+					<docletArtifact>
+						<groupId>nl.talsmasoftware</groupId>
+						<artifactId>umldoclet</artifactId>
+						<version>2.0.12</version>
+					</docletArtifact>
+
+					<!-- params -->
+					<show>private</show>
+					<doclint>none</doclint>
+					<detectOfflineLinks>false</detectOfflineLinks>
+					<additionalOptions>
+						<additionalOption>-Xdoclint:none</additionalOption>
+						<!-- Specify each diagram option here as an
+						additionOption tag. -->
+					</additionalOptions>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,210 @@
+@startuml US23-CD
+
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+title US23 - Save Game Functionality - Class Diagram
+
+package "UI Layer" {
+    class SaveGameUI {
+        - controller: SaveGameController
+        - scanner: Scanner
+        + SaveGameUI()
+        + run(): void
+        - showSaveGameMenu(): void
+        - handleLoadGame(): void
+        - handleListSaveFiles(): void
+        - handleDeleteSaveFile(): void
+        - displaySaveGameInfo(SaveGameData): void
+    }
+}
+
+package "Controller Layer" {
+    class SaveGameController {
+        - saveGameService: SaveGameService
+        - authService: AuthenticationService
+        - gameSession: GameSession
+        - userSession: UserSession
+        + SaveGameController()
+        + saveCurrentGame(String): boolean
+        + loadGame(String): SaveGameData
+        + loadAndRestoreGame(String): boolean
+        + getAvailableSaveFiles(): List<String>
+        + saveFileExists(String): boolean
+        + deleteSaveFile(String): boolean
+        + isValidFileName(String): boolean
+        + hasActiveGameSession(): boolean
+        - getCurrentPlayer(): Player
+        - getCurrentScenario(): Scenario
+        - restoreGameState(SaveGameData): void
+    }
+}
+
+package "Service Layer" {
+    class SaveGameService {
+        - GAME_VERSION: String {static}
+        - saveGameRepository: SaveGameRepository
+        - serializer: SaveGameSerializer
+        - repositories: Repositories
+        + SaveGameService()
+        + saveGame(String, Player, Scenario, GameSession): boolean
+        + loadGame(String): SaveGameData
+        + getAvailableSaveFiles(): List<String>
+        + saveFileExists(String): boolean
+        + deleteSaveFile(String): boolean
+        - collectGameState(SaveGameData, GameSession): void
+        - isValidFileName(String): boolean
+        - isValidSaveData(SaveGameData): boolean
+    }
+
+    class SaveGameSerializer {
+        - gson: Gson
+        + SaveGameSerializer()
+        + serializeToJson(SaveGameData): String
+        + deserializeFromJson(String): SaveGameData
+        + isValidSaveData(String): boolean
+    }
+
+    class GameSession {
+        - currentScenario: Scenario
+        - isGameActive: boolean
+        + GameSession()
+        + getLoggedInPlayer(): Player
+        + getCurrentScenario(): Scenario
+        + setCurrentScenario(Scenario): void
+        + isGameActive(): boolean
+        + startGame(Scenario): void
+        + endGame(): void
+        + restoreGameSession(Player, Scenario): void
+    }
+
+    class LocalDateTimeTypeAdapter {
+        + LocalDateTimeTypeAdapter()
+        + write(JsonWriter, LocalDateTime): void
+        + read(JsonReader): LocalDateTime
+    }
+}
+
+package "Session Layer" {
+    class UserSession {
+        - instance: UserSession {static}
+        - currentPlayer: Player
+        - userEmail: String
+        - UserSession()
+        + getInstance(): UserSession {static}
+        + getPlayer(): Player
+        + setPlayer(Player): void
+        + getUserEmail(): String
+        + setUserEmail(String): void
+        + isLoggedIn(): boolean
+        + logout(): void
+    }
+}
+
+package "Repository Layer" {
+    class SaveGameRepository {
+        - SAVES_DIRECTORY: String {static}
+        - SAVE_FILE_EXTENSION: String {static}
+        - savesPath: Path
+        + SaveGameRepository()
+        + saveGame(String, SaveGameData, String): boolean
+        + loadGame(String): String
+        + saveFileExists(String): boolean
+        + getAllSaveFiles(): List<String>
+        + deleteSaveFile(String): boolean
+        + getSavesDirectory(): Path
+        - createSavesDirectoryIfNotExists(): void
+        - sanitizeFileName(String): String
+    }
+
+    class Repositories {
+        - instance: Repositories {static}
+        - saveGameRepository: SaveGameRepository
+        - Repositories()
+        + getInstance(): Repositories {static}
+        + getSaveGameRepository(): SaveGameRepository
+    }
+}
+
+package "Domain Layer" {
+    class SaveGameData {
+        - metadata: SaveGameMetadata
+        - player: Player
+        - scenario: Scenario
+        - simulationTime: LocalDateTime
+        - trains: List<Train>
+        - stations: List<Station>
+        - gameProgress: GameProgress
+        + SaveGameData(SaveGameMetadata, Player, Scenario)
+        + getMetadata(): SaveGameMetadata
+        + getPlayer(): Player
+        + getScenario(): Scenario
+        + getSimulationTime(): LocalDateTime
+        + getTrains(): List<Train>
+        + getStations(): List<Station>
+        + getGameProgress(): GameProgress
+        + setters(): void
+    }
+
+    class SaveGameMetadata {
+        - saveName: String
+        - playerName: String
+        - saveDate: LocalDateTime
+        - gameVersion: String
+        - description: String
+        + SaveGameMetadata(String, String, String)
+        + getSaveName(): String
+        + getPlayerName(): String
+        + getSaveDate(): LocalDateTime
+        + getGameVersion(): String
+        + getDescription(): String
+        + setDescription(String): void
+    }
+
+    class GameProgress {
+        - currentLevel: int
+        - score: long
+        - completedObjectives: List<String>
+        - gameTimeElapsed: Duration
+        + GameProgress()
+        + getCurrentLevel(): int
+        + getScore(): long
+        + getCompletedObjectives(): List<String>
+        + getGameTimeElapsed(): Duration
+        + setters(): void
+        + addCompletedObjective(String): void
+    }
+}
+
+' Relationships
+SaveGameUI --> SaveGameController : uses
+SaveGameController --> SaveGameService : uses
+SaveGameController --> GameSession : uses
+SaveGameController --> UserSession : uses
+SaveGameService --> SaveGameRepository : uses
+SaveGameService --> SaveGameSerializer : uses
+SaveGameService --> Repositories : uses
+SaveGameSerializer --> LocalDateTimeTypeAdapter : uses
+GameSession --> UserSession : uses
+Repositories --> SaveGameRepository : manages
+SaveGameData --> SaveGameMetadata : contains
+SaveGameData --> GameProgress : contains
+
+' External dependencies (shown for completeness)
+SaveGameController ..> Player : uses
+SaveGameController ..> Scenario : uses
+SaveGameData ..> Train : contains
+SaveGameData ..> Station : contains
+
+note top of SaveGameUI : "Provides user interface\nfor save/load operations"
+note top of SaveGameController : "Coordinates save game\noperations between UI and services"
+note top of SaveGameService : "Business logic for\nsave game operations"
+note top of SaveGameRepository : "File system operations\nfor save games"
+note top of UserSession : "Singleton pattern\nfor user session management"
+
+@enduml

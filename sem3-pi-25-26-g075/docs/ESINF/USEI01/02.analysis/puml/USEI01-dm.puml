@@ -1,0 +1,59 @@
+@startuml USEI01 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+' Warehouse Management Package
+package "Warehouse Management" {
+  class Warehouse {
+    name
+    location
+  }
+
+  class Aisle {
+    coordinates
+  }
+
+  class Bay {
+    capacityOfBoxes
+    coordinates
+  }
+
+  class Box {
+    quantity
+    sku
+    expireDate
+    receivedAt
+  }
+}
+
+' Order Management Package
+package "Order Management" {
+  class Item {
+    sku
+    name
+    category
+    unit
+    volume
+    unitWeight
+  }
+}
+
+' Staff
+class StationStoreManager {
+  name
+}
+
+' Relationships
+Warehouse "1" -- "1..*" Aisle : "part of"
+Aisle "1" -- "1..*" Bay : "located in"
+Bay "1" -- "0..*" Box : "stored in"
+Box "*" -- "1" Item : "contains"
+
+StationStoreManager "1" -- "0..*" Warehouse : "manages"
+
+@enduml

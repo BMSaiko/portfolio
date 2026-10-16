@@ -1,0 +1,59 @@
+@startuml
+title Sequence Diagram - US071: Decommission Aircraft
+
+actor "Company Collaborator" as Collab
+participant "DecommissionAircraftUI" as UI
+participant "DecommissionAircraftController" as Controller
+participant "AuthService" as Auth
+participant "AircraftRepository" as Repo
+participant "Aircraft" as Aggregate
+
+Collab -> UI: enters aircraft registration (registration)
+activate UI
+
+UI -> Controller: decommissionAircraft(registration)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(AIR_TRANSPORT_COMPANY_COLLABORATOR)
+activate Auth
+alt not authenticated or wrong role
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: SecurityException
+    UI --> Collab: error: "Access denied"
+else authorized
+    Auth --> Controller: ok
+    deactivate Auth
+
+    Controller -> Repo: ofIdentity(registration)
+    activate Repo
+    Repo --> Controller: Optional<Aircraft>
+    deactivate Repo
+
+    alt aircraft not found
+        Controller --> UI: throw IllegalArgumentException
+        UI --> Collab: error: "No aircraft found with registration..."
+    else aircraft exists
+        Controller -> Aggregate: decommission()
+        activate Aggregate
+        alt aircraft is already retired
+            Aggregate --> Controller: throw IllegalStateException
+            Controller --> UI: IllegalStateException
+            UI --> Collab: error: "Aircraft is already retired"
+        else status updated
+            Aggregate --> Controller: ok
+            deactivate Aggregate
+
+            Controller -> Repo: save(aircraft)
+            activate Repo
+            Repo --> Controller: saved
+            deactivate Repo
+
+            Controller --> UI: aircraft
+            UI --> Collab: success: "Aircraft decommissioned successfully!"
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

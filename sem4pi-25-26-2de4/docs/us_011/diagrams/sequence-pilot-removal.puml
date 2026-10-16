@@ -1,0 +1,59 @@
+@startuml
+title Sequence Diagram - Pilot Removal (Organisation Aggregate)
+
+actor "Air Transport Company\nCollaborator" as ATCC
+participant "CompanyController" as Controller
+participant "CompanyService" as Service
+participant "CompanyRepository" as CompanyRepo
+participant "AirTransportCompany" as Aggregate
+participant "FlightPlanRepository" as FlightRepo
+
+ATCC -> Controller: removePilot(companyId, pilotId)
+activate Controller
+
+Controller -> Service: removePilot(companyId, pilotId)
+activate Service
+
+Service -> CompanyRepo: findById(companyId)
+activate CompanyRepo
+CompanyRepo --> Service: company
+deactivate CompanyRepo
+
+Service -> FlightRepo: findActiveFlightPlansByPilot(pilotId)
+activate FlightRepo
+note right of FlightRepo
+    **Cross-aggregate query:**
+    Checks for flight plans with:
+    - status = "ACTIVE" or "SCHEDULED"
+    - pilot matches pilotId
+end note
+FlightRepo --> Service: activeFlightPlans (list)
+deactivate FlightRepo
+
+alt activeFlightPlans is not empty
+    Service --> Controller: throw PilotHasActiveFlightsException
+    Controller --> ATCC: error: "Cannot remove pilot: has active flight plans assigned"
+else no active flight plans
+    Service -> Aggregate: removePilot(pilotId)
+    activate Aggregate
+    note right of Aggregate
+        **Invariant enforced inside aggregate:**
+        - Pilot must exist in this company's roster
+        - No active flight plans (already verified)
+        - Sets pilot status to INACTIVE
+    end note
+    Aggregate --> Service: updatedCompany
+    deactivate Aggregate
+
+    Service -> CompanyRepo: save(company)
+    activate CompanyRepo
+    CompanyRepo --> Service: saved
+    deactivate CompanyRepo
+
+    Service --> Controller: success
+    Controller --> ATCC: success: "Pilot removed from roster successfully"
+end
+
+deactivate Service
+deactivate Controller
+@enduml

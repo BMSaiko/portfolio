@@ -1,0 +1,96 @@
+@startuml USEI11-class-diagram
+
+class RailwayUpgradeService {
+    - repository: RailwayNetworkRepository
+    - inDegree: Map<Station, Integer>
+    - adjacencyList: Map<Station, List<Station>>
+    + computeUpgradePlan(): UpgradePlanResult
+    - buildInternalStructures(): void
+    - findCycleStations(remainingInDegree: Map): List<Station>
+    - findCycleEdges(remainingInDegree: Map): List<String>
+    + getGraphStatistics(): String
+    + validateGraph(): List<String>
+}
+
+class RailwayNetworkRepository {
+    - {static} instance: RailwayNetworkRepository
+    - networkGraph: Graph<Station, TrackConnection>
+    - dataLoaded: boolean
+    + {static} getInstance(): RailwayNetworkRepository
+    + getNetworkGraph(): Graph<Station, TrackConnection>
+    + setNetworkGraph(graph: Graph): void
+    + isDataLoaded(): boolean
+}
+
+interface Graph<V, E> {
+    + vertices(): ArrayList<V>
+    + edges(): Collection<Edge<V, E>>
+    + outgoingEdges(vert: V): Collection<Edge<V, E>>
+    + edge(vOrig: V, vDest: V): Edge<V, E>
+    + numVertices(): int
+    + numEdges(): int
+    + outDegree(vert: V): int
+    + inDegree(vert: V): int
+}
+
+class MapGraph<V, E> {
+    - mapVertices: Map<V, MapVertex>
+    + vertices(): ArrayList<V>
+    + edges(): Collection<Edge>
+    + outgoingEdges(vert: V): Collection<Edge>
+    + edge(vOrig: V, vDest: V): Edge
+}
+
+class Edge<V, E> {
+    - vOrig: V
+    - vDest: V
+    - weight: E
+}
+
+class Station {
+    - stationId: int
+    - name: String
+}
+
+class TrackConnection {
+    - distance: double
+    - capacity: int
+    - cost: double
+}
+
+class UpgradePlanResult {
+    - hasCycles: boolean
+    - topologicalOrder: List<Station>
+    - cycleStations: List<Station>
+    - cycleEdges: List<String>
+    - verticesCount: int
+    - edgesCount: int
+}
+
+class CycleInfo {
+    - stations: List<Station>
+    - edges: List<String>
+}
+
+RailwayUpgradeService --> RailwayNetworkRepository : uses
+RailwayUpgradeService ..> UpgradePlanResult : creates
+RailwayUpgradeService --> Station : processes
+RailwayUpgradeService ..> Graph : uses
+RailwayUpgradeService --> Edge : processes
+
+RailwayNetworkRepository --> Graph : manages
+
+MapGraph ..|> Graph : implements
+
+Graph --> Edge : contains
+Graph --> Station : vertices
+Graph --> TrackConnection : edge weights
+
+Edge --> Station : vOrig, vDest
+Edge --> TrackConnection : weight
+
+UpgradePlanResult --> Station : references
+UpgradePlanResult --> CycleInfo : contains
+CycleInfo --> Station : references
+
+@enduml

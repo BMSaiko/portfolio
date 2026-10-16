@@ -1,0 +1,211 @@
+@startuml US04-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+left to right direction
+
+title US04 - Class Diagram - Create a Scenario for a Selected Map
+
+class CreateScenarioUI {
+}
+
+class CreateScenarioController {
+  - authService: AuthenticationService
+  - gameRepository: GameRepository
+  - scenarioService: ScenarioService
+  - mapMapper: MapMapper
+  - locomotiveTypeMapper: LocomotiveTypeMapper
+  - industryTypeMapper: IndustryTypeMapper
+  + getCurrentUserRole(): String
+  + getMapList(): List<MapDTO>
+  + getLocomotiveTypeList(): List<LocomotiveTypeDTO>
+  + getIndustryTypeList(): List<IndustryTypeDTO>
+  + createScenario(request: CreateScenarioRequestDTO): void
+}
+
+' DTOs for UI <- Domain (providing lists)
+class MapDTO {
+  + id: Long
+  + name: String
+  + width: int
+  + height: int
+}
+
+class LocomotiveTypeDTO {
+  + name: String
+  + speed: double
+  + power: double
+  + cost: double
+}
+
+class IndustryTypeDTO {
+  + name: String
+  + productionRate: double
+  + consumptionRate: double
+}
+
+' DTO for UI -> Domain (sending data)
+class CreateScenarioRequestDTO {
+  + mapId: Long
+  + name: String
+  + startTime: Date
+  + endTime: Date
+  + locomotiveTypeIds: List<Long>
+  + industryTypeIds: List<Long>
+  + historicalEvents: List<HistoricalEvent>
+}
+
+
+interface Mapper<T> {
+  + toDTO(type: T): T
+  + toDTOList(type: List<T>): List<T>
+}
+
+' Mappers
+class MapMapper {
+  + toDTO(map: Map): MapDTO
+  + toDTOList(maps: List<Map>): List<MapDTO>
+}
+
+class LocomotiveTypeMapper {
+  + toDTO(type: LocomotiveType): LocomotiveTypeDTO
+  + toDTOList(types: List<LocomotiveType>): List<LocomotiveTypeDTO>
+}
+
+class IndustryTypeMapper {
+  + toDTO(type: IndustryType): IndustryTypeDTO
+  + toDTOList(types: List<IndustryType>): List<IndustryTypeDTO>
+}
+
+class MapRepository {
+  + getAllMaps(): List<Map>
+  + findById(id: Long): Map
+}
+
+class LocomotiveTypeRepository {
+  + getAllLocomotiveTypes(): List<LocomotiveType>
+  + findByIds(ids: List<Long>): List<LocomotiveType>
+}
+
+class IndustryTypeRepository {
+  + getAllIndustryTypes(): List<IndustryType>
+  + findByIds(ids: List<Long>): List<IndustryType>
+}
+
+class ScenarioRepository {
+  + saveScenario(scenario: Scenario): void
+}
+
+class ScenarioService {
+  - scenarioRepository: ScenarioRepository
+  + validateScenario(scenario: Scenario): boolean
+  + createScenario(request: CreateScenarioRequestDTO, map: Map, locomotiveTypes: List<LocomotiveType>, industryTypes: List<IndustryType>): Scenario
+}
+
+class GameRepository {
+  + getMapRepository(): MapRepository
+}
+
+class AuthenticationService {
+  + getCurrentUserSession(): UserSession
+}
+
+class UserSession {
+  + getUserRoles(): List<String>
+}
+
+class Map {
+  - id: Long
+  - name: String
+  - width: int
+  - height: int
+  - regions: List<Object>
+  - scenarios: List<Scenario>
+  - stations: List<Station>
+  - industries: List<Industry>
+  - cities: List<City>
+  + createScenario(name: String, startTime: Date, endTime: Date, locomotiveTypes: List<LocomotiveType>, industryTypes: List<IndustryType>, historicalEvents: List<HistoricalEvent>): Scenario
+}
+
+class Scenario {
+  - name: String
+  - startTime: Date
+  - endTime: Date
+  - allowedLocomotiveTypes: List<LocomotiveType>
+  - allowedIndustryTypes: List<IndustryType>
+  - historicalEvents: List<HistoricalEvent>
+  + validateData(): boolean
+}
+
+class LocomotiveType {
+  - name: String
+  - speed: double
+  - power: double
+  - cost: double
+}
+
+class IndustryType {
+  - name: String
+  - productionRate: double
+  - consumptionRate: double
+}
+
+class HistoricalEvent {
+  - name: String
+  - description: String
+  - date: Date
+  - impact: Object
+}
+
+class Editor {
+  - id: String
+  - name: String
+  - role: String
+}
+
+' UI uses DTOs, not domain objects
+CreateScenarioUI --> CreateScenarioController
+CreateScenarioUI ..> MapDTO : displays
+CreateScenarioUI ..> LocomotiveTypeDTO : displays
+CreateScenarioUI ..> IndustryTypeDTO : displays
+CreateScenarioUI ..> CreateScenarioRequestDTO : creates
+
+' Controller uses mappers to convert domain to DTOs
+CreateScenarioController --> MapMapper
+CreateScenarioController --> LocomotiveTypeMapper
+CreateScenarioController --> IndustryTypeMapper
+CreateScenarioController --> AuthenticationService
+CreateScenarioController --> UserSession
+CreateScenarioController --> GameRepository
+CreateScenarioController --> ScenarioService
+
+
+MapMapper ..|> Mapper : implements
+LocomotiveTypeMapper ..|> Mapper : implements
+IndustryTypeMapper ..|> Mapper : implements
+' Repositories for data access
+
+
+' Mappers convert between domain and DTOs
+MapMapper ..> Map : converts from
+MapMapper ..> MapDTO : converts to
+LocomotiveTypeMapper ..> LocomotiveType : converts from
+LocomotiveTypeMapper ..> LocomotiveTypeDTO : converts to
+IndustryTypeMapper ..> IndustryType : converts from
+IndustryTypeMapper ..> IndustryTypeDTO : converts to
+
+GameRepository --> MapRepository
+CreateScenarioController --> MapRepository
+CreateScenarioController --> LocomotiveTypeRepository
+CreateScenarioController --> IndustryTypeRepository
+CreateScenarioController --> ScenarioRepository
+ScenarioService --> ScenarioRepository
+
+Map "1" *-- "0..*" Scenario : has
+Editor "1" *-- "0..*" Scenario : creates
+Scenario "1" *-- "1..*" LocomotiveType : allows
+Scenario "1" *-- "1..*" IndustryType : allows
+Scenario "1" *-- "0..*" HistoricalEvent : includes
+
+@enduml

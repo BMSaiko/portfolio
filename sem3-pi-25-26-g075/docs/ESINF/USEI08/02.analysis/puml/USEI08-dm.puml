@@ -1,0 +1,46 @@
+@startuml USEI08-dm
+
+hide methods
+hide circle
+skinParam lineType ortho
+left to right direction
+skinParam classPadding 10
+skinParam nodesep 80
+skinParam ranksep 80
+
+interface KDTreeNodeInterface {
+  getCoords()
+}
+
+class Station {
+  name
+  isCity
+  isMainStation
+  isAirport
+}
+
+class Coordinates {
+  latitude
+  longitude
+}
+
+class "KDTree<E>" as KDTree {
+}
+
+class "KDNode<E>" as KDNode {
+  coords
+}
+
+class StationFilter {
+  isCity
+  isMainStation
+  country
+}
+
+Station ..|> KDTreeNodeInterface : implements
+Station "1" -- "1" Coordinates : has
+KDTree "1" -- "*" KDNode : contains
+KDNode "1" -- "1" KDTreeNodeInterface : stores
+StationFilter -- Station : filters
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml US08-DM
+
+
+'left to right direction
+
+hide circle
+hide methods
+
+title Domain Model (DM) - US08 Build Railway Line
+
+class Map {
+  name
+  width
+  height
+}
+
+class Element {
+  position
+  type
+}
+
+class RailwayLine {
+  constructionCost
+  distance
+}
+
+class Station {
+  name
+  location
+  type
+}
+
+class Path {
+  distance
+  terrain
+}
+
+class Player {
+  funds
+}
+
+class Scenario {
+  name
+  startTime
+  endTime
+}
+
+' Inheritance
+Element <|-- RailwayLine
+Element <|-- Station
+
+' Relationships
+RailwayLine "1" -- "2" Station : connects >
+RailwayLine "1" -- "1" Path : follows >
+Map "1" -- "*" Element : contains >
+RailwayLine "*" -- "1" Player : owned by >
+Scenario "1" -- "1..*" Map : is defined for >
+
+@enduml

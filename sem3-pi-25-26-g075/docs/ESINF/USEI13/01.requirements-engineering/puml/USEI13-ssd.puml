@@ -1,0 +1,16 @@
+@startuml USEI13 - System Sequence Diagram
+
+actor "Network Analyst" as Analyst
+participant ":System" as System
+
+Analyst -> System : request hub ranking computation
+activate System
+System --> Analyst : hub ranking results (sorted by score)
+deactivate System
+
+Analyst -> System : request detailed metrics
+activate System
+System --> Analyst : detailed centrality values
+deactivate System
+
+@enduml

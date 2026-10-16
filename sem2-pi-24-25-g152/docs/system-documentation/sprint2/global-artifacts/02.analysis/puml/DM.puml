@@ -1,0 +1,143 @@
+@startuml General Domain Model
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+
+hide circle
+hide methods
+title Domain Model (DM) - General Domain Model
+
+' User & Context Classes
+class Editor {
+    name
+    email
+}
+
+class Player {
+    id
+    name
+    funds
+}
+
+class Map {
+    name
+    width
+    height
+}
+
+class Scenario {
+    name
+    startTime
+    endTime
+}
+
+' Location and Map Features
+class Location {
+    x
+    y
+}
+
+class City {
+    name
+    population
+    numberOfHouseBlocks
+}
+
+class Industry {
+    name
+}
+
+' Railway Infrastructure
+class RailwayNetwork {
+    stations
+}
+
+class Station {
+    name
+    type
+    radius
+    cost
+    buildings
+}
+
+class Building {
+    name
+}
+
+class Path {
+    segments
+}
+
+' Train, Cargo, and Routing
+class Train {
+    id
+}
+
+class Locomotive {
+    id
+    type
+    power
+    speed
+    cost
+    availableFrom
+    availableUntil
+}
+
+class Carriage {
+    id
+    cargoType
+}
+
+class Cargo {
+    type
+    quantity
+    status
+}
+
+class Route {
+    stations
+    path
+}
+
+' --- Relationships ---
+
+' Editor Relationships
+Editor "1" --> "*" Map : creates
+Editor "1" --> "*" Scenario : makes
+Editor "1" -- "*" Map : loads
+Editor "1" -- "*" Map : saves
+
+' Player Relationships
+Player "1" --> "0..*" Station : can build
+Player "1" --> "0..*" Station : can upgrade
+Player "1" --> "0..*" Train : can own
+
+' Map Relationships
+Map "1" --> "1..*" Scenario : has
+Map "1" --> "*" Industry : contains
+Map "1" --> "*" City : contains
+Map "1" --> "0..*" Station : contains
+
+' Location Relationships for Map Features
+City "1" --> "1" Location : has central position
+Industry "1" --> "1" Location : has position
+
+' Railway Network & Station Relationships
+RailwayNetwork "1" --> "0..*" Station : manages
+RailwayNetwork "1" --> "0..*" Train : manages
+
+Station "1" --> "1" Location : has position
+Station "1" --> "0..*" Building : has
+
+' Train, Cargo, and Route Relationships
+Train "1" --> "1" Locomotive : has
+Train "1" --> "1..*" Carriage : consists of
+Train "1" --> "0..*" Cargo : carries
+Train "1" --> "0..1" Route : follows
+
+Route "1" --> "1..*" Station : contains
+Route "1" --> "1" Path : defined by
+
+@enduml

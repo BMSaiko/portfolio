@@ -1,0 +1,35 @@
+@startuml US08-SSD
+
+title System Sequence Diagram (SD) - US08 Build Railway Line
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":System" as SYSTEM
+
+activate PLAYER
+
+    PLAYER -> SYSTEM : requests to build a railway line
+    activate SYSTEM
+        SYSTEM --> PLAYER : shows available stations and asks to select starting station
+    deactivate SYSTEM
+
+    PLAYER -> SYSTEM : selects starting station
+    activate SYSTEM
+        SYSTEM --> PLAYER : shows available destination stations
+    deactivate SYSTEM
+
+    PLAYER -> SYSTEM : selects destination station
+    activate SYSTEM
+        SYSTEM --> PLAYER : calculates and shows construction cost
+    deactivate SYSTEM
+
+    PLAYER -> SYSTEM : confirms construction
+    activate SYSTEM
+        SYSTEM --> PLAYER : validates resources and builds railway line
+        SYSTEM --> PLAYER : displays operation success
+    deactivate SYSTEM
+
+deactivate PLAYER
+
+@enduml

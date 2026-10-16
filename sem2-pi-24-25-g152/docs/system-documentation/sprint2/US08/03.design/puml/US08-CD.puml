@@ -1,0 +1,106 @@
+@startuml US08-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US08 - Class Diagram - Build a Railway Line
+
+class BuildRailwayLineUI {
+  controller: BuildRailwayLineController
+  + buildRailwayLine(): void
+  - saveSelectedStartStation(station: Station): void
+  - saveSelectedEndStation(station: Station): void
+}
+
+class BuildRailwayLineController {
+  - gameSession: GameSession
+  - gameRepository: GameRepository
+  - stationRepository: StationRepository
+  - pathFinderService: PathFinderService
+  - railwayLineService: RailwayLineService
+  - railwayLineRepository: RailwayLineRepository
+  + getCurrentPlayer(): Player
+  + getAvailableStations(): List<Station>
+  + getAvailableEndStations(startStation: Station): List<Station>
+  + calculatePathAndCost(startStation: Station, endStation: Station): Optional<Object[]>
+  + buildRailwayLine(player: Player, startStation: Station, endStation: Station, path: Path, cost: double): boolean
+}
+
+class GameSession {
+  + getLoggedInPlayer(): Player
+}
+
+class Player {
+  - name: String
+  - funds: double
+  - railwayLines: List<RailwayLine>
+  - stations: List<Station>
+  + hasSufficientFunds(cost: double): boolean
+  + createRailwayLine(startStation: Station, endStation: Station, path: Path, cost: double): RailwayLine
+  + deductFunds(cost: double): void
+}
+
+class GameRepository {
+  + getStationRepository(): StationRepository
+}
+
+class StationRepository {
+  + getAllStations(): List<Station>
+  + getPossibleEndStations(startStation: Station): List<Station>
+  + getStationByName(name: String): Optional<Station>
+}
+
+class Station {
+  - name: String
+  - location: Object
+  - storageCapacity: double
+  - currentCargoes: List<Cargo>
+}
+
+class PathFinderService {
+  + findPath(startStation: Station, endStation: Station): Optional<Path>
+}
+
+class Path {
+  - points: List<Object>
+  - length: double
+}
+
+class RailwayLineService {
+  + calculateConstructionCost(path: Path): double
+  + validateRailwayLine(railwayLine: RailwayLine): boolean
+}
+
+class RailwayLine {
+  - startStation: Station
+  - endStation: Station
+  - path: Path
+  - cost: double
+  + validateData(): boolean
+}
+
+class RailwayLineRepository {
+  + saveRailwayLine(railwayLine: RailwayLine): void
+  + getRailwayLinesByPlayer(player: Player): List<RailwayLine>
+  + getRailwayLineById(id: String): Optional<RailwayLine>
+}
+
+BuildRailwayLineUI --> BuildRailwayLineController
+BuildRailwayLineController --> GameSession
+BuildRailwayLineController --> Player
+BuildRailwayLineController --> GameRepository
+GameRepository --> StationRepository
+BuildRailwayLineController --> StationRepository
+BuildRailwayLineController --> PathFinderService
+BuildRailwayLineController --> RailwayLineService
+BuildRailwayLineController --> RailwayLineRepository
+BuildRailwayLineController --> Station
+BuildRailwayLineController --> Path
+BuildRailwayLineController --> RailwayLine
+
+Player "1" *-- "0..*" RailwayLine : owns >
+RailwayLine "1" -- "1" Station : starts at >
+RailwayLine "1" -- "1" Station : ends at >
+RailwayLine "1" -- "1" Path : follows >
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml US12-SD-partial-generate-city-cargoes
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US12 - Generate City Cargoes - Partial Sequence Diagram
+
+participant ":CargoGenerationController" as CTRL
+participant "station:Station" as STATION
+participant ":CityService" as CITYSERVICE
+participant "cityCargoes:List<Cargo>" as CITY_CARGOES
+
+group Generate City Cargoes
+CTRL -> CITYSERVICE : generateCargoForStation(station)
+activate CITYSERVICE
+    ' Internal logic of CityService to determine demand based on station's served cities
+    CITYSERVICE --> CTRL : cityCargoes
+deactivate CITYSERVICE
+end group
+@enduml

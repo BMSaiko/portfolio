@@ -1,0 +1,114 @@
+@startuml US041_Register_Weather_Data_Sequence
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam sequence {
+    ParticipantBorderColor #2C3E50
+    ParticipantBackgroundColor #ECF0F1
+    ArrowColor #2C3E50
+}
+
+title US041 - Register Weather Data Sequence Diagram
+
+actor "Weather Person" as User
+participant "MainMenu" as Menu
+participant "RegisterWeatherDataUI" as UI
+participant "RegisterWeatherDataController" as Ctrl
+participant "AuthService" as Auth
+participant "User" as CurrentUser
+participant "AirControlAreaRepository" as AreaRepo
+database "H2 DB" as DB
+participant "WeatherData" as Weather
+participant "WeatherDataRepository" as WeatherRepo
+
+== Navigate to Register Weather Data ==
+
+User -> Menu : selects "Weather management"
+activate Menu
+note right of Menu : MainMenu checks\nhasRole(WEATHER_PERSON) or\nhasRole(ADMIN)
+Menu -> UI : new RegisterWeatherDataUI(\n  controller, areaRepo).show()
+activate UI
+
+== Select Air Control Area ==
+
+UI -> AreaRepo : findAll()
+activate AreaRepo
+AreaRepo -> DB : SELECT a FROM AirControlArea a
+DB --> AreaRepo : areas
+AreaRepo --> UI : list of areas
+deactivate AreaRepo
+UI -> Admin : display areas\n(name + code)
+User -> UI : selects area option
+
+== Collect Weather Measurements ==
+
+UI -> User : "Timestamp (yyyy-MM-dd HH:mm):"
+User -> User : enters timestamp
+UI -> User : "Temperature (ºC):"
+User -> User : enters temperature
+UI -> User : "Wind speed (m/s):"
+User -> User : enters wind speed
+UI -> User : "Wind direction (degrees, 0-360):"
+User -> User : enters wind direction
+UI -> User : "Humidity (%):"
+User -> User : enters humidity
+UI -> User : "Pressure (hPa):"
+User -> User : enters pressure
+
+== Controller Registration ==
+
+UI -> Ctrl : register(areaCode, timestamp,\n  temp, windSpeed, windDir, humidity, pressure)
+activate Ctrl
+
+Ctrl -> Auth : ensureHasAnyRole(\n  WEATHER_PERSON, ADMIN)
+activate Auth
+Auth -> Auth : ensureAuthenticated()
+Auth -> CurrentUser : hasRole(WEATHER_PERSON)
+activate CurrentUser
+CurrentUser --> Auth : true
+deactivate CurrentUser
+Auth --> Ctrl : (authorized)
+deactivate Auth
+
+Ctrl -> AreaRepo : findByCode(areaCode)
+activate AreaRepo
+AreaRepo -> DB : SELECT ... WHERE area_code = ?
+DB --> AreaRepo : AirControlArea
+AreaRepo --> Ctrl : Optional<AirControlArea>
+deactivate AreaRepo
+
+Ctrl -> Weather : new WeatherData(area, timestamp,\n  temp, windSpeed, windDir, humidity, pressure)
+activate Weather
+Weather -> Weather : setTimestamp()\n(reject if future)
+Weather -> Weather : setTemperature()\n(range: -50..60)
+Weather -> Weather : setWindSpeed()\n(reject if < 0)
+Weather -> Weather : setWindDirection()\n(range: 0..360)
+Weather -> Weather : setHumidity()\n(range: 0..100)
+Weather -> Weather : setPressure()\n(range: 800..1100)
+Weather --> Ctrl : WeatherData entity
+deactivate Weather
+
+Ctrl -> WeatherRepo : save(weatherData)
+activate WeatherRepo
+WeatherRepo -> DB : INSERT INTO T_WEATHER_DATA ...
+DB --> WeatherRepo : persisted
+WeatherRepo --> Ctrl : (void)
+deactivate WeatherRepo
+
+Ctrl --> UI : (void)
+deactivate Ctrl
+
+UI -> User : "Weather data registered successfully."
+
+== Error: Area Not Found ==
+
+note over UI, DB : If findByCode returns empty:\nCtrl throws IllegalArgumentException\n("Air control area not found")\nUI catches and shows "Error: ..."
+
+== Error: Validation Failure ==
+
+note over UI, Weather : If any measurement is out of range\nor timestamp is in the future:\nWeatherData constructor throws\nIllegalArgumentException\nUI catches and shows the error
+
+== Error: Unauthorized ==
+
+note over UI, Auth : If user lacks WEATHER_PERSON\nand ADMIN roles:\nensureHasAnyRole throws\nSecurityException("User does not have required role")
+
+@enduml

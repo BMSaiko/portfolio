@@ -1,0 +1,74 @@
+@startuml USEI02 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+' Order Management Package
+package "Order Management" {
+  class Order {
+    status
+    dueDate
+    priority
+  }
+
+  class OrderLine {
+    requestedQty
+    status
+    allocatedQty
+  }
+
+  class Item {
+    sku
+    name
+    category
+    unit
+    volume
+    unitWeight
+  }
+
+  class Allocation {
+    quantity
+    status
+  }
+}
+
+' Warehouse Management Package
+package "Warehouse Management" {
+  class Warehouse {
+    name
+    location
+  }
+
+  class Bay {
+    capacityOfBoxes
+    coordinates
+  }
+
+  class Box {
+    quantity
+    sku
+    expireDate
+    receivedAt
+  }
+}
+
+' Staff
+class FreightManager {
+  name
+}
+
+' Relationships
+Order "1" -- "1..*" OrderLine : "contains"
+OrderLine "1..*" -- "0..*" Box : "fulfilled by"
+
+Allocation "*" -- "1" Box : "allocates from"
+Allocation "*" -- "1" OrderLine : "fulfills"
+
+Box "*" -- "1" Item : "contains"
+Bay "1" -- "0..*" Box : "stored in"
+
+FreightManager "1" -- "0..*" Order : "coordinates"
+
+@enduml

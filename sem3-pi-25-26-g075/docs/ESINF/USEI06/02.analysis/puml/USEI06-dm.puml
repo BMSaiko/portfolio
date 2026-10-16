@@ -1,0 +1,32 @@
+@startuml USEI06-dm
+
+hide methods
+hide circle
+skinParam lineType ortho
+left to right direction
+
+skinParam ranksep 250
+
+class Station {
+  name
+  isCity
+  isMainStation
+  isAirport
+}
+
+class Coordinates {
+  latitude
+  longitude
+}
+
+class TimeZone {
+  country
+  zone
+  group
+}
+
+Station "1" -- "1" Coordinates : has
+Station "1" -- "1" TimeZone : belongs to
+TimeZone "1" -- "*" Station : groups
+
+@enduml

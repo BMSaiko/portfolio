@@ -1,0 +1,199 @@
+@startuml US08-SD-full
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US08 Build Railway Line - Full
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant ":PlayerMapper" as PLAYERMAPPER
+participant ":StationMapper" as STATIONMAPPER
+participant ":PathMapper" as PATHMAPPER
+participant ":GameSession" as SESSION
+participant "player:Player" as PLAYER_CLASS
+participant ":GameRepository" as GAMEREPO
+participant ":StationRepository" as STATIONREPO
+participant "stationList:List<Station>" as STATIONLIST
+participant "startStation:Station" as START_STATION
+participant "endStation:Station" as END_STATION
+participant ":PathFinderService" as PATHFINDER
+participant "path:Path" as PATH
+participant ":RailwayLineService" as LINESERVICE
+participant "cost:Money" as COST
+participant "railwayLine:RailwayLine" as LINE
+participant ":RailwayLineRepository" as LINEREPO
+
+activate PLAYER
+
+    PLAYER -> UI : requests to build a railway line
+    activate UI
+        UI -> CTRL : getCurrentPlayer()
+        activate CTRL
+            CTRL -> SESSION : getLoggedInPlayer()
+            activate SESSION
+                SESSION --> CTRL : player
+            deactivate SESSION
+            
+            CTRL -> PLAYERMAPPER : toDTO(player)
+            activate PLAYERMAPPER
+                PLAYERMAPPER --> CTRL : playerDTO
+            deactivate PLAYERMAPPER
+            
+            CTRL --> UI : playerDTO
+        deactivate CTRL
+
+        UI -> CTRL : getAvailableStations()
+        activate CTRL
+            CTRL -> GAMEREPO : getStationRepository()
+            activate GAMEREPO
+                GAMEREPO --> CTRL : stationRepository
+            deactivate GAMEREPO
+            CTRL -> STATIONREPO : getAllStations()
+            activate STATIONREPO
+                STATIONREPO --> CTRL : stationList
+            deactivate STATIONREPO
+            
+            CTRL -> STATIONMAPPER : toDTOList(stationList)
+            activate STATIONMAPPER
+                STATIONMAPPER --> CTRL : stationDTOList
+            deactivate STATIONMAPPER
+            
+            CTRL --> UI : stationDTOList
+        deactivate CTRL
+
+        UI --> PLAYER : shows available stations and asks to select starting station
+    deactivate UI
+            PLAYER -> UI : selects starting station
+
+    activate UI
+        UI -> UI : saveSelectedStartStation(startStationName)
+
+        UI -> CTRL : getAvailableEndStations(startStationName)
+        activate CTRL
+            CTRL -> STATIONREPO : getStationByName(startStationName)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : startStation
+            deactivate STATIONREPO
+            
+            CTRL -> STATIONREPO : getPossibleEndStations(startStation)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : endStationList
+            deactivate STATIONREPO
+            
+            CTRL -> STATIONMAPPER : toDTOList(endStationList)
+            activate STATIONMAPPER
+                STATIONMAPPER --> CTRL : endStationDTOList
+            deactivate STATIONMAPPER
+            
+            CTRL --> UI : endStationDTOList
+        deactivate CTRL
+
+        UI --> PLAYER : shows available destination stations
+    deactivate UI
+
+    PLAYER -> UI : selects destination station
+    activate UI
+        UI -> UI : saveSelectedEndStation(endStationName)
+
+        UI -> CTRL : calculatePathAndCost(startStationName, endStationName)
+        activate CTRL
+            CTRL -> STATIONREPO : getStationByName(startStationName)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : startStation
+            deactivate STATIONREPO
+            
+            CTRL -> STATIONREPO : getStationByName(endStationName)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : endStation
+            deactivate STATIONREPO
+            
+            CTRL -> PATHFINDER : findPath(startStation, endStation)
+            activate PATHFINDER
+                PATHFINDER --> CTRL : path
+            deactivate PATHFINDER
+
+            CTRL -> LINESERVICE : calculateConstructionCost(path)
+            activate LINESERVICE
+                LINESERVICE --> CTRL : cost
+            deactivate LINESERVICE
+            
+            CTRL -> PATHMAPPER : toPathCostDTO(path, cost)
+            activate PATHMAPPER
+                PATHMAPPER --> CTRL : pathCostDTO
+            deactivate PATHMAPPER
+            
+            CTRL --> UI : pathCostDTO
+        deactivate CTRL
+
+        UI --> PLAYER : shows path preview and construction cost, asks for confirmation
+    deactivate UI
+
+    PLAYER -> UI : confirms construction
+    activate UI
+        UI -> UI : collectRailwayLineData()
+        
+        UI -> CTRL : buildRailwayLine(request)
+        activate CTRL
+            CTRL -> SESSION : getLoggedInPlayer()
+            activate SESSION
+                SESSION --> CTRL : player
+            deactivate SESSION
+            
+            CTRL -> STATIONREPO : getStationByName(request.startStationName)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : startStation
+            deactivate STATIONREPO
+            
+            CTRL -> STATIONREPO : getStationByName(request.endStationName)
+            activate STATIONREPO
+                STATIONREPO --> CTRL : endStation
+            deactivate STATIONREPO
+            
+            CTRL -> PATHFINDER : findPath(startStation, endStation)
+            activate PATHFINDER
+                PATHFINDER --> CTRL : path
+            deactivate PATHFINDER
+            
+            CTRL -> PLAYER_CLASS : hasSufficientFunds(cost)
+            activate PLAYER_CLASS
+                PLAYER_CLASS --> CTRL : true
+            deactivate PLAYER_CLASS
+
+            CTRL -> PLAYER_CLASS : createRailwayLine(startStation, endStation, path, cost)
+            activate PLAYER_CLASS
+                PLAYER_CLASS --> LINE** : create(startStation, endStation, path, cost)
+                PLAYER_CLASS -> LINE : validateData()
+                activate LINE
+                    LINE --> PLAYER_CLASS : validationResult
+                deactivate LINE
+                PLAYER_CLASS --> CTRL : railwayLine
+            deactivate PLAYER_CLASS
+
+            CTRL -> LINESERVICE : validateRailwayLine(railwayLine)
+            activate LINESERVICE
+                LINESERVICE --> CTRL : validationResult
+            deactivate LINESERVICE
+
+            CTRL -> LINEREPO : saveRailwayLine(railwayLine)
+            activate LINEREPO
+                LINEREPO --> CTRL : success
+            deactivate LINEREPO
+
+            CTRL -> PLAYER_CLASS : deductFunds(cost)
+            activate PLAYER_CLASS
+                PLAYER_CLASS --> CTRL : updatedFunds
+            deactivate PLAYER_CLASS
+
+            CTRL --> UI : success
+        deactivate CTRL
+
+        UI --> PLAYER : displays operation success
+    deactivate UI
+
+deactivate PLAYER
+
+@enduml

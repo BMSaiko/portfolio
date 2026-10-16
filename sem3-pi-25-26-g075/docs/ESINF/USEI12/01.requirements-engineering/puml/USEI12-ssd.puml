@@ -1,0 +1,16 @@
+@startuml USEI12 - System Sequence Diagram
+
+actor "Infrastructure Planner" as Planner
+participant ":System" as System
+
+Planner -> System : request minimal backbone network computation
+activate System
+System --> Planner : minimal backbone network
+deactivate System
+
+Planner -> System : request network visualization
+activate System
+System --> Planner : visualization files (DOT and SVG)
+deactivate System
+
+@enduml

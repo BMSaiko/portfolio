@@ -1,0 +1,17 @@
+========================================
+  AISAFE - MONTHLY REPORT
+  Period: April 2026 | Generated: 2026-06-12 22:35
+========================================
+
+1. SUMMARY: 4 flights | 2 validated | 0 completed | 0 cancelled | 100,0% pass rate
+----------------------------------------
+2. FLEET: 2 active aircraft types | Most used: BOEING-737 (Boeing) (2) | Total distance: 0,0 km
+----------------------------------------
+3. SAFETY: 0,0 km avg distance | 15000,0 kg avg fuel | 0 cancellations | 0 violations
+----------------------------------------
+4. TOP ROUTES: LIS-OPO(2) OPO-FAO(1) LIS-FAO(1)
+----------------------------------------
+
+========================================
+  END OF REPORT - AISAFE Flight Control
+========================================

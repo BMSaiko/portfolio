@@ -1,0 +1,99 @@
+@startuml USEI08-kdtree-structure
+
+title KD-Tree Structure for Station Search
+
+package "Controller" {
+    class PlannerMenuController {
+      - stationSearchService: StationSearchService
+      + searchByCoordinaatesRange(): void
+    }
+}
+
+
+
+package "Utils" {
+    interface KDTreeNodeInterface {
+        + getCoords(): Point2D.Double
+    }
+    
+    class "KDNode<E>" as KDNode {
+        - coords: Point2D.Double
+        - left: KDNode<E>
+        - right: KDNode<E>
+        + getX(): double
+        + getY(): double
+        + getCoords(): Point2D.Double
+    }
+    
+    class "KDTree<E extends KDTreeNodeInterface>" as KDTree {
+        - cmpX: Comparator<KDNode<E>>
+        - cmpY: Comparator<KDNode<E>>
+        + insert(E element): void
+        + rangeSearch(latMin, latMax, lonMin, lonMax): List<E>
+        + rangeSearch(latMin, latMax, lonMin, lonMax, filter): List<E>
+    }
+    
+    class "BST<E extendes Comparable<E>>" as BST {
+        # root: Node<E>
+        + insert(E element): void
+    }
+    
+    class "Node<E>" as Node {
+        - element: E
+        - left: Node<E>
+        - right: Node<E>
+    }
+}
+
+package "Domain" {
+    class Station {
+        - name: String
+        - coordinates: Coordinates
+        - isCity: boolean
+        - isMainStation: boolean
+        - isAirport: boolean
+        + getCoords(): Point2D.Double
+    }
+    
+    class Coordinates {
+        - latitude: Double
+        - longitude: Double
+    }
+    
+    class StationFilter {
+        - isCity: Boolean
+        - isMainStation: Boolean
+        - country: String
+        + matches(Station): boolean
+    }
+}
+
+package "Repository" <<singleton>> {
+    class StationsRepository {
+      - instance: StationsRepository
+      - kdTree: KDTree<Station>
+      + getInstance(): StationsRepository
+      + getKdTree(): KDTree<Station>
+      + addStation(Station station): void
+    }
+}
+
+package "Service" {
+    class StationSearchService {
+        - repository: StationsRepository
+        + getStationsByRange(latMin, latMax, lonMin, lonMax, filter): List<Station>
+    }
+}
+
+' Relationships
+KDNode --|> Node
+KDTree --|> BST
+Station ..|> KDTreeNodeInterface
+Station --> Coordinates
+StationSearchService --> StationsRepository : accesses
+PlannerMenuController --> StationFilter : uses
+KDTree --> KDNode
+StationsRepository --> KDTree : manages
+PlannerMenuController --> StationSearchService : uses
+
+@enduml

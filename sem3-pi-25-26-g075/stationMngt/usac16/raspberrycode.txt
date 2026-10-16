@@ -1,0 +1,281 @@
+#include "DHT.h"
+#include <arduino-timer.h>
+
+// Pin and sensor definitions
+#define DHTPIN 28
+#define DHTTYPE DHT11
+
+// Number of sensors
+#define NR_SOIL_HUMIDITY_SENSORS 2          // Sensor ID: 1, Sensor ID: 2
+#define NR_ATMOSPHERIC_HUMIDITY_SENSORS 4   // Sensor ID: 3, 4, 5, 6
+#define NR_ATMOSPHERIC_TEMPERATURE_SENSORS 4 // Sensor ID: 7, 8, 9, 10
+
+// Buffer sizes and timing constants
+#define DATA_LENGTH 100
+#define TYPE_NAME_LENGTH 30
+#define UNIT_NAME_LENGTH 30
+
+#define TOGGLE_LED_PERIOD 1000      // milliseconds
+#define SOIL_HUMIDITY_PERIOD 5000
+#define ATMOSPHERIC_HUMIDITY_PERIOD 2000
+#define ATMOSPHERIC_TEMPERATURE_PERIOD 2000
+#define BLINK_INTERVAL 500  // Intervall to red led blink
+
+// LEDS
+// Track 1
+const int TRACK1_GREEN_LED = 17;
+const int TRACK1_YELLOW_LED = 18;
+const int TRACK1_RED_LED = 16;
+
+// Track 2
+const int TRACK2_GREEN_LED = 14;
+const int TRACK2_YELLOW_LED = 13;
+const int TRACK2_RED_LED = 15;
+
+// Led Variables
+unsigned long previousBlinkMillis1 = 0;
+unsigned long previousBlinkMillis2 = 0;
+bool blinkState1 = false;
+bool blinkState2 = false;
+bool blinkMode1 = false;
+bool blinkMode2 = false;
+
+// Sensor type names
+char sensor_types[][TYPE_NAME_LENGTH] = {
+    "soil_humidity",
+    "atmospheric_humidity",
+    "atmospheric_temperature"
+};
+
+enum sensor_type {
+    SOIL_HUMIDITY = 0,
+    ATMOSPHERIC_HUMIDITY,
+    ATMOSPHERIC_TEMPERATURE
+};
+
+// Sensor unit names
+char sensor_units[][UNIT_NAME_LENGTH] = {
+    "percentage",
+    "celsius"
+};
+
+enum sensor_unit {
+    PERCENTAGE = 0,
+    CELSIUS
+};
+
+// DHT sensor object
+DHT dht(DHTPIN, DHTTYPE);
+
+// Timer object
+auto timer = timer_create_default();
+
+// Function prototypes
+bool toggle_led(void *);
+int get_sensor_id(int min, int max);
+bool read_soil_humidity(void *);
+bool read_atmospheric_humidity(void *);
+bool read_atmospheric_temperature(void *);
+void send_data(int id, sensor_type t, float r, sensor_unit u, unsigned long m);
+void process_serial_command(String command);
+void updateBlinking();
+
+// Toggle LED function (using built-in LED)
+bool toggle_led(void *) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    return true;
+}
+
+// Generate random sensor ID within range
+int get_sensor_id(int min, int max) {
+    return random(min, max);
+}
+
+// Read soil humidity
+bool read_soil_humidity(void *) {
+    int min = 1;
+    int max = min + NR_SOIL_HUMIDITY_SENSORS;
+    int id = get_sensor_id(min, max);
+    float r = dht.readHumidity();
+    
+    if (!isnan(r)) {
+        send_data(id, SOIL_HUMIDITY, r, PERCENTAGE, millis());
+    }
+    return true;
+}
+
+// Read atmospheric humidity
+bool read_atmospheric_humidity(void *) {
+    int min = NR_SOIL_HUMIDITY_SENSORS + 1;
+    int max = min + NR_ATMOSPHERIC_HUMIDITY_SENSORS;
+    int id = get_sensor_id(min, max);
+    float r = dht.readHumidity();
+    
+    if (!isnan(r)) {
+        send_data(id, ATMOSPHERIC_HUMIDITY, r, PERCENTAGE, millis());
+    }
+    return true;
+}
+
+// Read atmospheric temperature
+bool read_atmospheric_temperature(void *) {
+    int min = NR_SOIL_HUMIDITY_SENSORS + NR_ATMOSPHERIC_HUMIDITY_SENSORS + 1;
+    int max = min + NR_ATMOSPHERIC_TEMPERATURE_SENSORS;
+    int id = get_sensor_id(min, max);
+    float r = dht.readTemperature();
+    
+    if (!isnan(r)) {
+        send_data(id, ATMOSPHERIC_TEMPERATURE, r, CELSIUS, millis());
+    }
+    return true;
+}
+
+// Send data via serial
+void send_data(int id, sensor_type t, float r, sensor_unit u, unsigned long m) {
+    char buffer[DATA_LENGTH];
+    snprintf(buffer, DATA_LENGTH - 1,
+             "sensor_id:%d#type:%s#value:%.2f#unit:%s#time:%lu",
+             id, sensor_types[t], r, sensor_units[u], m);
+    Serial.println(buffer);
+}
+
+// Function to update leds blinking
+void updateBlinking() {
+    unsigned long currentMillis = millis();
+    
+    // Track1
+    if (blinkMode1) {
+        if (currentMillis - previousBlinkMillis1 >= BLINK_INTERVAL) {
+            previousBlinkMillis1 = currentMillis;
+            blinkState1 = !blinkState1;
+            digitalWrite(TRACK1_RED_LED, blinkState1 ? HIGH : LOW);
+        }
+    }
+    
+    // Track2
+    if (blinkMode2) {
+        if (currentMillis - previousBlinkMillis2 >= BLINK_INTERVAL) {
+            previousBlinkMillis2 = currentMillis;
+            blinkState2 = !blinkState2;
+            digitalWrite(TRACK2_RED_LED, blinkState2 ? HIGH : LOW);
+        }
+    }
+}
+
+// Process serial commands for traffic lights
+void process_serial_command(String command) {
+    command.trim();
+
+    int commaIndex = command.indexOf(',');
+
+    if (commaIndex > 0) {
+
+        String opCode = command.substring(0, commaIndex);
+        
+
+        int trackNumber = command.substring(commaIndex + 1).toInt();
+
+
+        if (trackNumber == 1) {
+
+            // Track 1
+
+            blinkMode1 = false;
+
+            digitalWrite(TRACK1_GREEN_LED, LOW);
+            digitalWrite(TRACK1_YELLOW_LED, LOW);
+            digitalWrite(TRACK1_RED_LED, LOW);
+
+
+            if (opCode.equalsIgnoreCase("GE")) {
+                digitalWrite(TRACK1_GREEN_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("YE")) {
+                digitalWrite(TRACK1_YELLOW_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("RE")) {
+                digitalWrite(TRACK1_RED_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("RB")) {
+
+                blinkMode1 = true;
+                blinkState1 = false;
+                previousBlinkMillis1 = millis();
+                digitalWrite(TRACK1_RED_LED, LOW);
+            }
+
+        } else if (trackNumber == 2) {
+            // Track 2
+            
+            blinkMode2 = false;
+            
+            digitalWrite(TRACK2_GREEN_LED, LOW);
+            digitalWrite(TRACK2_YELLOW_LED, LOW);
+            digitalWrite(TRACK2_RED_LED, LOW);
+
+            if (opCode.equalsIgnoreCase("GE")) {
+                digitalWrite(TRACK2_GREEN_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("YE")) {
+                digitalWrite(TRACK2_YELLOW_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("RE")) {
+                digitalWrite(TRACK2_RED_LED, HIGH);
+            } else if (opCode.equalsIgnoreCase("RB")) {
+
+                blinkMode2 = true;
+                blinkState2 = false;
+                previousBlinkMillis2 = millis();
+                digitalWrite(TRACK2_RED_LED, LOW);
+            }
+        }
+    }
+}
+
+// Setup function
+void setup() {
+    // Initialize built-in LED
+    pinMode(LED_BUILTIN, OUTPUT);
+    
+    // Initialize traffic light LEDs
+    pinMode(TRACK1_GREEN_LED, OUTPUT);
+    pinMode(TRACK1_YELLOW_LED, OUTPUT);
+    pinMode(TRACK1_RED_LED, OUTPUT);
+
+    pinMode(TRACK2_GREEN_LED, OUTPUT);
+    pinMode(TRACK2_YELLOW_LED, OUTPUT);
+    pinMode(TRACK2_RED_LED, OUTPUT);
+
+    digitalWrite(TRACK1_GREEN_LED, LOW);
+    digitalWrite(TRACK1_YELLOW_LED, LOW);
+    digitalWrite(TRACK1_RED_LED, LOW);
+
+    digitalWrite(TRACK2_GREEN_LED, LOW);
+    digitalWrite(TRACK2_YELLOW_LED, LOW);
+    digitalWrite(TRACK2_RED_LED, LOW);
+    
+    // Initialize random seed
+    randomSeed(analogRead(0));
+    
+    // Initialize serial communication
+    Serial.begin(9600);
+    
+    // Initialize DHT sensor
+    dht.begin();
+    
+    // Setup timers for sensor readings and LED toggling
+    timer.every(TOGGLE_LED_PERIOD, toggle_led);
+    timer.every(ATMOSPHERIC_TEMPERATURE_PERIOD, read_atmospheric_temperature);
+    timer.every(ATMOSPHERIC_HUMIDITY_PERIOD, read_atmospheric_humidity);
+    timer.every(SOIL_HUMIDITY_PERIOD, read_soil_humidity);
+}
+
+
+void loop() {
+    // Process timer events
+    timer.tick();
+    
+    // Update blinking LEDs
+    updateBlinking();
+    
+    // Check for serial commands (traffic light control)
+    if (Serial.available() > 0) {
+        String command = Serial.readStringUntil('\n');
+        process_serial_command(command);
+    }
+}

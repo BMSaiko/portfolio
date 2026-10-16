@@ -1,0 +1,108 @@
+@startuml
+title Sequence Diagram - Register Aircraft Model (US055)
+
+actor "Backoffice Operator" as BO
+participant "RegisterAircraftModelUI" as UI
+participant "RegisterAircraftModelController" as Controller
+participant "AuthService" as Auth
+participant "AircraftModelRepository" as AircraftRepo
+participant "EngineModelRepository" as EngineRepo
+participant "AircraftModel" as Aggregate
+
+BO -> UI: show()
+activate UI
+
+note over UI
+    Input collected in 6 confirmed groups:
+    1. Identification (modelId, makerName, type)
+    2. Weights (emptyWeight, MTOW, MZFW, maxFuel)
+    3. Performance (ceiling, cruiseSpeed, maxRange)
+    4. Aerodynamics (wingArea, wingSpan, AR, e, Cd, Cl)
+    5. Configuration (numberOfEngines, maxPaxCapacity)
+    6. Certified Engines (selected from list)
+    Each group shows a summary and asks: Confirm? (y/n)
+end note
+
+UI -> Controller: registerAircraftModel(modelId, makerName, aircraftType,\nemptyWeight, mtow, mzfw, maxFuelCapacity,\nserviceCeiling, cruiseSpeedMach,\nwingArea, wingSpan, aspectRatio, oswaldFactor,\ndragCoefficient, liftCoefficient,\nnumberOfEngines, maxPassengerCapacity, maxRange,\nengineIds)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt unauthorized
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: throw SecurityException
+    UI --> BO: ACCESS DENIED
+end
+deactivate Auth
+
+Controller -> Controller: AircraftModelId.of(modelId, makerName)
+alt blank modelId or makerName
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: invalid input
+end
+
+Controller -> AircraftRepo: findById(id)
+activate AircraftRepo
+AircraftRepo --> Controller: Optional<AircraftModel>
+deactivate AircraftRepo
+
+alt aircraft model already exists
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "aircraft model already exists"
+end
+
+alt engineIds null or empty
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: "at least one engine must be provided"
+end
+
+loop for each engineId
+    Controller -> EngineRepo: findById(engineId)
+    activate EngineRepo
+    EngineRepo --> Controller: Optional<EngineModel>
+    deactivate EngineRepo
+    alt engine not found
+        Controller --> UI: throw IllegalStateException
+        UI --> BO: ERROR: "engine model not found"
+    end
+end
+
+Controller -> Controller: AircraftType.fromString(aircraftType)
+alt unknown aircraft type
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: "unknown aircraft type"
+end
+
+Controller -> Aggregate: new AircraftModel(id, type,\nemptyWeight, mtow, mzfw, maxFuelCapacity,\nserviceCeiling, cruiseSpeedMach,\nwingArea, wingSpan, aspectRatio, oswaldFactor,\ndragCoefficient, liftCoefficient,\nnumberOfEngines, maxPassengerCapacity, maxRange,\ncertifiedEngines)
+activate Aggregate
+note right of Aggregate
+    **Invariants enforced in constructor:**
+    - mtow > emptyWeight
+    - mzfw <= mtow
+    - all physical params > 0
+    - 0 < oswaldFactor <= 1
+    - numberOfEngines >= 1
+    - maxPassengerCapacity >= 0
+    - certifiedEngines not empty
+    - all engines of the same EngineType
+end note
+
+alt invalid parameters or mixed engine types
+    Aggregate --> Controller: throw IllegalArgumentException
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: invalid parameters
+end
+Aggregate --> Controller: aircraftModel
+deactivate Aggregate
+
+Controller -> AircraftRepo: save(aircraftModel)
+activate AircraftRepo
+AircraftRepo --> Controller: aircraftModel
+deactivate AircraftRepo
+
+Controller --> UI: aircraftModel
+UI --> BO: Success: aircraft model registered
+
+deactivate Controller
+deactivate UI
+@enduml

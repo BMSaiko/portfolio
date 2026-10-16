@@ -1,0 +1,61 @@
+@startuml
+title Sequence Diagram - Aircraft Creation (Aircraft Aggregate)
+
+actor "Air Transport Company\nCollaborator" as ATCC
+participant "AircraftController" as Controller
+participant "AircraftService" as Service
+participant "AircraftModelRepository" as ModelRepo
+participant "AircraftRepository" as AircraftRepo
+participant "Aircraft" as Aggregate
+
+ATCC -> Controller: addAircraft(registrationNumber, modelId, companyId, cabinConfig, crewCount)
+activate Controller
+
+Controller -> Service: addAircraft(aircraftData)
+activate Service
+
+Service -> ModelRepo: findById(modelId)
+activate ModelRepo
+ModelRepo --> Service: aircraftModel
+deactivate ModelRepo
+
+Service -> AircraftRepo: findByRegistrationNumber(registrationNumber)
+activate AircraftRepo
+AircraftRepo --> Service: existingAircraft (or null)
+deactivate AircraftRepo
+
+alt registrationNumber already exists
+    Service --> Controller: throw DuplicateRegistrationException
+    Controller --> ATCC: error: "Registration number already exists worldwide"
+else
+    Service -> Aggregate: new Aircraft(registrationNumber, model, company, cabinConfig, crewCount)
+    activate Aggregate
+    note right of Aggregate
+        **Invariants enforced inside constructor:**
+        - firstClassSeats + businessClassSeats
+          + economyClassSeats <= model.maxPassengerCapacity
+        - registrationNumber format must be valid
+        - crewCount must be >= 1
+    end note
+
+    alt cabinConfig exceeds model capacity
+        Aggregate --> Service: throw SeatCapacityExceededException
+        Service --> Controller: throw SeatCapacityExceededException
+        Controller --> ATCC: error: "Total seats exceed aircraft model's max capacity"
+    else cabin config is valid
+        Aggregate --> Service: aircraft
+        deactivate Aggregate
+
+        Service -> AircraftRepo: save(aircraft)
+        activate AircraftRepo
+        AircraftRepo --> Service: saved
+        deactivate AircraftRepo
+
+        Service --> Controller: aircraft
+        Controller --> ATCC: success: "Aircraft added to fleet successfully"
+    end
+end
+
+deactivate Service
+deactivate Controller
+@enduml

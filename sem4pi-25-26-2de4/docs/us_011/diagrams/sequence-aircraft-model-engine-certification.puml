@@ -1,0 +1,74 @@
+@startuml
+title Sequence Diagram - Aircraft Model Engine Certification (AircraftModel Aggregate)
+
+actor "Backoffice Operator" as BO
+participant "AircraftModelController" as Controller
+participant "AircraftModelService" as Service
+participant "AircraftModelRepository" as ModelRepo
+participant "EngineModelRepository" as EngineRepo
+participant "CertifiedEngineEntryRepository" as CertRepo
+participant "AircraftModel" as Aggregate
+
+BO -> Controller: addCertifiedEngine(modelId, engineModelId)
+activate Controller
+
+Controller -> Service: addCertifiedEngine(modelId, engineModelId)
+activate Service
+
+Service -> ModelRepo: findById(modelId)
+activate ModelRepo
+ModelRepo --> Service: aircraftModel
+deactivate ModelRepo
+
+Service -> EngineRepo: findById(engineModelId)
+activate EngineRepo
+EngineRepo --> Service: engineModel
+deactivate EngineRepo
+
+alt engineModel not found
+    Service --> Controller: throw EngineModelNotFoundException
+    Controller --> BO: error: "Engine model not found"
+else
+    Service -> CertRepo: findByModelIdAndEngineId(modelId, engineModelId)
+    activate CertRepo
+    CertRepo --> Service: existingEntry (or null)
+    deactivate CertRepo
+
+    alt engine already certified for this model
+        Service --> Controller: throw DuplicateCertifiedEngineException
+        Controller --> BO: error: "Engine model already certified for this aircraft model"
+    else
+        Service -> Aggregate: addCertifiedEngine(engineModel)
+        activate Aggregate
+        note right of Aggregate
+            **Invariants enforced inside aggregate:**
+            - Engine type must be compatible
+              with aircraft model type
+            - Engine model must not already be
+              in the certified engines list
+            - Aircraft model must retain at least
+              one certified engine (on removal)
+        end note
+
+        alt engine type incompatible
+            Aggregate --> Service: throw IncompatibleEngineTypeException
+            Service --> Controller: throw IncompatibleEngineTypeException
+            Controller --> BO: error: "Engine type not compatible with aircraft model"
+        else engine type is compatible
+            Aggregate --> Service: updatedAircraftModel
+            deactivate Aggregate
+
+            Service -> ModelRepo: save(aircraftModel)
+            activate ModelRepo
+            ModelRepo --> Service: saved
+            deactivate ModelRepo
+
+            Service --> Controller: success
+            Controller --> BO: success: "Engine model certified for aircraft model successfully"
+        end
+    end
+end
+
+deactivate Service
+deactivate Controller
+@enduml

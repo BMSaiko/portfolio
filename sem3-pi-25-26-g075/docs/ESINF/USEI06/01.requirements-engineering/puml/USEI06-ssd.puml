@@ -1,0 +1,24 @@
+@startuml USEI06-ssd
+
+autonumber
+
+actor "Planner" as Planner
+participant ":System" as System
+
+activate Planner
+
+    Planner -> System : requests station search
+    activate System
+    
+        System --> Planner : shows search options\n(timezone group, coordinates, country)
+    deactivate System
+    
+    Planner -> System : selects search type and provides criteria
+    activate System
+    
+        System --> Planner : displays matching stations with details
+    deactivate System
+
+deactivate Planner
+
+@enduml

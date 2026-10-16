@@ -1,0 +1,76 @@
+@startuml US08-SD-partial-build-railway-line
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US08 - Build Railway Line - Partial Sequence Diagram
+
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant ":GameSession" as SESSION
+participant ":StationRepository" as STATIONREPO
+participant ":PathFinderService" as PATHFINDER
+participant "player:Player" as PLAYER_CLASS
+participant "startStation:Station" as START_STATION
+participant "endStation:Station" as END_STATION
+participant "path:Path" as PATH
+participant "railwayLine:RailwayLine" as LINE
+participant ":RailwayLineService" as LINESERVICE
+participant ":RailwayLineRepository" as LINEREPO
+
+UI -> CTRL : buildRailwayLine(request)
+activate CTRL
+    group Build Railway Line
+    CTRL -> SESSION : getLoggedInPlayer()
+    activate SESSION
+        SESSION --> CTRL : player
+    deactivate SESSION
+    
+    CTRL -> STATIONREPO : getStationByName(request.startStationName)
+    activate STATIONREPO
+        STATIONREPO --> CTRL : startStation
+    deactivate STATIONREPO
+    
+    CTRL -> STATIONREPO : getStationByName(request.endStationName)
+    activate STATIONREPO
+        STATIONREPO --> CTRL : endStation
+    deactivate STATIONREPO
+    
+    CTRL -> PATHFINDER : findPath(startStation, endStation)
+    activate PATHFINDER
+        PATHFINDER --> CTRL : path
+    deactivate PATHFINDER
+    
+    CTRL -> PLAYER_CLASS : hasSufficientFunds(cost)
+    activate PLAYER_CLASS
+        PLAYER_CLASS --> CTRL : true
+    deactivate PLAYER_CLASS
+
+    CTRL -> PLAYER_CLASS : createRailwayLine(startStation, endStation, path, cost)
+    activate PLAYER_CLASS
+        PLAYER_CLASS --> LINE** : create(startStation, endStation, path, cost)
+        PLAYER_CLASS -> LINE : validateData()
+        activate LINE
+            LINE --> PLAYER_CLASS : validationResult
+        deactivate LINE
+        PLAYER_CLASS --> CTRL : railwayLine
+    deactivate PLAYER_CLASS
+
+    CTRL -> LINESERVICE : validateRailwayLine(railwayLine)
+    activate LINESERVICE
+        LINESERVICE --> CTRL : validationResult
+    deactivate LINESERVICE
+
+    CTRL -> LINEREPO : saveRailwayLine(railwayLine)
+    activate LINEREPO
+        LINEREPO --> CTRL : success
+    deactivate LINEREPO
+
+    CTRL -> PLAYER_CLASS : deductFunds(cost)
+    activate PLAYER_CLASS
+        PLAYER_CLASS --> CTRL : updatedFunds
+    deactivate PLAYER_CLASS
+    end group
+    CTRL --> UI : success
+deactivate CTRL
+@enduml

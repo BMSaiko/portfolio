@@ -1,0 +1,21 @@
+@startuml USEI03 - System Sequence Diagram
+
+actor "Picker" as Picker
+participant ":System" as System
+
+Picker -> System : generatePickingPlan(orderId, heuristic)
+activate System
+System --> Picker : pickingPlan
+deactivate System
+
+Picker -> System : viewTrolleyDetails(trolleyId)
+activate System
+System --> Picker : trolleyContents
+deactivate System
+
+Picker -> System : calculatePackingEfficiency()
+activate System
+System --> Picker : efficiencyMetrics
+deactivate System
+
+@enduml

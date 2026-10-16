@@ -1,0 +1,176 @@
+@startuml US08-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+left to right direction
+
+title US08 - Class Diagram - Build a Railway Line
+
+class BuildRailwayLineUI {
+}
+
+' DTOs for UI <- Domain (providing data)
+class StationDTO {
+  + name: String
+  + location: LocationDTO
+  + storageCapacity: double
+  + currentCargoCount: int
+}
+
+class LocationDTO {
+  + x: double
+  + y: double
+}
+
+class PathCostDTO {
+  + path: List<LocationDTO>
+  + totalCost: double
+  + distance: double
+}
+
+class PlayerDTO {
+  + name: String
+  + funds: double
+  + railwayLineCount: int
+}
+
+' DTO for UI -> Domain (sending data)
+class BuildRailwayLineRequestDTO {
+  + startStationName: String
+  + endStationName: String
+  + confirmedCost: double
+}
+
+interface Mapper<T> {
+  + toDTO(type: T): T
+  + toDTOList(type: List<T>): List<T>
+}
+
+' Mappers
+class StationMapper {
+  + toDTO(station: Station): StationDTO
+  + toDTOList(stations: List<Station>): List<StationDTO>
+}
+
+class PlayerMapper {
+  + toDTO(player: Player): PlayerDTO
+}
+
+class PathMapper {
+  + toPathCostDTO(path: Path, cost: double): PathCostDTO
+}
+
+class BuildRailwayLineController {
+  - gameSession: GameSession
+  - gameRepository: GameRepository
+  - stationRepository: StationRepository
+  - pathFinderService: PathFinderService
+  - railwayLineService: RailwayLineService
+  - railwayLineRepository: RailwayLineRepository
+  - stationMapper: StationMapper
+  - playerMapper: PlayerMapper
+  - pathMapper: PathMapper
+  + getCurrentPlayer(): PlayerDTO
+  + getAvailableStations(): List<StationDTO>
+  + getAvailableEndStations(startStationName: String): List<StationDTO>
+  + calculatePathAndCost(startStationName: String, endStationName: String): Optional<PathCostDTO>
+  + buildRailwayLine(request: BuildRailwayLineRequestDTO): boolean
+}
+
+class GameSession {
+  + getLoggedInPlayer(): Player
+}
+
+class Player {
+  - name: String
+  - funds: double
+  - railwayLines: List<RailwayLine>
+  - stations: List<Station>
+  + hasSufficientFunds(cost: double): boolean
+  + createRailwayLine(startStation: Station, endStation: Station, path: Path, cost: double): RailwayLine
+  + deductFunds(cost: double): void
+}
+
+class GameRepository {
+  + getStationRepository(): StationRepository
+}
+
+class StationRepository {
+  + getAllStations(): List<Station>
+  + getPossibleEndStations(startStation: Station): List<Station>
+  + getStationByName(name: String): Optional<Station>
+}
+
+class Station {
+  - name: String
+  - location: Object
+  - storageCapacity: double
+  - currentCargoes: List<Cargo>
+}
+
+class PathFinderService {
+  + findPath(startStation: Station, endStation: Station): Optional<Path>
+}
+
+class Path {
+  - points: List<Object>
+  - length: double
+}
+
+class RailwayLineService {
+  + calculateConstructionCost(path: Path): double
+  + validateRailwayLine(railwayLine: RailwayLine): boolean
+}
+
+class RailwayLine {
+  - startStation: Station
+  - endStation: Station
+  - path: Path
+  - cost: double
+  + validateData(): boolean
+}
+
+class RailwayLineRepository {
+  + saveRailwayLine(railwayLine: RailwayLine): void
+  + getRailwayLinesByPlayer(player: Player): List<RailwayLine>
+  + getRailwayLineById(id: String): Optional<RailwayLine>
+}
+
+' UI uses DTOs, not domain objects
+BuildRailwayLineUI --> BuildRailwayLineController
+BuildRailwayLineUI ..> StationDTO : displays
+BuildRailwayLineUI ..> PathCostDTO : displays
+BuildRailwayLineUI ..> PlayerDTO : displays
+BuildRailwayLineUI ..> BuildRailwayLineRequestDTO : creates
+
+' Controller uses mappers to convert domain to DTOs
+BuildRailwayLineController --> StationMapper
+BuildRailwayLineController --> PlayerMapper
+BuildRailwayLineController --> PathMapper
+BuildRailwayLineController --> GameSession
+BuildRailwayLineController --> GameRepository
+GameRepository --> StationRepository
+BuildRailwayLineController --> StationRepository
+BuildRailwayLineController --> PathFinderService
+BuildRailwayLineController --> RailwayLineService
+BuildRailwayLineController --> RailwayLineRepository
+
+StationMapper ..|> Mapper : implements
+PlayerMapper ..|> Mapper : implements
+PathMapper ..|> Mapper : implements
+
+' Mappers convert between domain and DTOs
+StationMapper ..> Station : converts from
+StationMapper ..> StationDTO : converts to
+PlayerMapper ..> Player : converts from
+PlayerMapper ..> PlayerDTO : converts to
+PathMapper ..> Path : converts from
+PathMapper ..> PathCostDTO : converts to
+
+Player "1" *-- "0..*" RailwayLine : owns >
+RailwayLine "1" -- "1" Station : starts at >
+RailwayLine "1" -- "1" Station : ends at >
+RailwayLine "1" -- "1" Path : follows >
+
+@enduml

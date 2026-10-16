@@ -1,0 +1,17 @@
+========================================
+  AISAFE - MONTHLY REPORT
+  Period: June 2026 | Generated: 2026-06-12 22:35
+========================================
+
+1. SUMMARY: 1 flights | 1 validated | 0 completed | 0 cancelled | 100,0% pass rate
+----------------------------------------
+2. FLEET: 1 active aircraft types | Most used: A320-200 (Airbus) (1) | Total distance: 0,0 km
+----------------------------------------
+3. SAFETY: 0,0 km avg distance | 15000,0 kg avg fuel | 0 cancellations | 0 violations
+----------------------------------------
+4. TOP ROUTES: LIS-OPO(1)
+----------------------------------------
+
+========================================
+  END OF REPORT - AISAFE Flight Control
+========================================

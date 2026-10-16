@@ -15,6 +15,11 @@ Projetos académicos desenvolvidos durante o curso de Engenharia Informática no
 | [biblioteca-ermesinde](biblioteca-ermesinde) | C# · ASP.NET Core · SQL Server · Docker · Jenkins | API de gestão de biblioteca com CI/CD, SonarQube e testes (projeto final CTESP) |
 | [porto-on-wheels](porto-on-wheels) | PHP · MySQL · Bootstrap | Website de aluguer de carros/bicicletas/trotinetes com back-office |
 | [rentacar](rentacar) | Java · JavaFX · Gradle · SQL Server | Aplicação desktop de gestão de aluguer de automóveis |
+| [rcomp-25-26-de-g2](rcomp-25-26-de-g2) | Cisco Packet Tracer · Networking | Desenho de rede de campus e simulações Packet Tracer |
+| [sem2-pi-24-25-g152](sem2-pi-24-25-g152) | Java · Maven · Jupyter (MATCP) · UML | Jogo de construção ferroviária (projeto integrador do 2.º semestre da LEI) |
+| [sem3-pi-24-25-g152](sem3-pi-24-25-g152) | Oracle PL/SQL · C · Assembly · Arduino · Java | Gestão de chão de fábrica: Oracle, C/Assembly, Java (LEI 3.º semestre, 2024/25) |
+| [sem3-pi-25-26-g075](sem3-pi-25-26-g075) | Java · Oracle SQL · Scrum | Logística de estações/armazéns ferroviários com Oracle (LEI 3.º semestre, 2025/26) |
+| [sem4pi-25-26-2de4](sem4pi-25-26-2de4) | Java · EAPLI · Maven · C · PlantUML | Plataforma de controlo de voos AISafe (LEI 4.º semestre) |
 
 Cada pasta tem o seu `README.md` (inglês) e `README.pt.md` (português).
 

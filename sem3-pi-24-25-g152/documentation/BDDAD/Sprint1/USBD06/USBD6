@@ -1,0 +1,8 @@
+SELECT DISTINCT wt.Name AS WorkstationType
+FROM "Order" o
+JOIN ProductionOrder po ON o.OID = po.OID
+JOIN BOO b ON po.BOOID = b.BOOID
+JOIN BOO_Operation boo_op ON b.BOOID = boo_op.BOOID
+JOIN OperationWorkstationTypes owt ON boo_op.OPID = owt.OPID
+JOIN WorkstationTypes wt ON owt.WTID = wt.WTID
+WHERE o.OID = 1;

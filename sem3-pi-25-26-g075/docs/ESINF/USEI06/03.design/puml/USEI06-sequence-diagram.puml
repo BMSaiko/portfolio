@@ -1,0 +1,60 @@
+@startuml USEI06-sequence-diagram
+
+autonumber
+
+actor "Planner" as Planner
+participant ":PlannerMenuController" as Controller
+participant ":StationSearchService" as Service
+participant ":StationsRepository" as Repository
+participant "timeZones:BST<TimeZone>" as BST
+participant "tzMap:Map<TimeZone,List<Station>>" as Map
+
+activate Planner
+
+    Planner -> Controller : searchStationsByTimeZoneGroup()
+    activate Controller
+    
+        Controller -> Controller : reads timezone group from user
+        
+        Controller -> Service : getStationsByTimeZoneGroup(timeZoneGroup)
+        activate Service
+        
+            Service -> Service : validates timezone group
+            
+            Service -> Repository : getTimeZones()
+            activate Repository
+                Repository --> Service : BST<TimeZone>
+            deactivate Repository
+            
+            Service -> BST : inOrder()
+            activate BST
+                BST --> Service : List<TimeZone>
+            deactivate BST
+            
+            loop for each timezone matching group
+                Service -> Repository : getTimeZoneStationMap()
+                activate Repository
+                    Repository --> Service : Map<TimeZone, List<Station>>
+                deactivate Repository
+                
+                Service -> Map : get(timezone)
+                activate Map
+                    Map --> Service : List<Station>
+                deactivate Map
+                
+                Service -> Service : add stations to result
+            end
+            
+            Service -> Service : sort result by country, name
+            
+            Service --> Controller : List<Station>
+        deactivate Service
+        
+        Controller -> Controller : displays station list
+        
+        Controller --> Planner : shows matching stations
+    deactivate Controller
+
+deactivate Planner
+
+@enduml

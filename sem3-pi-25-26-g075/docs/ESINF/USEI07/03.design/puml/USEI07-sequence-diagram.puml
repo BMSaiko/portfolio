@@ -1,0 +1,142 @@
+@startuml USEI07-sequence-diagram
+
+title USEI07 - Balanced KD-Tree Construction Sequence Diagram
+
+actor "Data Engineer" as User
+participant "PlannerMenuController" as Controller
+participant "DataInitializationService" as DataInit
+participant "StationsRepository" as Repository
+participant "BalancedTreeBuilder" as TreeBuilder
+participant "KDTree<Station>" as KDTree
+participant "Station" as Station
+
+User -> Controller: initialize application
+activate Controller
+
+Controller -> DataInit: initializeStationsData()
+activate DataInit
+
+DataInit -> Repository: clear()
+activate Repository
+Repository --> DataInit:
+deactivate Repository
+
+loop for each station in CSV
+    DataInit -> DataInit: parseStation(row)
+    DataInit -> Station: new Station(name, coords, timezone, flags)
+    activate Station
+    DataInit -> Station: isValid()
+    Station --> DataInit: true/false
+    deactivate Station
+
+    alt station is valid
+        DataInit -> Repository: addStation(timeZone, station)
+        activate Repository
+        Repository -> Repository: validate station
+        Repository -> KDTree: insert(station)
+        activate KDTree
+        KDTree --> Repository:
+        deactivate KDTree
+        Repository --> DataInit:
+        deactivate Repository
+    else station is invalid
+        DataInit -> DataInit: log invalid station
+    end
+end
+
+DataInit --> Controller: data initialized
+deactivate DataInit
+
+User -> Controller: request balanced tree construction
+Controller -> Controller: get stations for region
+
+Controller -> Repository: get stations by range\n(lat: 40-60, lon: -10-20)
+activate Repository
+Repository -> KDTree: rangeSearch(40, 60, -10, 20, null)
+activate KDTree
+KDTree --> Repository: List<Station>
+deactivate KDTree
+Repository --> Controller: List<Station>
+deactivate Repository
+
+Controller -> TreeBuilder: buildBalancedKDTree(stations)
+activate TreeBuilder
+
+TreeBuilder -> TreeBuilder: filter valid stations
+note right TreeBuilder
+  Filter criteria:
+  - Station has valid name
+  - Coordinates within valid ranges
+  - Timezone data valid (if present)
+end note
+
+TreeBuilder -> KDTree: new KDTree<Station>()
+activate KDTree
+KDTree --> TreeBuilder: empty KDTree
+deactivate KDTree
+
+TreeBuilder -> TreeBuilder: buildBalancedKDTreeRecursive(\nkdTree, stations, depth=0)
+activate TreeBuilder
+
+group Recursive Balanced Construction [depth: 0 - X axis]
+    TreeBuilder -> TreeBuilder: sort stations by longitude
+    TreeBuilder -> TreeBuilder: find median index
+    TreeBuilder -> TreeBuilder: get median station
+    TreeBuilder -> KDTree: insert(medianStation)
+    activate KDTree
+    KDTree --> TreeBuilder:
+    deactivate KDTree
+
+    TreeBuilder -> TreeBuilder: leftStations = stations[0:median-1]
+    TreeBuilder -> TreeBuilder: rightStations = stations[median+1:end]
+
+    TreeBuilder -> TreeBuilder: buildBalancedKDTreeRecursive(\nkdTree, leftStations, depth+1)
+    TreeBuilder -> TreeBuilder: buildBalancedKDTreeRecursive(\nkdTree, rightStations, depth+1)
+end
+
+group Recursive Balanced Construction [depth: 1 - Y axis]
+    TreeBuilder -> TreeBuilder: sort stations by latitude
+    TreeBuilder -> TreeBuilder: find median index
+    TreeBuilder -> TreeBuilder: get median station
+    TreeBuilder -> KDTree: insert(medianStation)
+    activate KDTree
+    KDTree --> TreeBuilder:
+    deactivate KDTree
+
+    TreeBuilder -> TreeBuilder: split and recurse...
+end
+
+deactivate TreeBuilder
+deactivate TreeBuilder
+
+TreeBuilder -> TreeBuilder: printTreeStatistics(kdTree, totalStations)
+note right TreeBuilder
+  Statistics output:
+  - Total stations: X
+  - Tree height: Y
+  - Optimal height: Z
+  - Balance ratio: W
+  - Efficiency metrics
+end note
+
+TreeBuilder --> Controller: balancedKDTree
+deactivate TreeBuilder
+
+Controller -> Controller: validate tree balance
+note right Controller
+  Balance validation:
+  - Height ≤ 3.0 × optimal height
+  - All stations properly inserted
+  - Spatial properties maintained
+end note
+
+Controller -> User: display construction results
+note right User
+  Construction complete:
+  - X stations processed
+  - Tree height: Y (optimal: Z)
+  - Balance ratio: W
+  - Ready for efficient spatial queries
+end note
+
+@enduml

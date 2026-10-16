@@ -1,0 +1,156 @@
+@startuml US04-SD-full
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US04 Create a Scenario for a Selected Map - Full
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":AuthenticationService" as AUTH
+participant ":UserSession" as USESSION
+participant "editor:Editor" as EDITOR_CLASS
+participant ":GameRepository" as GAMEREPO
+participant ":MapRepository" as MAPREPO
+participant "mapList\n:List<Map>" as MAPLIST
+participant "selectedMap:Map" as MAP
+participant ":LocomotiveTypeRepository" as LOCOREPO
+participant "locoTypeList\n:List<LocomotiveType>" as LOCOTYPELIST
+participant ":IndustryTypeRepository" as INDUSTRYREPO
+participant "industryTypeList\n:List<IndustryType>" as INDUSTRYTYPELIST
+participant "scenario:Scenario" as SCENARIO
+participant ":ScenarioService" as SCENARIOSERVICE
+participant ":ScenarioRepository" as SCENARIOREPO
+
+activate EDITOR
+
+    EDITOR -> UI : asks to create a scenario
+    activate UI
+        UI -> CTRL : getCurrentUserRole()
+        activate CTRL
+            CTRL -> AUTH : getCurrentUserSession()
+            activate AUTH
+                AUTH --> CTRL : userSession
+            deactivate AUTH
+            
+            CTRL -> USESSION : getUserRoles()
+            activate USESSION
+                USESSION --> CTRL : roles
+            deactivate USESSION
+            
+            CTRL --> UI : roles
+        deactivate CTRL
+        
+        UI -> UI : validateRole("Editor")
+        
+        UI -> CTRL : getMapList()
+        activate CTRL
+            CTRL -> GAMEREPO : getMapRepository()
+            activate GAMEREPO
+                GAMEREPO --> CTRL : mapRepository
+            deactivate GAMEREPO
+            
+            CTRL -> MAPREPO : getAllMaps()
+            activate MAPREPO
+                MAPREPO --> CTRL : mapList
+            deactivate MAPREPO
+            
+            CTRL --> UI : mapList
+        deactivate CTRL
+        
+        UI --> EDITOR : shows map list and asks to select one
+    deactivate UI
+
+    EDITOR -> UI : selects a map
+    activate UI
+        UI -> UI : saveSelectedMap(map)
+        
+        UI --> EDITOR : requests data (name, start time, end time)
+    deactivate UI
+
+    EDITOR -> UI : types requested data
+    activate UI
+        UI -> UI : saveData(name, startTime, endTime)
+        
+        UI -> CTRL : getLocomotiveTypeList()
+        activate CTRL
+            CTRL -> LOCOREPO : getAllLocomotiveTypes()
+            activate LOCOREPO
+                LOCOREPO --> CTRL : locomotiveTypeList
+            deactivate LOCOREPO
+            
+            CTRL --> UI : locomotiveTypeList
+        deactivate CTRL
+        
+        UI --> EDITOR : shows locomotive types and asks to select
+    deactivate UI
+
+    EDITOR -> UI : selects locomotive types
+    activate UI
+        UI -> UI : saveSelectedLocomotiveTypes(locomotiveTypes)
+        
+        UI -> CTRL : getIndustryTypeList()
+        activate CTRL
+            CTRL -> INDUSTRYREPO : getAllIndustryTypes()
+            activate INDUSTRYREPO
+                INDUSTRYREPO --> CTRL : industryTypeList
+            deactivate INDUSTRYREPO
+            
+            CTRL --> UI : industryTypeList
+        deactivate CTRL
+        
+        UI --> EDITOR : shows industry types and asks to select
+    deactivate UI
+
+    EDITOR -> UI : selects industry types
+    activate UI
+        UI -> UI : saveSelectedIndustryTypes(industryTypes)
+        
+        UI --> EDITOR : asks for historical events
+    deactivate UI
+
+    EDITOR -> UI : adds historical events
+    activate UI
+        UI -> UI : saveHistoricalEvents(historicalEvents)
+        
+        UI --> EDITOR : shows all data and requests confirmation
+    deactivate UI
+
+    EDITOR -> UI : confirms data
+    activate UI
+        UI -> CTRL : createScenario(map, name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+        activate CTRL
+            CTRL -> MAP : createScenario(name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+            activate MAP
+                MAP --> SCENARIO** : create(name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+                
+                MAP -> SCENARIO : validateData()
+                activate SCENARIO
+                    SCENARIO --> MAP : validationResult
+                deactivate SCENARIO
+                
+                MAP --> CTRL : scenario
+            deactivate MAP
+            
+            CTRL -> SCENARIOSERVICE : validateScenario(scenario)
+            activate SCENARIOSERVICE
+                SCENARIOSERVICE --> CTRL : validationResult
+            deactivate SCENARIOSERVICE
+            
+            CTRL -> SCENARIOREPO : saveScenario(scenario)
+            activate SCENARIOREPO
+                SCENARIOREPO --> CTRL : success
+            deactivate SCENARIOREPO
+            
+            CTRL --> UI : success
+        deactivate CTRL
+        
+        UI --> EDITOR : displays operation success
+    deactivate UI
+
+deactivate EDITOR
+
+@enduml

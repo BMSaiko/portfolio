@@ -1,0 +1,227 @@
+@startuml US02-CD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+left to right direction
+
+title US02 - Class Diagram - Add Industry to Map
+
+class AddIndustryUI {
+}
+
+class AddIndustryController {
+  - authService: AuthenticationService
+  - gameRepository: GameRepository
+  - industryService: IndustryService
+  - mapMapper: MapMapper
+  - industryTypeMapper: IndustryTypeMapper
+  + getCurrentUserRole(): String
+  + getMapList(): List<MapDTO>
+  + getIndustryTypeList(): List<IndustryTypeDTO>
+  + getIndustrySubtypeList(typeId: Long): List<IndustrySubtypeDTO>
+  + addIndustry(request: AddIndustryRequestDTO): void
+}
+
+' DTOs for UI <- Domain (providing lists)
+class MapDTO {
+  + id: Long
+  + name: String
+  + width: int
+  + height: int
+}
+
+class IndustryTypeDTO {
+  + id: Long
+  + name: String
+  + category: String
+}
+
+class IndustrySubtypeDTO {
+  + id: Long
+  + name: String
+  + typeId: Long
+  + inputResources: List<String>
+  + outputProducts: List<String>
+}
+
+' DTO for UI -> Domain (sending data)
+class AddIndustryRequestDTO {
+  + mapId: Long
+  + industryTypeId: Long
+  + industrySubtypeId: Long
+  + x: int
+  + y: int
+}
+
+interface Mapper {
+  + toDTO(type: T): T
+  + toDTOList(type: List<T>): List<T>
+}
+
+' Mappers
+class MapMapper {
+  + toDTO(map: Map): MapDTO
+  + toDTOList(maps: List<Map>): List<MapDTO>
+}
+
+class IndustryTypeMapper {
+  + toDTO(type: IndustryType): IndustryTypeDTO
+  + toDTOList(types: List<IndustryType>): List<IndustryTypeDTO>
+  + subtypeToDTO(subtype: IndustrySubtype): IndustrySubtypeDTO
+  + subtypeToDTOList(subtypes: List<IndustrySubtype>): List<IndustrySubtypeDTO>
+}
+
+class MapRepository {
+  + getAllMaps(): List<Map>
+  + findById(id: Long): Map
+  + save(map: Map): void
+}
+
+class IndustryTypeRepository {
+  + getAllIndustryTypes(): List<IndustryType>
+  + findById(id: Long): IndustryType
+  + getSubtypesByTypeId(typeId: Long): List<IndustrySubtype>
+  + findSubtypeById(id: Long): IndustrySubtype
+}
+
+class IndustryRepository {
+  + saveIndustry(industry: Industry): void
+}
+
+class IndustryService {
+  - industryRepository: IndustryRepository
+  - industryFactory: IndustryFactory
+  + validateIndustryPlacement(map: Map, location: Location): boolean
+  + createIndustry(request: AddIndustryRequestDTO, map: Map, industrySubtype: IndustrySubtype): Industry
+}
+
+class IndustryFactory {
+  + createIndustry(subtype: IndustrySubtype, location: Location): Industry
+  - createPrimaryIndustry(subtype: IndustrySubtype, location: Location): PrimaryIndustry
+  - createTransformingIndustry(subtype: IndustrySubtype, location: Location): TransformingIndustry
+  - createMixedIndustry(subtype: IndustrySubtype, location: Location): MixedIndustry
+}
+
+class GameRepository {
+  + getMapRepository(): MapRepository
+}
+
+class AuthenticationService {
+  + getCurrentUserSession(): UserSession
+}
+
+class UserSession {
+  + getUserRoles(): List<String>
+}
+
+class Map {
+  - id: Long
+  - name: String
+  - width: int
+  - height: int
+  - industries: List<Industry>
+  - cities: List<City>
+  + addIndustry(industry: Industry): boolean
+  + isValidLocation(location: Location): boolean
+  + hasElementAt(location: Location): boolean
+}
+
+abstract class Industry {
+  - id: Long
+  - name: String
+  - location: Location
+  - industrySubtype: IndustrySubtype
+  + validateData(): boolean
+}
+
+class PrimaryIndustry {
+  - outputRate: double
+}
+
+class TransformingIndustry {
+  - transformationRatio: double
+}
+
+class MixedIndustry {
+  - capabilities: List<String>
+}
+
+class Location {
+  - x: int
+  - y: int
+  + isWithinBounds(width: int, height: int): boolean
+  + distanceTo(other: Location): double
+}
+
+class IndustryType {
+  - id: Long
+  - name: String
+  - category: String
+}
+
+class IndustrySubtype {
+  - id: Long
+  - name: String
+  - industryType: IndustryType
+  - inputResources: List<CargoType>
+  - outputProducts: List<CargoType>
+}
+
+class CargoType {
+  - id: Long
+  - name: String
+  - unit: String
+}
+
+class Editor {
+  - id: String
+  - name: String
+  - role: String
+}
+
+' UI uses DTOs, not domain objects
+AddIndustryUI --> AddIndustryController
+AddIndustryUI ..> MapDTO : displays
+AddIndustryUI ..> IndustryTypeDTO : displays
+AddIndustryUI ..> IndustrySubtypeDTO : displays
+AddIndustryUI ..> AddIndustryRequestDTO : creates
+
+' Controller uses mappers to convert domain to DTOs
+AddIndustryController --> MapMapper
+AddIndustryController --> IndustryTypeMapper
+AddIndustryController --> AuthenticationService
+AddIndustryController --> UserSession
+AddIndustryController --> GameRepository
+AddIndustryController --> IndustryService
+
+MapMapper ..|> Mapper : implements
+IndustryTypeMapper ..|> Mapper : implements
+
+' Mappers convert between domain and DTOs
+MapMapper ..> Map : converts from
+MapMapper ..> MapDTO : converts to
+IndustryTypeMapper ..> IndustryType : converts from
+IndustryTypeMapper ..> IndustryTypeDTO : converts to
+IndustryTypeMapper ..> IndustrySubtype : converts from
+IndustryTypeMapper ..> IndustrySubtypeDTO : converts to
+
+GameRepository --> MapRepository
+AddIndustryController --> MapRepository
+AddIndustryController --> IndustryTypeRepository
+AddIndustryController --> IndustryRepository
+IndustryService --> IndustryRepository
+IndustryService --> IndustryFactory
+
+Map "1" *-- "*" Industry : contains
+Industry "1" *-- "1" Location : has
+Industry "1" -- "1" IndustrySubtype : of type
+IndustrySubtype "1" -- "1" IndustryType : belongs to
+IndustrySubtype "*" -- "*" CargoType : processes
+Editor "1" *-- "*" Industry : creates
+
+Industry <|-- PrimaryIndustry
+Industry <|-- TransformingIndustry
+Industry <|-- MixedIndustry
+
+@enduml

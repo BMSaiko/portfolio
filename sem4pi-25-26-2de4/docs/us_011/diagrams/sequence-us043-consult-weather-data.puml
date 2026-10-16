@@ -1,0 +1,51 @@
+@startuml
+title Sequence Diagram - US043 Consult Weather Data
+
+actor "Weather Person / Pilot /\nFlight Control Operator" as User
+participant "ConsultWeatherDataUI" as UI
+participant "ConsultWeatherDataController" as Controller
+participant "AuthService" as Auth
+participant "AirControlAreaRepository" as AreaRepo
+participant "WeatherDataRepository" as WeatherRepo
+
+User -> UI: select "Consult weather data"
+UI -> AreaRepo: findAll()
+activate AreaRepo
+AreaRepo --> UI: available air control areas
+deactivate AreaRepo
+
+UI -> User: choose air control area and date
+User -> UI: areaCode, date
+
+UI -> Controller: consult(areaCode, date)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(WEATHER_PERSON,\nPILOT, FLIGHT_CONTROL_OPERATOR, ADMIN)
+activate Auth
+Auth --> Controller: authorized
+deactivate Auth
+
+Controller -> Controller: validate areaCode and date
+
+Controller -> AreaRepo: findByCode(AirControlAreaCode.of(areaCode))
+activate AreaRepo
+AreaRepo --> Controller: AirControlArea
+deactivate AreaRepo
+
+Controller -> Controller: compute startOfDay and startOfNextDay
+
+Controller -> WeatherRepo: findByAreaAndPeriodStartBetween(area,\nstartOfDay, startOfNextDay)
+activate WeatherRepo
+WeatherRepo --> Controller: Iterable<WeatherData>
+deactivate WeatherRepo
+
+Controller --> UI: weather data records
+deactivate Controller
+
+alt records found
+    UI --> User: show weather data for selected area/date
+else no records
+    UI --> User: show "No weather data found."
+end
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml US03-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US03 As an Editor, I want to add a city in a position XY of the selected map, with a name and a positive number of house blocks.
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":System" as SYSTEM
+
+activate EDITOR
+
+    EDITOR -> SYSTEM : asks to add a city
+    activate SYSTEM
+        SYSTEM --> EDITOR : requests authentication
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : provides credentials
+    activate SYSTEM
+        SYSTEM --> EDITOR : validates Editor role
+        SYSTEM --> EDITOR : shows map list and asks to select one
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects map
+    activate SYSTEM
+        SYSTEM --> EDITOR : requests city data (name, coordinates, house blocks count)
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : provides city data
+    activate SYSTEM
+        SYSTEM --> EDITOR : validates city name format and uniqueness
+        SYSTEM --> EDITOR : requests block assignment method (manual/automatic)
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects block assignment method
+    activate SYSTEM
+
+    alt manual placement
+        SYSTEM --> EDITOR : requests coordinates for each house block
+        deactivate SYSTEM
+        EDITOR -> SYSTEM : provides coordinates for each block
+        activate SYSTEM
+    else automatic placement
+        SYSTEM --> EDITOR : generates block positions using normal distribution
+    end
+
+    SYSTEM --> EDITOR : validates city placement (boundaries, spacing, occupation)
+    SYSTEM --> EDITOR : confirms successful addition with population summary
+    deactivate SYSTEM
+
+deactivate EDITOR
+@enduml

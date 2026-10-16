@@ -1,0 +1,32 @@
+@startuml US04-SD-partial-get-locomotive-types-list
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US04 - Get Locomotive Types List - Partial Sequence Diagram 
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":LocomotiveTypeRepository" as LOCOREPO
+participant ":LocomotiveTypeMapper" as LOCOMAPPER
+participant "locomotiveTypeList\n:List<LocomotiveType>" as LOCOTYPELIST
+participant "locoDTOList\n:List<LocomotiveTypeDTO>" as LOCODTOLIST
+
+UI -> CTRL : getLocomotiveTypeList()
+activate CTRL
+    group Get Locomotive Types List
+    CTRL -> LOCOREPO : getAllLocomotiveTypes()
+    activate LOCOREPO
+        LOCOREPO --> CTRL : locomotiveTypeList
+    deactivate LOCOREPO
+    
+    CTRL -> LOCOMAPPER : toDTOList(locomotiveTypeList)
+    activate LOCOMAPPER
+        LOCOMAPPER --> CTRL : locoDTOList
+    deactivate LOCOMAPPER
+    end group
+
+    CTRL --> UI : locoDTOList
+
+deactivate CTRL
+@enduml

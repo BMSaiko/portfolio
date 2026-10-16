@@ -1,0 +1,54 @@
+@startuml US04-SD-partial-create-scenario
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US04 - Create Scenario - Partial Sequence Diagram (with DTOs)
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant ":MapRepository" as MAPREPO
+participant ":LocomotiveTypeRepository" as LOCOREPO
+participant ":IndustryTypeRepository" as INDUSTRYREPO
+participant "scenario:Scenario" as SCENARIO
+participant ":ScenarioService" as SCENARIOSERVICE
+participant ":ScenarioRepository" as SCENARIOREPO
+
+UI -> CTRL : createScenario(request)
+activate CTRL
+    group Create Scenario
+    CTRL -> MAPREPO : findById(request.mapId)
+    activate MAPREPO
+        MAPREPO --> CTRL : selectedMap
+    deactivate MAPREPO
+    
+    CTRL -> LOCOREPO : findByIds(request.locomotiveTypeIds)
+    activate LOCOREPO
+        LOCOREPO --> CTRL : selectedLocomotiveTypes
+    deactivate LOCOREPO
+    
+    CTRL -> INDUSTRYREPO : findByIds(request.industryTypeIds)
+    activate INDUSTRYREPO
+        INDUSTRYREPO --> CTRL : selectedIndustryTypes
+    deactivate INDUSTRYREPO
+    
+    CTRL -> SCENARIOSERVICE : createScenario(request, selectedMap, \nselectedLocomotiveTypes, selectedIndustryTypes)
+    activate SCENARIOSERVICE
+        SCENARIOSERVICE --> SCENARIO** : create scenario from request data
+        
+        SCENARIOSERVICE -> SCENARIO : validateData()
+        activate SCENARIO
+            SCENARIO --> SCENARIOSERVICE : validationResult
+        deactivate SCENARIO
+        
+        SCENARIOSERVICE -> SCENARIOREPO : saveScenario(scenario)
+        activate SCENARIOREPO
+            SCENARIOREPO --> SCENARIOSERVICE : success
+        deactivate SCENARIOREPO
+        
+        SCENARIOSERVICE --> CTRL : scenario
+    deactivate SCENARIOSERVICE
+    end group
+    CTRL --> UI : success
+deactivate CTRL
+@enduml

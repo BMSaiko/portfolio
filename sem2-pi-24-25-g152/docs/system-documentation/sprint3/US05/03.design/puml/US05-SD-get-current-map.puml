@@ -1,0 +1,35 @@
+@startuml US05-SD-GetCurrentMap
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuildStationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "mapRepository\n:MapRepository" as MAP_REPO
+
+autonumber 7
+-> CTRL : getCurrentMap()
+autonumber 7.1
+activate CTRL
+    group Get Current Map
+        CTRL -> REPOS : getInstance()
+        activate REPOS
+            REPOS --> CTRL: repositories
+        deactivate REPOS
+
+        CTRL -> REPOS_SINGLETON : getMapRepository()
+        activate REPOS_SINGLETON
+            REPOS_SINGLETON --> CTRL: mapRepository
+        deactivate REPOS_SINGLETON
+
+        CTRL -> MAP_REPO : getCurrentMap()
+        activate MAP_REPO
+            MAP_REPO --> CTRL : currentMap
+        deactivate MAP_REPO
+    end
+    autonumber 8
+    <-- CTRL : currentMap
+deactivate CTRL
+
+@enduml

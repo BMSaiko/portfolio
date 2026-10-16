@@ -1,0 +1,113 @@
+@startuml USLP07-class-diagram
+
+' --- Pure Fabrication / Service Classes (Controller/Logic) ---
+
+class FreightDispatchService {
+    - routeCalculator: RouteCalculator
+    - conflictResolver: ConflictResolver
+    - trainRepository: TrainRepository
+    - routeRepository: RouteRepository
+    + dispatchTrain(trainId, routePath, departureTime): DispatchPlan
+    - setupDispatch(trainId, routePath): Train
+    - formatDispatchPlan(route: Route): DispatchPlan
+}
+
+class RouteCalculator {
+    + calculateMaxTractionSpeed(power: double, weight: double): double
+    + calculateTravelTime(distance: double, speed: double): double
+}
+
+class ConflictResolver {
+    + resolveConflicts(route: Route): void
+    - identifySingleTrackConflicts(route: Route): List<PassageEvent>
+    - determineCrossingPoint(conflict): Endpoint
+}
+
+' --- Domain Classes (Information Expert / Repository) ---
+
+class Train {
+    - trainID: String
+    - operator: String
+    - locomotives: List<Locomotive>
+    - wagons: List<Wagon>
+    + getTotalWeight(): double
+    + getTotalPower(): double
+}
+
+class Locomotive {
+    - locomotiveID: String
+    - power: double
+    - totalWeight: double
+    - type: String
+    + getPower(): double
+    + getWeight(): double
+}
+
+class Wagon {
+    - wagonID: String
+    - tare: double
+    - payloadCapacity: double
+    + getWeight(): double
+}
+
+class Route {
+    - routeID: String
+    - plannedDepartureTime: Instant
+    - endpoints: List<Endpoint>
+    - passageEvents: List<PassageEvent>
+    + addPassageEvent(event: PassageEvent): void
+    + getOrderedSegments(): List<LineSegment>
+    + getPassageEvents(): List<PassageEvent>
+}
+
+class PassageEvent {
+    - eventID: String
+    - estimatedTime: Instant
+    - actualTime: Instant
+    - isCrossingOperation: boolean
+}
+
+class Endpoint {
+    - endpointID: String
+    - name: String
+    - latitude: double
+    - longitude: double
+    - type: String
+}
+
+class LineSegment {
+    - segmentID: String
+    - length: double
+    - maxSpeedLimit: double
+    - trackType: String
+    - isElectrified: boolean
+    + getLength(): double
+    + getMaxSpeedLimit(): double
+}
+
+' --- Relationships ---
+
+' Service Dependencies
+FreightDispatchService --> RouteCalculator
+FreightDispatchService --> ConflictResolver
+' Note: Repositories (Train/Route) are typically injected into the service
+
+' Traffic & Rolling Stock Composition
+Train "1" *-- "1..*" Locomotive : pulls/pushes
+Train "1" *-- "0..*" Wagon : transports
+
+' Route Structure
+Route "1" *-- "1..*" Endpoint : visits in order
+Route "1" *-- "1..*" PassageEvent : records movement
+
+' Infrastructure Connection (Used by Route internally)
+Route ..> LineSegment : uses
+
+' Event Location
+PassageEvent --> Endpoint : occurs at
+
+' Calculation Dependencies
+RouteCalculator ..> Train : calculates V_traction
+ConflictResolver ..> Route : analyzes
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml USLP07 - System Sequence Diagram
+
+actor "Freight Manager" as Manager
+participant ":System" as System
+
+
+Manager -> System : selectTrainAndRoute(trainId, routePath, wagonsList, departureTime)
+activate System
+System --> Manager : acknowledgment
+deactivate System
+
+
+Manager -> System : calculateMaxSpeed()
+activate System
+System --> Manager : maxSpeedPerSegmentList
+deactivate System
+
+Manager -> System : calculateEstimatedTimes()
+activate System
+System --> Manager : estimatedPassageTimesList
+deactivate System
+
+Manager -> System : identifyCrossingOperations()
+activate System
+System --> Manager : requiredCrossingPointsList
+deactivate System
+
+
+Manager -> System : dispatchTrain()
+activate System
+System --> Manager : dispatchPlan(path, times, crossings)
+deactivate System
+
+@enduml

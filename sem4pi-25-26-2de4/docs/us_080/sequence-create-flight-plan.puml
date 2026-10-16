@@ -1,0 +1,156 @@
+@startuml
+title Sequence Diagram - US080: Create a Flight Plan
+
+actor "Pilot" as Pilot
+participant "CreateFlightPlanUI" as UI
+participant "CreateFlightPlanController" as Controller
+participant "AuthService" as Auth
+participant "FlightRouteRepository" as RouteRepo
+participant "AircraftRepository" as AircraftRepo
+participant "PilotRepository" as PilotRepo
+participant "FlightPlanRepository" as FlightPlanRepo
+participant "FlightPlanRegistrationDTO" as DTO
+participant "FlightPlan" as Aggregate
+
+activate UI
+
+' --- 1. Interactive Selection Phase ---
+UI -> Controller: activeRoutes()
+activate Controller
+Controller -> Auth: ensureHasAnyRole(PILOT)
+activate Auth
+Auth --> Controller: ok
+deactivate Auth
+Controller -> RouteRepo: findAll()
+activate RouteRepo
+RouteRepo --> Controller: routes (Iterable<FlightRoute>)
+deactivate RouteRepo
+Controller --> UI: routes
+deactivate Controller
+
+UI -> UI: filter routes where isActive()
+
+Pilot -> UI: selects route, enters aircraft registration,\npilot email, departure date/time, fuel
+
+' --- 2. Registration Phase ---
+UI -> DTO: new FlightPlanRegistrationDTO(routeDesignator, aircraftReg, pilotEmail, departureDateTime, fuel)
+activate DTO
+note right of DTO
+    validates non-blank fields,
+    non-null date/time,
+    fuel > 0
+end note
+
+alt invalid input (blank field or fuel <= 0)
+    DTO --> UI: throw IllegalArgumentException
+    UI --> Pilot: error: "Estimated fuel must be positive." (etc.)
+else input is valid
+    DTO --> UI: dto
+    deactivate DTO
+
+    UI -> Controller: createFlightPlan(dto)
+    activate Controller
+
+    Controller -> Auth: ensureHasAnyRole(PILOT)
+    activate Auth
+    Auth --> Controller: ok
+    deactivate Auth
+
+    alt user not authenticated / wrong role
+        Auth --> Controller: throw SecurityException
+        Controller --> UI: propagate SecurityException
+        UI --> Pilot: ACCESS DENIED
+    else authorized
+
+        Controller -> RouteRepo: findByDesignator(dto.routeDesignator)
+        activate RouteRepo
+        RouteRepo --> Controller: Optional<FlightRoute>
+        deactivate RouteRepo
+
+        alt route not found
+            Controller --> UI: throw IllegalStateException
+            UI --> Pilot: error: "Route not found: ..."
+        else route found
+
+            alt route is not active
+                Controller --> UI: throw IllegalStateException
+                UI --> Pilot: error: "Route ... is deactivated."
+            else route is active
+
+                Controller -> AircraftRepo: findByRegistration(dto.aircraftRegistration)
+                activate AircraftRepo
+                AircraftRepo --> Controller: Optional<Aircraft>
+                deactivate AircraftRepo
+
+                alt aircraft not found
+                    Controller --> UI: throw IllegalStateException
+                    UI --> Pilot: error: "Aircraft not found: ..."
+                else aircraft found
+
+                    alt aircraft status == RETIRED
+                        Controller --> UI: throw IllegalStateException
+                        UI --> Pilot: error: "Aircraft ... is decommissioned."
+                    else aircraft is operational
+
+                        Controller -> PilotRepo: findByEmail(dto.pilotEmail)
+                        activate PilotRepo
+                        PilotRepo --> Controller: Optional<Pilot>
+                        deactivate PilotRepo
+
+                        alt pilot not found
+                            Controller --> UI: throw IllegalStateException
+                            UI --> Pilot: error: "Pilot not found: ..."
+                        else pilot found
+
+                            alt pilot is not active
+                                Controller --> UI: throw IllegalStateException
+                                UI --> Pilot: error: "Pilot ... is inactive."
+                            else pilot is active
+
+                                Controller -> Controller: pilot.company().iataCode()\n.equals(route.company().iataCode())
+
+                                alt pilot company != route company
+                                    Controller --> UI: throw IllegalArgumentException
+                                    UI --> Pilot: error: "Pilot does not belong to the\ncompany that owns route '...'."
+                                else same company
+
+                                    Controller -> Controller: dto.departureDateTime\n.isAfter(now())
+
+                                    alt departure date/time not in the future
+                                        Controller --> UI: throw IllegalArgumentException
+                                        UI --> Pilot: error: "Departure date/time must\nbe in the future."
+                                    else departure is valid
+
+                                        Controller -> Aggregate: new FlightPlan(id, route, aircraft, pilot, departureDateTime, fuel)
+                                        activate Aggregate
+                                        note right of Aggregate
+                                            status = DRAFT
+                                            legs = empty
+                                            totalDistance = 0.0
+                                            departureAirport/arrivalAirport
+                                            derived from route
+                                        end note
+                                        Aggregate --> Controller: newFlightPlan
+                                        deactivate Aggregate
+
+                                        Controller -> FlightPlanRepo: save(newFlightPlan)
+                                        activate FlightPlanRepo
+                                        FlightPlanRepo --> Controller: savedFlightPlan
+                                        deactivate FlightPlanRepo
+
+                                        Controller --> UI: savedFlightPlan
+                                        UI --> Pilot: success: "Flight plan created\nsuccessfully! [status=DRAFT]"
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    deactivate Controller
+end
+
+deactivate UI
+@enduml

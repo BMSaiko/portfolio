@@ -1,0 +1,1013 @@
+@startuml global-class-diagram
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam Linetype ortho
+left to right direction
+
+package "Main" {
+    class Main {
+        + {static} main(args: String[]): void
+    }
+}
+
+package "pt.isep.dei.esinf.controller" {
+    class MainMenuController {
+        - scanner: Scanner
+        + show(): void
+    }
+    
+    class PlannerMenuController {
+        - scanner: Scanner
+        - dataInitService: DataInitializationService
+        - warehouseService: WarehouseManagementService
+        - stationSearchService: StationSearchService
+        - warehouse: Warehouse
+        - lastAllocationResult: AllocationResult
+        + show(): void
+        - handleViewBayContents(): void
+        - handleDispatchSku(): void
+        - handleRelocateBox(): void
+        - handleViewInventory(): void
+        - handleProcessOrders(): void
+        - handlePackTrolleys(): void
+        - handleStationSearch(): void
+    }
+    
+    class TraficDispatcherMenuController {
+        - scanner: Scanner
+        + show(): void
+    }
+    
+    class TrainSchedulerMenuController {
+        - scanner: Scanner
+        - repository: TrainRepository
+        - scheduler: TrainSchedulerService
+        - dateFormatter: DateTimeFormatter
+        - timeFormatter: DateTimeFormatter
+        + show(): void
+        - viewAllTrains(): void
+        - scheduleNewTrain(): void
+        - viewTrainSchedule(): void
+    }
+    
+    class UpgradePlanController {
+        - scanner: Scanner
+        - upgradeService: RailwayUpgradeService
+        - dataService: DataInitializationService
+        - repository: RailwayNetworkRepository
+        + show(): void
+        - handleLoadData(): void
+        - displayMenu(): void
+        - readOption(): int
+        - processOption(option: int): void
+    }
+}
+
+package "pt.isep.dei.esinf.ui" {
+    class Menu {
+        # scanner: Scanner
+        + run(): void
+    }
+    
+    class MainMenu {
+        + run(): void
+    }
+    
+    class PlannerMenu {
+        + run(): void
+    }
+    
+    class SearchStationsMenu {
+        + run(): void
+    }
+    
+    class TraficDispatcherMenu {
+        + run(): void
+    }
+    
+    class TrainSchedulerMenu {
+        + run(): void
+    }
+    
+    class UpgradePlanMenu {
+        + run(): void
+    }
+}
+
+package "pt.isep.dei.esinf.service" {
+    class StationSearchService {
+        - repository: StationsRepository
+        + getStationsByTimeZoneGroup(group: String): List<Station>
+        + getStationsByTimeZoneGroups(groups: String[]): List<Station>
+        + getStationsByCoordinates(latitude: double, longitude: double): List<Station>
+        + getStationsInRadius(latitude: double, longitude: double, radius: double): List<Station>
+        + findNearestStations(latitude: double, longitude: double, n: int, filter: StationFilter): List<Station>
+    }
+    
+    class TrainSchedulerService {
+        - {static} STOP_TIME_MINUTES: int
+        - {static} CROSSING_TIME_MINUTES: int
+        - {static} POWER_TO_SPEED_FACTOR: double
+        + calculateSchedule(train: Train): TrainSchedule
+        - calculateMaxSpeed(train: Train, segment: LineSegment): int
+        - determineStopNeeded(segment: LineSegment, train: Train): boolean
+    }
+    
+    class TravelTimeCalculatorService {
+        - connection: Connection
+        + connect(): void
+        + disconnect(): void
+        + listStations(): void
+        + listLocomotives(): void
+        + calculateTravelTime(originId: int, destId: int, locoNumber: int): TravelTimeResult
+        + showMenu(scanner: Scanner): void
+    }
+}
+
+package "pt.isep.dei.esinf.service.railway" {
+    class MinimalBackboneService {
+        - railwayNetworkRepository: RailwayNetworkRepository
+        + calculateMinimalBackbone(): Graph<Station, TrackConnection>
+        + kruskalMST(): Graph<Station, TrackConnection>
+        + generateDotFile(graph: Graph, filename: String): String
+        + generateSvgFromDot(dotFilePath: String, outputSvgPath: String): boolean
+        + generateMinimalBackboneVisualization(baseFilename: String): String
+    }
+    
+    class RailwayUpgradeService {
+        - repository: RailwayNetworkRepository
+        - inDegree: Map<Station, Integer>
+        - adjacencyList: Map<Station, List<Station>>
+        + computeUpgradePlan(): UpgradePlanResult
+        - buildInternalStructures(): void
+        - topologicalSort(): List<Station>
+        - detectCycles(): CycleInfo
+    }
+}
+
+package "pt.isep.dei.esinf.service.data" {
+    class DataInitializationService {
+        - csvImportService: CsvImportService
+        - warehouseAllocator: WarehouseAllocator
+        + initializeWarehouse(): Warehouse
+        + getCsvImportService(): CsvImportService
+    }
+    
+    class CsvImportService {
+        - items: Map<String, Item>
+        - bays: Map<String, Bay>
+        - boxes: List<Box>
+        - orders: Map<String, Order>
+        + importItems(InputStream): void
+        + importBays(InputStream): void
+        + importWagons(InputStream): void
+        + importOrders(InputStream): void
+        + importOrderLines(InputStream): void
+        + getItems(): Map<String, Item>
+        + getBays(): Map<String, Bay>
+        + getBoxes(): List<Box>
+        + getOrdersList(): List<Order>
+    }
+}
+
+package "pt.isep.dei.esinf.service.spatial" {
+    class BalancedTreeBuilder {
+        + buildBalancedKDTree(stations: List<Station>): KDTree<Station>
+        - buildBalancedKDTreeRecursive(kdTree: KDTree<Station>, stations: List<Station>, depth: int): void
+        + buildBalancedKDTreeDirect(stations: List<Station>): KDTree<Station>
+        - printTreeStatistics(kdTree: KDTree<Station>, stationCount: int): void
+        + buildStationsBST(stations: Map<TimeZone, List<Station>>): BST<TimeZone>
+        + buildCoordinatesBST(stations: Map<TimeZone, List<Station>>): BST<CoordinateStationKey>
+    }
+}
+
+package "pt.isep.dei.esinf.service.warehouse" {
+    class WarehouseAllocator {
+        + allocateBoxesToWarehouse(boxes: List<Box>, warehouse: Warehouse): void
+    }
+    
+    class WarehouseManagementService {
+        - orderAllocationService: OrderAllocationService
+        - trolleyPackingService: TrolleyPackingService
+        + displayBayContents(warehouse: Warehouse): void
+        + dispatchSku(warehouse: Warehouse, sku: String, qty: int): boolean
+        + displayInventoryBySku(warehouse: Warehouse): void
+        + getAllAvailableBoxes(warehouse: Warehouse): Map<String, String>
+        + relocateBox(warehouse: Warehouse, boxId: String, newBayLocation: String): boolean
+        + processOrders(orders: List<Order>, warehouse: Warehouse, mode: EligibilityMode): AllocationResult
+        + packTrolleys(allocations: List<AllocationFragment>, capacity: double, heuristic: PackingHeuristic, items: Map<String, Item>): PickingPlan
+    }
+    
+    class OrderAllocationService {
+        + allocateOrders(orders: List<Order>, warehouse: Warehouse, mode: EligibilityMode): AllocationResult
+        - createInventorySnapshot(warehouse: Warehouse): Map<String, List<BoxAllocation>>
+    }
+    
+    class TrolleyPackingService {
+        - skuWeightCache: Map<String, Double>
+        + packAllocations(allocations: List<AllocationFragment>, trolleyCapacity: double, heuristic: PackingHeuristic, items: Map<String, Item>): PickingPlan
+        - calculateWeights(allocations: List<AllocationFragment>, items: Map<String, Item>): List<TrolleyAllocation>
+        - packWithFirstFit(allocations: List<TrolleyAllocation>, plan: PickingPlan): void
+        - packWithFirstFitDecreasing(allocations: List<TrolleyAllocation>, plan: PickingPlan): void
+        - packWithBestFitDecreasing(allocations: List<TrolleyAllocation>, plan: PickingPlan): void
+        - packAllocation(allocation: TrolleyAllocation, plan: PickingPlan, useBestFit: boolean): void
+    }
+}
+
+package "pt.isep.dei.esinf.repository" {
+    class StationsRepository {
+        - {static} instance: StationsRepository
+        - stationsBST: BST<TimeZone>
+        - coordinatesBST: BST<CoordinateStationKey>
+        - kdTree: KDTree<Station>
+        - stations: Map<TimeZone, List<Station>>
+        + {static} getInstance(): StationsRepository
+        + getStations(): Map<TimeZone, List<Station>>
+        + setStations(stations: Map<TimeZone, List<Station>>): void
+        + getStationsBST(): BST<TimeZone>
+        + setStationsBST(bst: BST<TimeZone>): void
+        + getCoordinatesBST(): BST<CoordinateStationKey>
+        + setCoordinatesBST(bst: BST<CoordinateStationKey>): void
+        + getKdTree(): KDTree<Station>
+        + setKdTree(tree: KDTree<Station>): void
+    }
+    
+    class TrainRepository {
+        - connection: Connection
+        + disconnect(): void
+        + getAllTrains(): List<Train>
+        + getTrainById(trainId: int): Train
+        + getTrainPath(pathId: int): TrainPath
+        + getLocomotive(locomotiveNumber: int): Locomotive
+        + getWagonsForTrain(trainId: int): List<Wagon>
+        + saveTrainSchedule(schedule: TrainSchedule): void
+    }
+    
+    class RailwayNetworkRepository {
+        - {static} instance: RailwayNetworkRepository
+        - networkGraph: Graph<Station, TrackConnection>
+        - dataLoaded: boolean
+        + {static} getInstance(): RailwayNetworkRepository
+        + getNetworkGraph(): Graph<Station, TrackConnection>
+        + setNetworkGraph(graph: Graph): void
+        + isDataLoaded(): boolean
+        + reset(): void
+    }
+}
+
+' ===== DOMAIN LAYER =====
+package "pt.isep.dei.esinf.domain" {
+    class LineEligibility {
+        - orderId: String
+        - lineNo: int
+        - sku: String
+        - requestedQty: int
+        - allocatedQty: int
+        - status: AllocationStatus
+        + getOrderId(): String
+        + getLineNo(): int
+        + getSku(): String
+        + getRequestedQty(): int
+        + getAllocatedQty(): int
+        + getStatus(): AllocationStatus
+    }
+    
+    class SegmentInfo {
+        - lengthKm: double
+        - segmentId: String
+        - startStation: String
+        - endStation: String
+        - speedLimitKmh: double
+        - locomotiveMaxSpeed: double
+        - effectiveSpeed: double
+        - timeMinutes: double
+        - isElectrified: boolean
+        - locomotiveType: String
+        + getTimeMinutes(): double
+        + display(segmentNumber: int): void
+    }
+}
+
+package "pt.isep.dei.esinf.domain.allocations" {
+    class AllocationFragment {
+        - orderId: String
+        - lineNo: int
+        - sku: String
+        - qty: int
+        - boxId: String
+        - aisle: int
+        - bay: int
+        + getOrderId(): String
+        + getLineNo(): int
+        + getSku(): String
+        + getQty(): int
+        + getBoxId(): String
+        + getAisle(): int
+        + getBay(): int
+    }
+    
+    class BoxAllocation {
+        - box: Box
+        - aisle: int
+        - bay: int
+        + availableQty: int
+        + getBox(): Box
+        + getAisle(): int
+        + getBay(): int
+        + getAvailableQty(): int
+        + setAvailableQty(qty: int): void
+    }
+    
+    class TrolleyAllocation {
+        - allocation: AllocationFragment
+        - weight: double
+        + getAllocation(): AllocationFragment
+        + getWeight(): double
+        + compareTo(other: TrolleyAllocation): int
+    }
+}
+
+package "pt.isep.dei.esinf.domain.enums" {
+    enum AllocationStatus {
+        ELIGIBLE
+        PARTIAL
+        UNDISPATCHABLE
+    }
+    
+    enum EligibilityMode {
+        STRICT
+        PARTIAL
+    }
+    
+    enum PackingHeuristic {
+        FIRST_FIT
+        FIRST_FIT_DECREASING
+        BEST_FIT_DECREASING
+        + getDisplayName(): String
+        + getDescription(): String
+    }
+}
+
+package "pt.isep.dei.esinf.domain.picking" {
+    class Trolley {
+        - number: int
+        - maxWeight: double
+        - allocations: List<AllocationFragment>
+        - currentWeight: double
+        + getRemainingCapacity(): double
+        + getUtilization(): double
+        + canFit(weight: double): boolean
+        + addAllocation(allocation: AllocationFragment, weight: double): void
+        + isEmpty(): boolean
+    }
+    
+    class PickingPlan {
+        - heuristic: PackingHeuristic
+        - trolleyCapacity: double
+        - trolleys: List<Trolley>
+        - notes: List<String>
+        + addTrolley(trolley: Trolley): void
+        + addNote(note: String): void
+        + getTotalTrolleys(): int
+        + getAverageUtilization(): double
+        + getTotalAllocations(): int
+        + getTotalWeight(): double
+    }
+}
+
+package "pt.isep.dei.esinf.domain.railway" {
+    class Facility {
+        - id: int
+        - name: String
+        - type: String
+    }
+    
+    class LineSegment {
+        - segmentId: int
+        - length: int
+        - speedLimit: int
+        - isElectrified: boolean
+        - isSingleTrack: boolean
+    }
+    
+    class Route {
+        - id: int
+        - name: String
+        - type: String
+        - origin: Station
+        - destination: Station
+        - segments: List<LineSegment>
+        + addSegment(segment: LineSegment): void
+        + getTotalDistance(): int
+        + isSimple(): boolean
+    }
+    
+    class SegmentPassage {
+        - segment: LineSegment
+        - arrivalTime: LocalDateTime
+        - departureTime: LocalDateTime
+        - maxSpeed: int
+        - travelTime: int
+    }
+    
+    class Station {
+        - stationId: int
+        - name: String
+    }
+    
+    class TrainPath {
+        - pathId: int
+        - name: String
+        - segments: List<LineSegment>
+        + addSegment(segment: LineSegment): void
+        + getTotalDistance(): int
+    }
+    
+    class TrackConnection {
+        - distance: double
+        - capacity: int
+        - cost: double
+    }
+}
+
+package "pt.isep.dei.esinf.domain.railway.upgrade" {
+    class UpgradePlanResult {
+        - hasCycles: boolean
+        - topologicalOrder: List<Station>
+        - cycleStations: List<Station>
+        - cycleEdges: List<String>
+        - verticesCount: int
+        - edgesCount: int
+    }
+    
+    class CycleInfo {
+        - stations: List<Station>
+        - edges: List<String>
+    }
+}
+
+package "pt.isep.dei.esinf.domain.results" {
+    class AllocationResult {
+        - eligibilities: List<LineEligibility>
+        - allocations: List<AllocationFragment>
+        + getEligibilities(): List<LineEligibility>
+        + getAllocations(): List<AllocationFragment>
+    }
+    
+    class TravelTimeResult {
+        - originStation: String
+        - destinationStation: String
+        - locomotiveId: String
+        - segments: List<SegmentInfo>
+        + addSegment(segment: SegmentInfo): void
+        + display(): void
+    }
+}
+
+package "pt.isep.dei.esinf.domain.stations" {
+    class Coordinates {
+        - latitude: double
+        - longitude: double
+        + getLatitude(): double
+        + getLongitude(): double
+        + compareTo(other: Coordinates): int
+        + equals(obj: Object): boolean
+        + hashCode(): int
+    }
+    
+    class CoordinateStationKey {
+        - coordinates: Coordinates
+        - station: Station
+        + getCoordinates(): Coordinates
+        + getStation(): Station
+        + compareTo(other: CoordinateStationKey): int
+    }
+    
+    class Station {
+        - stationId: String
+        - name: String
+        - country: String
+        - coordinates: Coordinates
+        - timeZone: TimeZone
+        + getStationId(): String
+        + getName(): String
+        + getCountry(): String
+        + getCoordinates(): Coordinates
+        + getTimeZone(): TimeZone
+        + isValid(): boolean
+        + compareTo(other: Station): int
+        + getKDValue(dimension: int): double
+    }
+    
+    class StationFilter {
+        - countries: List<String>
+        + matches(station: Station): boolean
+        + addCountry(country: String): void
+    }
+    
+    class TimeZone {
+        - group: String
+        - country: String
+        + getGroup(): String
+        + getCountry(): String
+        + compareTo(other: TimeZone): int
+    }
+}
+
+package "pt.isep.dei.esinf.domain.train" {
+    class Locomotive {
+        - number: int
+        - name: String
+        - model: LocomotiveModel
+        + getNumber(): int
+        + getName(): String
+        + getModel(): LocomotiveModel
+    }
+    
+    class LocomotiveModel {
+        - modelId: int
+        - name: String
+        - maxSpeed: int
+        - power: int
+        - weight: int
+        + getModelId(): int
+        + getName(): String
+        + getMaxSpeed(): int
+        + getPower(): int
+        + getWeight(): int
+    }
+    
+    class Train {
+        - trainId: int
+        - name: String
+        - departureDateTime: LocalDateTime
+        - locomotive: Locomotive
+        - wagons: List<Wagon>
+        - path: TrainPath
+        + getTrainId(): int
+        + getName(): String
+        + getDepartureDateTime(): LocalDateTime
+        + getLocomotive(): Locomotive
+        + getWagons(): List<Wagon>
+        + getPath(): TrainPath
+        + getTotalWeight(): int
+        + getTotalCapacity(): int
+    }
+    
+    class TrainSchedule {
+        - train: Train
+        - passages: List<SegmentPassage>
+        + getTrain(): Train
+        + getPassages(): List<SegmentPassage>
+        + addPassage(passage: SegmentPassage): void
+        + getTotalTravelTime(): int
+        + getArrivalTime(): LocalDateTime
+    }
+    
+    class Wagon {
+        - wagonId: int
+        - model: WagonModel
+        + getWagonId(): int
+        + getModel(): WagonModel
+    }
+    
+    class WagonModel {
+        - modelId: int
+        - name: String
+        - tareWeight: int
+        - maxGrossWeight: int
+        - capacity: int
+        + getModelId(): int
+        + getName(): String
+        + getTareWeight(): int
+        + getMaxGrossWeight(): int
+        + getCapacity(): int
+    }
+}
+
+package "pt.isep.dei.esinf.domain.tree" {
+    class Node<E> {
+        - element: E
+        - left: Node<E>
+        - right: Node<E>
+        + getElement(): E
+        + setElement(element: E): void
+        + getLeft(): Node<E>
+        + setLeft(left: Node<E>): void
+        + getRight(): Node<E>
+        + setRight(right: Node<E>): void
+    }
+    
+    class KDNode<E> {
+        - dimension: int
+        + getDimension(): int
+        + setDimension(dimension: int): void
+    }
+}
+
+package "pt.isep.dei.esinf.domain.warehouse" {
+    class Warehouse {
+        - bays: Map<String, Bay>
+        - skuToBays: Map<String, List<Bay>>
+        - allocatedBoxIds: Set<String>
+        + addBay(bay: Bay): void
+        + getBay(locationCode: String): Bay
+        + getAllBays(): Collection<Bay>
+        + allocateBox(box: Box): boolean
+        + dispatch(sku: String, qty: int): int
+        + getInventoryBySku(): Map<String, List<Box>>
+        + relocate(boxId: String, newBayLocation: String): boolean
+        + getTotalStockBySku(sku: String): int
+    }
+    
+    class Bay {
+        - warehouseId: String
+        - aisle: int
+        - bayNumber: int
+        - capacityBoxes: int
+        - storedBoxes: LinkedList<Box>
+        + getLocationCode(): String
+        + getAisle(): int
+        + getBayNumber(): int
+        + getCapacityBoxes(): int
+        + addBox(box: Box): boolean
+        + removeBox(boxId: String): Box
+        + getStoredBoxes(): List<Box>
+        + isEmpty(): boolean
+        + dispatch(sku: String, requestedQty: int): int
+        + relocate(box: Box): boolean
+    }
+    
+    class Box {
+        - boxId: String
+        - sku: String
+        - quantity: int
+        - expiryDate: LocalDateTime
+        - receivedAt: LocalDateTime
+        + getBoxId(): String
+        + getSku(): String
+        + getQuantity(): int
+        + getExpiryDate(): LocalDateTime
+        + getReceivedAt(): LocalDateTime
+        + compareTo(other: Box): int
+    }
+    
+    class Item {
+        - sku: String
+        - name: String
+        - category: String
+        - unit: String
+        - volume: double
+        - unitWeight: double
+        + getSku(): String
+        + getName(): String
+        + getCategory(): String
+        + getUnit(): String
+        + getVolume(): double
+        + getUnitWeight(): double
+    }
+    
+    class Order {
+        - orderId: String
+        - dueDate: LocalDate
+        - priority: int
+        - lines: List<OrderLine>
+        + getOrderId(): String
+        + getDueDate(): LocalDate
+        + getPriority(): int
+        + getLines(): List<OrderLine>
+        + addLine(line: OrderLine): void
+        + compareTo(other: Order): int
+    }
+    
+    class OrderLine {
+        - lineNo: int
+        - sku: String
+        - requestedQty: int
+        + getLineNo(): int
+        + getSku(): String
+        + getRequestedQty(): int
+        + compareTo(other: OrderLine): int
+    }
+    
+    class Wagon {
+        - wagonId: String
+        - warehouseId: String
+        - sku: String
+        - quantity: int
+        + getWagonId(): String
+        + getWarehouseId(): String
+        + getSku(): String
+        + getQuantity(): int
+    }
+}
+
+package "pt.isep.dei.esinf.utils" {
+    class BST<E> {
+        # root: Node<E>
+        + insert(element: E): void
+        + remove(element: E): void
+        + find(element: E): E
+        + isEmpty(): boolean
+        + size(): int
+        + height(): int
+        + inOrder(): Iterable<E>
+        + preOrder(): Iterable<E>
+        + postOrder(): Iterable<E>
+    }
+    
+    class AVL<E> {
+        + insert(element: E): void
+        + remove(element: E): void
+        - balanceNode(node: Node<E>): Node<E>
+        - rotateLeft(node: Node<E>): Node<E>
+        - rotateRight(node: Node<E>): Node<E>
+    }
+    
+    class KDTree<E> {
+        + insert(element: E): void
+        + findNearest(target: E, n: int): List<E>
+        + findInRange(center: E, radius: double): List<E>
+        - insertRec(node: Node<E>, element: E, depth: int): Node<E>
+    }
+    
+    class TREE<E> {
+        + insert(element: E): void
+        + remove(element: E): void
+    }
+    
+    class Utils {
+        + {static} readCSV(path: String): List<String[]>
+        + {static} parseDouble(value: String): double
+        + {static} parseInt(value: String): int
+    }
+}
+
+package "pt.isep.dei.esinf.utils.graph" {
+    class Edge<V, E> {
+        - vOrig: V
+        - vDest: V
+        - weight: E
+    }
+    
+    class Algorithms {
+        + {static} BreadthFirstSearch(g: Graph, vert: V): LinkedList<V>
+        + {static} DepthFirstSearch(g: Graph, vert: V): LinkedList<V>
+        + {static} allPaths(g: Graph, vOrig: V, vDest: V): ArrayList<LinkedList<V>>
+        + {static} shortestPath(g: Graph, vOrig: V, vDest: V): LinkedList<V>
+        + {static} shortestPaths(g: Graph, vOrig: V): ArrayList<LinkedList<V>>
+    }
+    
+    class CommonGraph<V, E> {
+        # isDirected: boolean
+        # numVerts: int
+        # numEdges: int
+        + isDirected(): boolean
+        + numVertices(): int
+        + numEdges(): int
+    }
+    
+    interface Graph<V, E> {
+        + isDirected(): boolean
+        + numVertices(): int
+        + vertices(): ArrayList<V>
+        + validVertex(vert: V): boolean
+        + key(vert: V): int
+        + vertex(key: int): V
+        + vertex(p: Predicate<V>): V
+        + adjVertices(vert: V): Collection<V>
+        + numEdges(): int
+        + edges(): Collection<Edge<V, E>>
+        + edge(vOrig: V, vDest: V): Edge<V, E>
+        + edge(vOrigKey: int, vDestKey: int): Edge<V, E>
+        + outDegree(vert: V): int
+        + inDegree(vert: V): int
+        + outgoingEdges(vert: V): Collection<Edge<V, E>>
+        + incomingEdges(vert: V): Collection<Edge<V, E>>
+        + addVertex(vert: V): boolean
+        + addEdge(vOrig: V, vDest: V, weight: E): boolean
+        + removeVertex(vert: V): boolean
+        + removeEdge(vOrig: V, vDest: V): boolean
+    }
+    
+    class MapGraph<V, E> {
+        - mapVertices: Map<V, MapVertex>
+        + validVertex(vert: V): boolean
+        + adjVertices(vert: V): Collection<V>
+        + edges(): Collection<Edge>
+        + edge(vOrig: V, vDest: V): Edge
+        + outDegree(vert: V): int
+        + inDegree(vert: V): int
+        + addVertex(vert: V): boolean
+        + addEdge(vOrig: V, vDest: V, weight: E): boolean
+        + removeVertex(vert: V): boolean
+        + removeEdge(vOrig: V, vDest: V): boolean
+    }
+    
+    class MapVertex<V, E> {
+        - outVerts: Map<V, Edge>
+        + numAdjVerts(): int
+        + getAllOutEdges(): Collection<Edge>
+        + getAllAdjVerts(): Collection<V>
+        + getEdge(vAdj: V): Edge
+        + addAdjVert(vAdj: V, edge: Edge): void
+        + remAdjVert(vAdj: V): void
+    }
+    MinimalBackboneService --> RailwayNetworkRepository : uses
+    MinimalBackboneService ..> Graph : uses
+    MinimalBackboneService ..> Algorithms : uses
+    MinimalBackboneService --> Edge : processes
+    MinimalBackboneService --> TrackConnection : uses
+    MinimalBackboneService --> Station : uses
+
+    RailwayUpgradeService --> RailwayNetworkRepository : uses
+    RailwayUpgradeService ..> UpgradePlanResult : creates
+    RailwayUpgradeService ..> CycleInfo : creates
+    RailwayUpgradeService --> Station : processes
+
+}  
+
+package "pt.isep.dei.esinf.utils.interfaces" {
+    interface BSTInterface<E> {
+        + insert(element: E): void
+        + remove(element: E): void
+        + find(element: E): E
+        + isEmpty(): boolean
+        + size(): int
+    }
+    
+    interface KDTreeNodeInterface {
+        + getKDValue(dimension: int): double
+    }
+}
+
+
+' Main
+Main --> MainMenuController : uses
+
+RailwayNetworkRepository --> Graph : manages
+RailwayNetworkRepository --> Station : stores
+RailwayNetworkRepository --> TrackConnection : stores
+
+' Controller relationships
+MainMenuController --> PlannerMenuController : creates
+MainMenuController --> TraficDispatcherMenuController : creates
+MainMenuController --> UpgradePlanController : creates
+MainMenuController --> MainMenu : uses
+
+PlannerMenuController --> DataInitializationService : uses
+PlannerMenuController --> WarehouseManagementService : uses
+PlannerMenuController --> StationSearchService : uses
+PlannerMenuController --> Warehouse : manages
+PlannerMenuController --> AllocationResult : receives
+PlannerMenuController --> PlannerMenu : uses
+PlannerMenuController --> SearchStationsMenu : uses
+
+TraficDispatcherMenuController --> TravelTimeCalculatorService : uses
+TraficDispatcherMenuController --> TrainSchedulerMenuController : creates
+TraficDispatcherMenuController --> TraficDispatcherMenu : uses
+
+TrainSchedulerMenuController --> TrainRepository : uses
+TrainSchedulerMenuController --> TrainSchedulerService : uses
+TrainSchedulerMenuController --> TrainSchedule : receives
+
+UpgradePlanController --> RailwayUpgradeService : uses
+UpgradePlanController --> DataInitializationService : uses
+UpgradePlanController --> RailwayNetworkRepository : uses
+UpgradePlanController --> UpgradePlanMenu : uses
+
+' UI relationships
+MainMenu --|> Menu
+PlannerMenu --|> Menu
+SearchStationsMenu --|> Menu
+TraficDispatcherMenu --|> Menu
+TrainSchedulerMenu --|> Menu
+UpgradePlanMenu --|> Menu
+
+' Service relationships
+DataInitializationService --> CsvImportService : uses
+DataInitializationService --> WarehouseAllocator : uses
+DataInitializationService ..> Warehouse : creates
+
+StationSearchService --> StationsRepository : uses
+StationSearchService --> Station : queries
+
+TrainSchedulerService --> Train : processes
+TrainSchedulerService ..> TrainSchedule : creates
+TrainSchedulerService --> LineSegment : analyzes
+
+TravelTimeCalculatorService ..> TravelTimeResult : creates
+TravelTimeCalculatorService --> SegmentInfo : uses
+
+BalancedTreeBuilder ..> KDTree : builds
+BalancedTreeBuilder ..> BST : builds
+BalancedTreeBuilder --> Station : processes
+
+WarehouseManagementService --> OrderAllocationService : uses
+WarehouseManagementService --> TrolleyPackingService : uses
+WarehouseManagementService --> Warehouse : operates on
+
+OrderAllocationService --> Warehouse : reads from
+OrderAllocationService --> Order : processes
+OrderAllocationService ..> AllocationResult : creates
+OrderAllocationService --> EligibilityMode : uses
+OrderAllocationService ..> BoxAllocation : creates
+
+TrolleyPackingService --> AllocationFragment : packs
+TrolleyPackingService --> Item : uses weights from
+TrolleyPackingService ..> TrolleyAllocation : creates
+TrolleyPackingService ..> PickingPlan : creates
+TrolleyPackingService --> PackingHeuristic : uses
+
+WarehouseAllocator --> Warehouse : allocates to
+WarehouseAllocator --> Box : allocates
+
+CsvImportService ..> Item : creates
+CsvImportService ..> Bay : creates
+CsvImportService ..> Box : creates
+CsvImportService ..> Order : creates
+CsvImportService ..> OrderLine : creates
+
+' Repository relationships
+StationsRepository --> BST : contains
+StationsRepository --> KDTree : contains
+StationsRepository --> Station : stores
+StationsRepository --> TimeZone : indexes by
+StationsRepository --> CoordinateStationKey : indexes by
+
+TrainRepository --> Train : retrieves
+TrainRepository --> TrainPath : retrieves
+TrainRepository --> Locomotive : retrieves
+TrainRepository --> Wagon : retrieves
+
+' Domain relationships
+LineEligibility --> AllocationStatus : has
+
+AllocationResult "1" *-- "many" LineEligibility : contains
+AllocationResult "1" *-- "many" AllocationFragment : contains
+
+BoxAllocation --> Box : references
+TrolleyAllocation "1" *-- "1" AllocationFragment : wraps
+
+PickingPlan "1" *-- "many" Trolley : contains
+PickingPlan --> PackingHeuristic : uses
+Trolley "1" *-- "many" AllocationFragment : carries
+
+Route --> Station : has origin/destination
+Route "1" *-- "many" LineSegment : contains
+
+SegmentPassage --> LineSegment : references
+
+' Graph relationships
+MapGraph ..|> Graph : implements
+MapGraph --|> CommonGraph : extends
+MapGraph "1" *-- "many" MapVertex : contains
+MapGraph --> Edge : uses
+Edge --> TrackConnection : weight
+Edge --> Station : vOrig, vDest
+
+UpgradePlanResult --> Station : references
+UpgradePlanResult --> CycleInfo : contains
+CycleInfo --> Station : references
+
+TrainPath "1" *-- "many" LineSegment : contains
+
+TravelTimeResult "1" *-- "many" SegmentInfo : contains
+
+CoordinateStationKey --> Coordinates : has
+CoordinateStationKey --> Station : references
+
+Station --> Coordinates : has
+Station --> TimeZone : belongs to
+Station ..|> KDTreeNodeInterface : implements
+
+Train --> Locomotive : has
+Train --> TrainPath : follows
+Train "1" *-- "many" Wagon : contains
+
+TrainSchedule --> Train : schedules
+TrainSchedule "1" *-- "many" SegmentPassage : contains
+
+Locomotive --> LocomotiveModel : has
+Wagon --> WagonModel : has
+
+KDNode --|> Node : extends
+
+Warehouse "1" *-- "many" Bay : contains
+Bay "1" *-- "many" Box : stores
+Box --> Item : references via SKU
+
+Order "1" *-- "many" OrderLine : contains
+OrderLine --> Item : references via SKU
+OrderLine ..> AllocationFragment : generates
+
+' Utils relationships
+BST ..|> BSTInterface : implements
+BST --> Node : uses
+AVL --|> BST : extends
+KDTree --|> BST : extends
+KDTree --> KDNode : uses
+TREE --|> BST : extends
+
+@enduml

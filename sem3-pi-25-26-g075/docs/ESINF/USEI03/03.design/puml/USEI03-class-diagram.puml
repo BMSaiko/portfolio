@@ -1,0 +1,110 @@
+@startuml USEI03-class-diagram
+
+class MenuController {
+    - scanner: Scanner
+    - warehouseService: WarehouseManagementService
+    - lastAllocationResult: AllocationResult
+    + handlePackTrolleys(): void
+}
+
+class WarehouseManagementService {
+    - trolleyPackingService: TrolleyPackingService
+    + packTrolleys(allocations: List<AllocationFragment>, capacity: double, heuristic: PackingHeuristic, items: Map<String, Item>): PickingPlan
+}
+
+class TrolleyPackingService {
+    - skuWeightCache: Map<String, Double>
+    + packAllocations(allocations: List<AllocationFragment>, trolleyCapacity: double, heuristic: PackingHeuristic, items: Map<String, Item>): PickingPlan
+    - calculateWeights(allocations: List<AllocationFragment>, items: Map<String, Item>): List<WeightedAllocation>
+    - packWithFirstFit(allocations: List<WeightedAllocation>, plan: PickingPlan): void
+    - packWithFirstFitDecreasing(allocations: List<WeightedAllocation>, plan: PickingPlan): void
+    - packWithBestFitDecreasing(allocations: List<WeightedAllocation>, plan: PickingPlan): void
+    - packAllocation(allocation: WeightedAllocation, plan: PickingPlan, useBestFit: boolean): void
+    - findBestFitTrolley(allocation: WeightedAllocation, trolleys: List<Trolley>): Trolley
+}
+
+enum PackingHeuristic {
+    FIRST_FIT
+    FIRST_FIT_DECREASING
+    BEST_FIT_DECREASING
+}
+
+class AllocationFragment {
+    - orderId: String
+    - lineNo: int
+    - sku: String
+    - qty: int
+    - boxId: String
+    - aisle: int
+    - bay: int
+    + getSku(): String
+    + getQty(): int
+}
+
+class Item {
+    - sku: String
+    - description: String
+    - unitWeight: double
+    + getSku(): String
+    + getUnitWeight(): double
+}
+
+class WeightedAllocation {
+    - allocation: AllocationFragment
+    - weight: double
+    + getAllocation(): AllocationFragment
+    + getWeight(): double
+    + compareTo(other: WeightedAllocation): int
+}
+
+class Trolley {
+    - id: int
+    - capacity: double
+    - currentWeight: double
+    - allocations: List<WeightedAllocation>
+    + getId(): int
+    + getCapacity(): double
+    + getCurrentWeight(): double
+    + getRemainingCapacity(): double
+    + addAllocation(allocation: WeightedAllocation): boolean
+    + getUtilization(): double
+    + getAllocations(): List<WeightedAllocation>
+}
+
+class PickingPlan {
+    - heuristic: PackingHeuristic
+    - trolleyCapacity: double
+    - trolleys: List<Trolley>
+    - notes: List<String>
+    + getHeuristic(): PackingHeuristic
+    + getTrolleyCapacity(): double
+    + getTrolleys(): List<Trolley>
+    + getNotes(): List<String>
+    + addTrolley(trolley: Trolley): void
+    + addNote(note: String): void
+    + getTotalTrolleys(): int
+    + getAverageUtilization(): double
+    + getTotalAllocations(): int
+}
+
+MenuController --> WarehouseManagementService
+MenuController --> AllocationResult
+
+WarehouseManagementService --> TrolleyPackingService
+
+TrolleyPackingService --> PackingHeuristic
+TrolleyPackingService --> AllocationFragment
+TrolleyPackingService --> Item
+TrolleyPackingService --> WeightedAllocation
+TrolleyPackingService --> PickingPlan
+
+WeightedAllocation "1" *-- "1" AllocationFragment : wraps
+
+Trolley "1" *-- "many" WeightedAllocation : contains
+
+PickingPlan "1" *-- "many" Trolley : contains
+PickingPlan --> PackingHeuristic
+
+AllocationFragment --> Item : references via SKU
+
+@enduml

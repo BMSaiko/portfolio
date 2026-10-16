@@ -1,0 +1,151 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class ApplicationSession
+{
+    - ApplicationSession()
+    + {static} getInstance()
+    + getCurrentSession()
+    + updateBudget(amount)
+}
+
+class UserSession
+{
+    + getPlayer()
+}
+
+class Player {
+    - id : String
+    - name : String
+    - budget : double
+
+    + updateBudget(amount)
+}
+
+class Station {
+    - name : String
+    - type : StationType
+    - radius : int
+    - cost : double
+    - location : Location
+
+    + Station(x, y, name, stationType, map)
+}
+
+enum StationType {
+    DEPOT
+    STATION
+    TERMINAL
+
+    + getRadius()
+    + getCost()
+}
+
+class Location {
+    - x : int
+    - y : int
+
+    + Location(x, y)
+    + getX()
+    + getY()
+}
+
+class Map {
+    - name : String
+    - width : int
+    - height : int
+    - cities : List<City>
+    - industries : List<Industry>
+
+    + validateStationPosition(x, y, stationType)
+    + findClosestCity(x, y)
+}
+
+class City {
+    - name : String
+    - location : Location
+    - houseBlocks : int
+
+    + getName()
+    + getLocation()
+}
+
+class MapRepository {
+    + getCurrentMap()
+}
+
+class StationRepository {
+    + addStation(station)
+    + getStations()
+}
+
+class Repositories {
+    - Repositories()
+    + {static} getInstance()
+    + getMapRepository()
+    + getStationRepository()
+}
+
+class BuildStationController {
+    + BuildStationController()
+    + getStationTypes()
+    + getCurrentMap()
+    + validatePosition(x, y, stationType)
+    + generateStationName(x, y)
+    + buildStation(x, y, stationType, stationName)
+    - calculateStationCost(stationType)
+}
+
+class BuildStationUI {
+}
+
+note right of BuildStationController
+    Station name is generated based
+    on the closest city
+end note
+
+note bottom of StationRepository
+    - maintains all stations
+    in the railway network
+end note
+
+BuildStationUI .> BuildStationController
+
+BuildStationController ..> ApplicationSession
+BuildStationController ..> UserSession
+BuildStationController ..> Station
+BuildStationController ..> StationType
+BuildStationController ..> Map
+BuildStationController ..> MapRepository
+BuildStationController ..> StationRepository
+BuildStationController .> Repositories
+
+Repositories -> "1" Repositories : instance
+Repositories --> "1" MapRepository : mapRepository
+Repositories --> "1" StationRepository : stationRepository
+
+ApplicationSession -> "1" ApplicationSession : instance
+ApplicationSession ..> UserSession
+
+MapRepository --> "1" Map : currentMap
+
+StationRepository --> "*" Station : stations
+
+Map --> "*" City : cities
+
+Station --> "1" StationType : type
+Station --> "1" Location : location
+Station --> "1" Map : map
+
+City --> "1" Location : location
+
+UserSession --> "1" Player : player
+@enduml

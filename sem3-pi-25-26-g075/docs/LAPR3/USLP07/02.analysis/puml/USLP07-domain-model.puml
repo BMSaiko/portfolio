@@ -1,0 +1,104 @@
+@startuml USLP07 - Domain Model Excerpt (Global)
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+package "Railway & Infrastructure" {
+  class LineSegment {
+    maxWeight (kg/m)
+    speedLimit
+    trackType
+    isElectrified
+    length
+    numberOfTracks
+  }
+
+  class "Station/Terminal" as Station {
+    name
+    type
+  }
+}
+
+package "Operations & Rolling Stock" {
+  class Locomotive {
+    power
+    totalWeight
+    ...
+  }
+
+  class Wagon {
+    tare
+    payloadCapacity
+    ...
+  }
+
+  class Train {
+    plannedDepartureTime
+    status
+    calculatedSpeed
+  }
+}
+
+package "Scheduling" {
+  class Route {
+    isSimple
+  }
+
+  class Path {
+    orderedStations
+  }
+
+  class PathSegment {
+    sequenceNumber
+    mustStop
+  }
+
+  class TrainPassage {
+    plannedArrivalTime
+    actualArrivalTime
+    plannedDepartureTime
+    actualDepartureTime
+    sequenceNumber
+  }
+
+  class Crossing {
+    location
+    plannedTime
+  }
+}
+
+package "Roles" {
+  class FreightManager {
+    name
+  }
+}
+
+' Relationships
+
+' Scheduling & Journey
+Route "1" -- "1" Path : "defines trajectory"
+Route "1" *-- "1..*" LineSegment : "uses"
+Route "1" -- "1..*" Train : "schedules"
+
+Path "1" *-- "1..*" PathSegment : "composed of ordered"
+PathSegment "*" -- "1" Station : "at"
+
+' Rolling Stock & Train Composition
+Train "1" -- "1..*" Locomotive : "uses"
+Train "1" -- "0..*" Wagon : "pulls"
+
+' Tracking and Events
+Train "1" -- "0..*" TrainPassage : "records movement"
+TrainPassage "*" -- "1" Station : "at"
+
+Crossing "0..*" -- "2" Train : "involves"
+Crossing "*" -- "1" Station : "occurs at"
+
+' Actor
+FreightManager "1" -- "0..*" Route : "dispatches"
+
+@enduml

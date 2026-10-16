@@ -1,0 +1,123 @@
+@startuml USEI03-sequence-diagram
+
+actor "Picker" as PICK
+participant ":MenuController" as MC
+participant ":WarehouseManagementService" as WMS
+participant ":TrolleyPackingService" as TPS
+participant ":WeightedAllocation" as WA
+participant ":Trolley" as TR
+participant ":PickingPlan" as PP
+
+PICK -> MC : handlePackTrolleys()
+activate MC
+
+MC -> MC : checkAllocationResults()
+
+alt no allocation results
+    MC --> PICK : error message
+else allocations available
+    MC -> MC : getTrolleyCapacity()
+    MC -> MC : selectHeuristic()
+    
+    MC -> WMS : packTrolleys(allocations, capacity, heuristic, items)
+    activate WMS
+    
+    WMS -> TPS : packAllocations(allocations, capacity, heuristic, items)
+    activate TPS
+    
+    create PP
+    TPS -> PP : create(heuristic, capacity)
+    
+    TPS -> TPS : validateInputs(allocations, capacity, items)
+    
+    alt invalid inputs
+        TPS -> PP : addNote(error)
+        TPS --> WMS : pickingPlan
+    else valid inputs
+        TPS -> TPS : calculateWeights(allocations, items)
+        activate TPS
+        
+        loop for each allocation
+            TPS -> TPS : getCachedWeight(sku)
+            
+            alt weight not cached
+                TPS -> TPS : getItemWeight(sku)
+                TPS -> TPS : cacheWeight(sku, weight)
+            end
+            
+            create WA
+            TPS -> WA : create(allocation, totalWeight)
+        end
+        
+        TPS --> TPS : weightedAllocations
+        deactivate TPS
+        
+        alt heuristic is FFD or BFD
+            TPS -> TPS : sortByWeightDescending(weightedAllocations)
+        end
+        
+        loop for each weighted allocation
+            TPS -> TPS : packAllocation(allocation, plan, heuristic)
+            activate TPS
+            
+            TPS -> TPS : findSuitableTrolley(allocation, plan)
+            
+            alt suitable trolley found (FF, FFD)
+                TPS -> TR : addAllocation(allocation)
+                activate TR
+                TR -> TR : updateCurrentWeight()
+                TR --> TPS : success
+                deactivate TR
+                
+            else no suitable trolley (create new)
+                create TR
+                TPS -> TR : create(capacity)
+                TPS -> PP : addTrolley(trolley)
+                TPS -> TR : addAllocation(allocation)
+                
+            else allocation too heavy (split)
+                TPS -> TPS : splitAllocation(allocation, capacity)
+                
+                loop for each split portion
+                    create TR
+                    TPS -> TR : create(capacity)
+                    TPS -> PP : addTrolley(trolley)
+                    TPS -> TR : addAllocation(portion)
+                end
+            end
+            
+            deactivate TPS
+        end
+        
+        TPS -> PP : calculateStatistics()
+        activate PP
+        PP -> PP : calculateAverageUtilization()
+        PP --> TPS : statistics calculated
+        deactivate PP
+        
+        TPS --> WMS : pickingPlan
+    end
+    
+    deactivate TPS
+    
+    WMS --> MC : pickingPlan
+    deactivate WMS
+    
+    MC -> PP : getTrolleys()
+    activate PP
+    PP --> MC : trolleys
+    deactivate PP
+    
+    MC -> PP : getAverageUtilization()
+    activate PP
+    PP --> MC : utilization
+    deactivate PP
+    
+    MC -> MC : displayPackingResults()
+    
+    MC --> PICK : display trolley assignments and statistics
+end
+
+deactivate MC
+
+@enduml

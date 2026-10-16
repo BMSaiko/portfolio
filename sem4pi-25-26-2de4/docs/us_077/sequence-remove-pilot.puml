@@ -1,0 +1,62 @@
+@startuml
+title Sequence Diagram - US077: Remove Pilot
+
+actor "Company Collaborator" as Collab
+participant "RemovePilotUI" as UI
+participant "RemovePilotController" as Controller
+participant "AuthService" as Auth
+participant "PilotRepository" as PilotRepo
+participant "FlightPlanRepository" as FlightPlanRepo
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "Pilot" as Aggregate
+
+activate UI
+
+' --- 1. Selection Phase ---
+UI -> Controller: activePilotsOfMyCompany()
+activate Controller
+Controller -> PilotRepo: findByCompany(company)
+activate PilotRepo
+PilotRepo --> Controller: pilots (List<Pilot>)
+deactivate PilotRepo
+Controller --> UI: activePilots
+deactivate Controller
+
+Collab -> UI: selects Pilot to remove
+UI -> Collab: asks for confirmation
+
+' --- 2. Deactivation Phase ---
+Collab -> UI: confirms (Y)
+UI -> Controller: deactivatePilot(pilot)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(AIR_TRANSPORT_COMPANY_COLLABORATOR)
+
+Controller -> FlightPlanRepo: countByPilot(pilot)
+activate FlightPlanRepo
+FlightPlanRepo --> Controller: count (long)
+deactivate FlightPlanRepo
+
+alt count > 0
+    Controller --> UI: throw IllegalStateException
+    UI --> Collab: error: "Cannot deactivate a pilot with assigned flight plans."
+else count == 0
+    Controller -> Aggregate: deactivate()
+    activate Aggregate
+    Aggregate -> Aggregate: setStatus(INACTIVE)
+    Aggregate --> Controller: ok
+    deactivate Aggregate
+
+    Controller -> PilotRepo: save(pilot)
+    activate PilotRepo
+    PilotRepo --> Controller: savedPilot
+    deactivate PilotRepo
+
+    Controller --> UI: savedPilot
+    UI --> Collab: success: "Pilot deactivated successfully!"
+end
+
+deactivate Controller
+deactivate UI
+@enduml

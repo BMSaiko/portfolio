@@ -1,0 +1,2453 @@
+INSERT INTO COUNTRY (
+    COUNTRYCODE,
+    NAME
+) VALUES (
+    'PO',
+    'Portugal'
+);
+
+INSERT INTO CLIENT (
+    NIF,
+    NAME,
+    EMAIL,
+    PHONE,
+    IDCLIENT,
+    CID,
+    STATUS
+) VALUES (
+    'PT501245987',
+    'Carvalho & Carvalho, Lda',
+    'idont@care.com',
+    0035183405,
+    456,
+    '01',
+    1
+);
+
+INSERT INTO ADDRESS (
+    ADDRESS,
+    ZIP,
+    TOWN,
+    COUNTRYCODE,
+    CLIENTNIF
+) VALUES (
+    'Tv. Augusto Lessa 23',
+    '4200-047',
+    'Porto',
+    'PO',
+    'PT501245987'
+);
+
+INSERT INTO COUNTRY (
+    COUNTRYCODE,
+    NAME
+) VALUES (
+    'PO',
+    'Portugal'
+);
+
+INSERT INTO CLIENT (
+    NIF,
+    NAME,
+    EMAIL,
+    PHONE,
+    IDCLIENT,
+    CID,
+    STATUS
+) VALUES (
+    'PT501245488',
+    'Tudo para a casa, Lda',
+    'me@neither.com',
+    0035183405,
+    785,
+    '01',
+    1
+);
+
+INSERT INTO ADDRESS (
+    ADDRESS,
+    ZIP,
+    TOWN,
+    COUNTRYCODE,
+    CLIENTNIF
+) VALUES (
+    'R. Dr. Barros 93',
+    '4465-219',
+    'São Mamede de Infesta',
+    'PO',
+    'PT501245488'
+);
+
+INSERT INTO COUNTRY (
+    COUNTRYCODE,
+    NAME
+) VALUES (
+    'PO',
+    'Portugal'
+);
+
+INSERT INTO CLIENT (
+    NIF,
+    NAME,
+    EMAIL,
+    PHONE,
+    IDCLIENT,
+    CID,
+    STATUS
+) VALUES (
+    'PT501242417',
+    'Sair de Cena',
+    'some@email.com',
+    0035183405,
+    657,
+    '01',
+    1
+);
+
+INSERT INTO ADDRESS (
+    ADDRESS,
+    ZIP,
+    TOWN,
+    COUNTRYCODE,
+    CLIENTNIF
+) VALUES (
+    'EDIFICIO CRISTAL lj18, R. António Correia de Carvalho 88',
+    '4400-023',
+    'Vila Nova de Gaia',
+    'PO',
+    'PT501242417'
+);
+
+INSERT INTO COUNTRY (
+    COUNTRYCODE,
+    NAME
+) VALUES (
+    'CZ',
+    'Czechia'
+);
+
+INSERT INTO CLIENT (
+    NIF,
+    NAME,
+    EMAIL,
+    PHONE,
+    IDCLIENT,
+    CID,
+    STATUS
+) VALUES (
+    'CZ6451237810',
+    'U Fleku',
+    'some.random@email.cz',
+    0042012345,
+    348,
+    '01',
+    1
+);
+
+INSERT INTO ADDRESS (
+    ADDRESS,
+    ZIP,
+    TOWN,
+    COUNTRYCODE,
+    CLIENTNIF
+) VALUES (
+    'Křemencova 11',
+    '110 00',
+    'Nové Město',
+    'CZ',
+    'CZ6451237810'
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5647,
+    'Disc cutting'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4578',
+    5647
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5647
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5647
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5649,
+    'Initial pot base pressing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5649
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5649
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5651,
+    'Final pot base pressing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5651
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5651
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5653,
+    'Pot base finishing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'C5637',
+    5653
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5655,
+    'Lid pressing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5655
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5655
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5657,
+    'Lid finishing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'C5637',
+    5657
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5659,
+    'Pot handles riveting'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'S3271',
+    5659
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5661,
+    'Lid handle screw'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'T3452',
+    5661
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5663,
+    'Pot test and packaging'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'K3675',
+    5663
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5665,
+    'Handle welding'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'D9123',
+    5665
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5667,
+    'Lid polishing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'Q3547',
+    5667
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5669,
+    'Pot base polishing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'Q3547',
+    5669
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5671,
+    'Teflon painting'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'Q5478',
+    5671
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5681,
+    'Initial pan base pressing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5681
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5681
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5682,
+    'Final pan base pressing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4588',
+    5682
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'A4598',
+    5682
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5683,
+    'Pan base finishing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'C5637',
+    5683
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5685,
+    'Handle gluing'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'D9123',
+    5685
+);
+
+INSERT INTO OPERATIONTYPE (
+    OTID,
+    DESCRIPTION
+) VALUES (
+    5688,
+    'Pan test and packaging'
+);
+
+INSERT INTO WSTYPES_OPERATIONTYPES (
+    WTID,
+    OPERATIONTYPEOTID
+) VALUES (
+    'K3675',
+    5688
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN12344A21',
+    'Screw M6 35 mm'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN12344A21'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN52384R50',
+    '300x300 mm 5 mm stainless steel sheet'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN52384R50'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN52384R10',
+    '300x300 mm 1 mm stainless steel sheet'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN52384R10'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN18544A21',
+    'Rivet 6 mm'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN18544A21'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN18544C21',
+    'Stainless steel handle model U6'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN18544C21'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN18324C54',
+    'Stainless steel handle model R12'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN18324C54'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN52384R45',
+    '250x250 mm 5mm stainless steel sheet'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN52384R45'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN52384R12',
+    '250x250 mm 1mm stainless steel sheet'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN52384R12'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN18324C91',
+    'Stainless steel handle model S26'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN18324C91'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN18324C51',
+    'Stainless steel handle model R11'
+);
+
+INSERT INTO COMPONENT (
+    PARTID
+) VALUES (
+    'PN18324C51'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'La Belle 22 5l pot',
+    130,
+    'AS12945T22'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945T22',
+    '5l 22 cm aluminium and teflon non stick pot'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 22 5l pot',
+    125,
+    'AS12945S22'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945S22',
+    '5l 22 cm stainless steel pot'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 22 5l pot bottom',
+    125,
+    'AS12946S22'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12946S22',
+    '5l 22 cm stainless steel pot bottom'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 22 lid',
+    145,
+    'AS12947S22'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12947S22',
+    '22 cm stainless steel lid'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 20 3l pot',
+    125,
+    'AS12945S20'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945S20',
+    '3l 20 cm stainless steel pot'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 20 3l pot bottom',
+    125,
+    'AS12946S20'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12946S20',
+    '3l 20 cm stainless steel pot bottom'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 20 lid',
+    145,
+    'AS12947S20'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12947S20',
+    '20 cm stainless steel lid'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 17 2l pot',
+    125,
+    'AS12945S17'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945S17',
+    '2l 17 cm stainless steel pot'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 17 2l sauce pan',
+    132,
+    'AS12945P17'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945P17',
+    '2l 17 cm stainless steel souce pan'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro 17 lid',
+    145,
+    'AS12945S48'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945S48',
+    '17 cm stainless steel lid'
+);
+
+INSERT INTO PRODUCT (
+    NAME,
+    PFID,
+    PARTID
+) VALUES (
+    'Pro Clear 17 lid',
+    146,
+    'AS12945G48'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'AS12945G48',
+    '17 cm glass lid'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A01'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A01',
+    '250 mm 5 mm stailess steel disc'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A02'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A02',
+    '220 mm pot base phase 1'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A03'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A03',
+    '220 mm pot base phase 2'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A04'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A04',
+    '220 mm pot base final'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A01'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A01',
+    '250 mm 1 mm stailess steel disc'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A02'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A02',
+    '220 mm lid pressed'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A03'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A03',
+    '220 mm lid polished'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A04'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A04',
+    '220 mm lid with handle'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A32'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A32',
+    '200 mm pot base phase 1'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A33'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A33',
+    '200 mm pot base phase 2'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12945A34'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12945A34',
+    '200 mm pot base final'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A32'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A32',
+    '200 mm lid pressed'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A33'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A33',
+    '200 mm lid polished'
+);
+
+INSERT INTO INTERMEDIATEPRODUCT (
+    PARTID
+) VALUES (
+    'IP12947A34'
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'IP12947A34',
+    '200 mm lid with handle'
+);
+
+INSERT INTO RAWMATERIAL (
+    PARTID,
+    UNITID
+) VALUES (
+    'PN94561L67',
+    NULL
+);
+
+INSERT INTO PART (
+    PARTID,
+    DESCRIPTION
+) VALUES (
+    'PN94561L67',
+    'Coolube 2210XP'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12946S22',
+    'IP12945A01'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    100,
+    'Operation 100',
+    5647,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    100,
+    'AS12946S22',
+    103
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    100,
+    'AS12946S22',
+    'PN52384R50'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A01',
+    100,
+    'AS12946S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    103,
+    'Operation 103',
+    5649,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    103,
+    'AS12946S22',
+    112
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    103,
+    'AS12946S22',
+    'IP12945A01'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    103,
+    'AS12946S22',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A02',
+    103,
+    'AS12946S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    112,
+    'Operation 112',
+    5651,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    112,
+    'AS12946S22',
+    114
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    112,
+    'AS12946S22',
+    'IP12945A02'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    112,
+    'AS12946S22',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A03',
+    112,
+    'AS12946S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    114,
+    'Operation 114',
+    5653,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    114,
+    'AS12946S22',
+    115
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    114,
+    'AS12946S22',
+    'IP12945A03'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A04',
+    114,
+    'AS12946S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    115,
+    'Operation 115',
+    5659,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    115,
+    'AS12946S22',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    115,
+    'AS12946S22',
+    'IP12945A04'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    2,
+    115,
+    'AS12946S22',
+    'PN18544C21'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12946S22',
+    115,
+    'AS12946S22'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12947S22',
+    'IP12947A01'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    120,
+    'Operation 120',
+    5647,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    120,
+    'AS12947S22',
+    121
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    120,
+    'AS12947S22',
+    'PN52384R10'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A01',
+    120,
+    'AS12947S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    121,
+    'Operation 121',
+    5655,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    121,
+    'AS12947S22',
+    122
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    121,
+    'AS12947S22',
+    'IP12947A01'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    121,
+    'AS12947S22',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A02',
+    121,
+    'AS12947S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    122,
+    'Operation 122',
+    5657,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    122,
+    'AS12947S22',
+    123
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    122,
+    'AS12947S22',
+    'IP12947A02'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A03',
+    122,
+    'AS12947S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    123,
+    'Operation 123',
+    5661,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    123,
+    'AS12947S22',
+    124
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    123,
+    'AS12947S22',
+    'IP12947A03'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    123,
+    'AS12947S22',
+    'PN18324C54'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A04',
+    123,
+    'AS12947S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    124,
+    'Operation 124',
+    5667,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    124,
+    'AS12947S22',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    124,
+    'AS12947S22',
+    'IP12947A04'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12947S22',
+    124,
+    'AS12947S22'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12945S22',
+    'AS12945S22'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    130,
+    'Operation 130',
+    5663,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    130,
+    'AS12945S22',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    130,
+    'AS12945S22',
+    'AS12947S22'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    130,
+    'AS12945S22',
+    'AS12946S22'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12945S22',
+    130,
+    'AS12945S22'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12946S20',
+    'IP12945A01'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    150,
+    'Operation 150',
+    5647,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    150,
+    'AS12946S20',
+    151
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    150,
+    'AS12946S20',
+    'PN52384R50'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A01',
+    150,
+    'AS12946S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    151,
+    'Operation 151',
+    5649,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    151,
+    'AS12946S20',
+    152
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    151,
+    'AS12946S20',
+    'IP12945A01'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    151,
+    'AS12946S20',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A32',
+    151,
+    'AS12946S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    152,
+    'Operation 152',
+    5651,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    152,
+    'AS12946S20',
+    153
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    152,
+    'AS12946S20',
+    'IP12945A32'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    152,
+    'AS12946S20',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A33',
+    152,
+    'AS12946S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    153,
+    'Operation 153',
+    5653,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    153,
+    'AS12946S20',
+    154
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    153,
+    'AS12946S20',
+    'IP12945A33'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12945A34',
+    153,
+    'AS12946S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    154,
+    'Operation 154',
+    5659,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    154,
+    'AS12946S20',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    154,
+    'AS12946S20',
+    'IP12945A34'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    2,
+    154,
+    'AS12946S20',
+    'PN18544C21'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12946S20',
+    154,
+    'AS12946S20'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12947S20',
+    'IP12947A01'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    160,
+    'Operation 160',
+    5647,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    160,
+    'AS12947S20',
+    161
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    160,
+    'AS12947S20',
+    'PN52384R10'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A01',
+    160,
+    'AS12947S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    161,
+    'Operation 161',
+    5655,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    161,
+    'AS12947S20',
+    162
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    161,
+    'AS12947S20',
+    'IP12947A01'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    5,
+    161,
+    'AS12947S20',
+    'PN94561L67'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A32',
+    161,
+    'AS12947S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    162,
+    'Operation 162',
+    5657,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    162,
+    'AS12947S20',
+    163
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    162,
+    'AS12947S20',
+    'IP12947A32'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A33',
+    162,
+    'AS12947S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    163,
+    'Operation 163',
+    5661,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    163,
+    'AS12947S20',
+    164
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    163,
+    'AS12947S20',
+    'IP12947A33'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    163,
+    'AS12947S20',
+    'PN18324C51'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'IP12947A34',
+    163,
+    'AS12947S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    164,
+    'Operation 164',
+    5667,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    164,
+    'AS12947S20',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    164,
+    'AS12947S20',
+    'IP12947A34'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12947S20',
+    164,
+    'AS12947S20'
+);
+
+INSERT INTO BOO (
+    BOOID,
+    PARTID
+) VALUES (
+    'AS12945S20',
+    'AS12945S20'
+);
+
+INSERT INTO OPERATION (
+    OPID,
+    NAME,
+    OPERATIONTYPEOTID,
+    EXPECTEDEXECUTIONTIME
+) VALUES (
+    170,
+    'Operation 170',
+    5663,
+    0
+);
+
+INSERT INTO BOO_OPERATION (
+    OPID,
+    BOOID,
+    NEXTOPID
+) VALUES (
+    170,
+    'AS12945S20',
+    NULL
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    170,
+    'AS12945S20',
+    'AS12946S20'
+);
+
+INSERT INTO PARTIN (
+    QUANTITYIN,
+    OPID,
+    BOOID,
+    PARTID
+) VALUES (
+    1,
+    170,
+    'AS12945S20',
+    'AS12947S20'
+);
+
+INSERT INTO PARTOUT (
+    QUANTITY,
+    PARTID,
+    OPID,
+    BOOID
+) VALUES (
+    1,
+    'AS12945S20',
+    170,
+    'AS12945S20'
+);
+
+INSERT INTO SUPPLIER (
+    SUPPLIERID,
+    NAME
+) VALUES (
+    12345,
+    NULL
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18544C21',
+    12345,
+    20,
+    1.25,
+    '2023-10-01',
+    NULL,
+    20
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C54',
+    12345,
+    10,
+    1.70,
+    '2023-10-01',
+    '2024-02-29',
+    10
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C54',
+    12345,
+    16,
+    1.80,
+    '2024-04-01',
+    NULL,
+    16
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C51',
+    12345,
+    30,
+    1.90,
+    '2023-07-01',
+    '2024-03-31',
+    30
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C51',
+    12345,
+    20,
+    1.90,
+    '2024-04-01',
+    NULL,
+    20
+);
+
+INSERT INTO SUPPLIER (
+    SUPPLIERID,
+    NAME
+) VALUES (
+    12298,
+    NULL
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18544C21',
+    12298,
+    10,
+    1.35,
+    '2023-09-01',
+    NULL,
+    10
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C54',
+    12298,
+    10,
+    1.80,
+    '2023-08-01',
+    '2024-01-29',
+    10
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C54',
+    12298,
+    20,
+    1.75,
+    '2024-02-15',
+    NULL,
+    20
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'PN18324C51',
+    12298,
+    40,
+    1.80,
+    '2023-08-01',
+    '2024-05-31',
+    40
+);
+
+INSERT INTO PLACEDORDER (
+    PARTID,
+    SUPPLIERID,
+    QUANTITY,
+    UNITCOST,
+    DATESTART,
+    DATEEND,
+    MINIMUMORDERSIZE
+) VALUES (
+    'AS12945G48',
+    12298,
+    10,
+    10.25,
+    '2023-07-01',
+    NULL,
+    10
+);

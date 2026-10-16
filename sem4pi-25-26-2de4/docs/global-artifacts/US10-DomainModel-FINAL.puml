@@ -1,0 +1,255 @@
+@startuml
+allowmixing
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+' --- Identity & Access ---
+package "User Aggregate" {
+    class User <<entity>><<root>> {
+        name
+        phoneNumber
+        status
+        skillsAssessmentDate
+    }
+    class Email <<value object>> {
+        address
+    }
+    class SecurityClearance <<value object>> {
+        expirationDate
+    }
+    class Role <<value object>> {
+    }
+    enum RoleType {
+        ADMIN
+        BACKOFFICE_OPERATOR
+        ATCC
+        PILOT
+        FLIGHT_CONTROL_OPERATOR
+        WEATHER_PERSON
+    }
+}
+
+' --- Organisation ---
+package "Organisation Aggregate" {
+    class AirTransportCompany <<entity>><<root>> {
+        name
+        iataCode
+        icaoCode
+    }
+    class Collaborator <<entity>> {
+        position
+    }
+    class Pilot <<entity>> {
+    }
+}
+
+package "Maker Aggregate" {
+ class Maker <<entity>><<root>> {
+        name
+        country
+    }
+}
+' --- Fleet ---
+package "AircraftModel Aggregate" {
+   class AircraftModel <<entity>><<root>> {
+       modelId
+       emptyWeight
+       MTOW
+       MZFW
+       maxFuelCapacity
+       serviceCeiling
+       cruiseSpeed
+       wingArea
+       wingSpan
+       aspectRatio
+       oswaldFactor
+       dragCoefficient
+       liftCoefficient
+       maxPassengerCapacity
+       numberOfEngines
+       maxRange
+   }
+
+    enum AircraftType {
+        PASSENGER
+        CARGO
+        MIXED
+    }
+}
+
+package "EngineModel Aggregate" {
+    class EngineModel <<entity>><<root>> {
+        name
+        thrustAtStandstill
+        thrustAtCruiseSpeed
+        TSFC
+    }
+
+    enum EngineType {
+        TURBOPROP
+        TURBOFAN
+        TURBOJET
+        RAMJET
+        ELECTRIC_PROPELLER
+    }
+
+    enum FuelType {
+        JET_A1
+        JET_A
+        AVGAS
+    }
+}
+
+package "Aircraft Aggregate" {
+    class Aircraft <<entity>><<root>> {
+        registrationNumber
+        numberOfCrewElements
+    }
+    class CabinConfiguration <<value object>> {
+        firstClassSeats
+        businessClassSeats
+        economyClassSeats
+    }
+
+    Enum OperationalStatus {
+            ACTIVE
+            DECOMMISSIONED
+    }
+}
+
+' --- Infrastructure ---
+package "AirControlArea Aggregate" {
+    class AirControlArea <<entity>><<root>>{
+        areaCode
+        name
+        minimumFuelRequired
+    }
+
+    class GeoBoundary <<value object>> {
+            northLatitude
+            southLatitude
+            eastLongitude
+            westLongitude
+    }
+}
+package "Airport Aggregate" {
+    class Airport <<entity>><<root>> {
+        name
+        town
+        country
+        iataCode
+        icaoCode
+    }
+    class Coordinates <<value object>> {
+        latitude
+        longitude
+        altitude
+    }
+}
+
+' ---Flight ---
+package "Flight Aggregate" {
+    class FlightPlan <<entity>><<root>> {
+            departureDateTime
+            totalFuelLoad
+            passengerCount
+            cargoWeight
+    }
+
+    class Flight <<entity>> {
+        departureDay
+        scheduledArrival
+    }
+
+    enum FlightType {
+        REGULAR
+        CHARTER
+    }
+
+    class FlightDesignator <<value object>> {
+        designator
+    }
+}
+
+package "FlightRoute Aggregate" {
+
+    class FlightRoute <<entity>><<root>> {
+        name
+        activeUntil
+    }
+
+    Enum FlightRouteStatus {
+        ACTIVE
+        INACTIVE
+    }
+}
+
+' --- Weather ---
+package "Weather Aggregate" {
+    class WeatherData <<entity>><<root>> {
+        date
+        windSpeed
+        windDirection
+        temperature
+        pressure
+        visibility
+    }
+    class WeatherSource <<entity>> {
+        provider
+        format
+    }
+}
+
+' --- Relationships ---
+
+User <|-- Collaborator
+Collaborator <|-- Pilot
+
+User "1" *-- "1" Email
+User "1" *-- "1" SecurityClearance
+User "1" *-- "1..*" Role
+Role *-- RoleType
+
+AirTransportCompany "1" *-- "0..*" Collaborator
+AirTransportCompany "1" --> "0..*" Aircraft : "owns"
+AirTransportCompany "1" --> "0..*" FlightRoute
+
+Maker "1" --> "0..*" AircraftModel : "manufactures"
+Maker "1" --> "0..*" EngineModel : "manufactures"
+
+AircraftModel "1" --> "1..*" EngineModel : "certified engines"
+AircraftModel "1" *-- "1" AircraftType : "classified as"
+
+EngineModel "1" *-- "1" EngineType : "classified as"
+EngineModel "1" *-- "1" FuelType : "uses"
+
+Aircraft "1" *-- "1" CabinConfiguration : "has"
+Aircraft "1" *-- "1" OperationalStatus : "has"
+Aircraft --> "1" AircraftModel
+Aircraft "1" --> "1" EngineModel : "equipped with"
+
+AirControlArea "1" *-- "1" GeoBoundary : "bounded by"
+AirControlArea "1" --> "0..*" Collaborator : employs
+
+Airport "0..*" --> "1" AirControlArea : belongs to
+Airport "1" *-- "1" Coordinates : "located at"
+
+FlightRoute --> "1" Airport : origin
+FlightRoute --> "1" Airport : destination
+FlightRoute "1" *-- "1" FlightRouteStatus : "has"
+
+FlightPlan "*" -- "1" Flight
+FlightPlan "0..*" --> "1" Pilot : assigned pilot
+FlightPlan "0..*" --> "1" Aircraft : assigned aircraft
+
+Flight "1" *-- "1" FlightDesignator
+Flight --> "1" FlightRoute
+Flight "1" *-- "1" FlightType : "typed as"
+
+WeatherData "1" *-- "1" WeatherSource
+WeatherData --> "1" AirControlArea : valid for
+
+Pilot "0..*" --> "1..*" AircraftModel : certified for
+
+
+@enduml

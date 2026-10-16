@@ -1,0 +1,46 @@
+@startuml USLP09 - Domain Model Excerpt
+
+hide circle
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+left to right direction
+
+package "Infrastructure" {
+  class "Station" as Station {
+    name
+  }
+}
+
+package "Operations" {
+  class Train {
+    code
+  }
+
+  class Locomotive {
+    power
+    type
+    status
+  }
+
+  class Wagon {
+    tare
+    capacity
+    status
+  }
+}
+
+package "Roles" {
+  class "Traffic Manager" as TrafficManager {
+  }
+}
+
+
+Train "1" -- "1..*" Locomotive : "formed by"
+Train "1" -- "0..*" Wagon : "pulls"
+
+Locomotive "0..*" -- "0..1" Station : "parked at"
+Wagon "0..*" -- "0..1" Station : "parked at"
+
+TrafficManager "1" -- "0..*" Train : "assembles"
+
+@enduml

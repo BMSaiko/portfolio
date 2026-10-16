@@ -1,0 +1,33 @@
+@startuml US06-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US06: As a Player, I want to upgrade a station
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":System" as SYSTEM
+
+activate PLAYER
+
+PLAYER -> SYSTEM : select station
+activate SYSTEM
+
+SYSTEM --> PLAYER : show available upgrades
+deactivate SYSTEM
+
+
+PLAYER -> SYSTEM : choose upgrade
+
+activate SYSTEM
+
+SYSTEM --> PLAYER : validate upgrade
+SYSTEM --> PLAYER : apply upgrade
+
+SYSTEM --> PLAYER : upgrade confirmed
+
+deactivate SYSTEM
+deactivate PLAYER
+@enduml

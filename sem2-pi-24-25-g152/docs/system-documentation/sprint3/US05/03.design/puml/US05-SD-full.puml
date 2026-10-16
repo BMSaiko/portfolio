@@ -1,0 +1,171 @@
+@startuml US05-SD
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Player" as PLAYER
+participant ":BuildStationUI" as UI
+participant ":BuildStationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "mapRepository\n:MapRepository" as MAP_REPO
+participant "currentMap\n:Map" as CURRENT_MAP
+participant "ApplicationSession" as APP_SESSION
+participant "appSession\n:ApplicationSession" as APP_SESSION_SINGLETON
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+participant "player\n:Player" as PLAYER_OBJ
+participant "stationRepository\n:StationRepository" as STATION_REPO
+participant "StationFactoryProvider" as FACTORY_PROVIDER
+participant "factory\n:StationFactory" as STATION_FACTORY
+participant "station\n:Station" as STATION
+participant "StationMapper" as MAPPER
+
+activate PLAYER
+
+    PLAYER -> UI : asks to build a station
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : getAvailableStationTypes()
+        activate CTRL
+            CTRL --> UI : stationTypes (depot, passenger, terminal)
+        deactivate CTRL
+
+        UI -> CTRL : getPlayerInfo()
+        activate CTRL
+            CTRL -> APP_SESSION : getInstance()
+            activate APP_SESSION
+                APP_SESSION --> CTRL : appSession
+            deactivate APP_SESSION
+
+            CTRL -> APP_SESSION_SINGLETON : getCurrentSession()
+            activate APP_SESSION_SINGLETON
+                APP_SESSION_SINGLETON --> CTRL : currentSession
+            deactivate APP_SESSION_SINGLETON
+
+            CTRL -> CURRENT_SESSION : getPlayer()
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : player
+            deactivate CURRENT_SESSION
+
+            CTRL --> UI : playerDTO
+        deactivate CTRL
+
+        UI -> UI : displayPlayerInfo(playerDTO)
+        UI -> UI : displayStationTypes()
+        UI --> PLAYER : shows station types and player info, asks to select station type
+    deactivate UI
+
+    PLAYER -> UI : selects a station type
+    activate UI
+        UI -> CTRL : getCurrentMap()
+        activate CTRL
+            CTRL -> REPOS : getInstance()
+            activate REPOS
+                REPOS --> CTRL: repositories
+            deactivate REPOS
+
+            CTRL -> REPOS_SINGLETON : getMapRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL: mapRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> MAP_REPO : getCurrentMap()
+            activate MAP_REPO
+                MAP_REPO --> CTRL : currentMap
+            deactivate MAP_REPO
+
+            CTRL --> UI : currentMap
+        deactivate CTRL
+
+        UI --> PLAYER : requests position (X,Y coordinates)
+    deactivate UI
+
+    PLAYER -> UI : inputs position (X,Y)
+    activate UI
+        UI -> UI : getStationCreationInput()
+        UI --> CTRL : stationCreationRequestDTO
+        activate CTRL
+
+
+            CTRL -> CTRL : validatePosition(stationCreationRequestDTO)
+            activate CTRL
+                CTRL -> MAP_REPO : validatePosition(x, y, stationType)
+                activate MAP_REPO
+                    MAP_REPO --> CTRL : isValid (boolean)
+                deactivate MAP_REPO
+
+                CTRL -> CTRL : generateStationName(x, y)
+                activate CTRL
+                    CTRL -> MAP_REPO : findClosestCity(x, y)
+                    activate MAP_REPO
+                        MAP_REPO --> CTRL : closestCity
+                    deactivate MAP_REPO
+                    CTRL --> CTRL : proposedName (e.g. "Porto Terminal")
+                deactivate CTRL
+                CTRL --> CTRL : ValidationResultDTO(true, null, proposedName)
+
+                CTRL --> CTRL : validationResult
+            deactivate CTRL
+
+            CTRL --> UI : validationResult
+        deactivate CTRL
+
+        UI -> UI : displayValidationResult(validationResult)
+        UI --> PLAYER : shows proposed name and asks for confirmation
+    deactivate UI
+
+    PLAYER -> UI : confirms name (or provides custom name)
+    activate UI
+        UI -> UI : update stationCreationRequestDTO with final name
+
+        UI -> CTRL : buildStation(stationCreationRequestDTO)
+        activate CTRL
+            CTRL -> CTRL : canAffordStation(stationType, budget)
+            activate CTRL
+                CTRL --> CTRL : canAfford (boolean)
+            deactivate CTRL
+
+            CTRL -> FACTORY_PROVIDER : getFactory(stationType)
+            activate FACTORY_PROVIDER
+                FACTORY_PROVIDER --> CTRL : factory
+            deactivate FACTORY_PROVIDER
+
+            CTRL -> STATION_FACTORY : createStation(x, y, name, currentMap)
+            activate STATION_FACTORY
+                STATION_FACTORY --> STATION** : create()
+                STATION_FACTORY --> CTRL : station
+            deactivate STATION_FACTORY
+
+            CTRL -> REPOS_SINGLETON : getStationRepository()
+            activate REPOS_SINGLETON
+                REPOS_SINGLETON --> CTRL : stationRepository
+            deactivate REPOS_SINGLETON
+
+            CTRL -> STATION_REPO : addStation(station)
+            activate STATION_REPO
+                STATION_REPO --> CTRL : success
+            deactivate STATION_REPO
+
+            CTRL -> PLAYER_OBJ : updateBudget(-cost)
+            activate PLAYER_OBJ
+                PLAYER_OBJ --> CTRL : success
+            deactivate PLAYER_OBJ
+
+            CTRL -> MAPPER : toDTO(station)
+            activate MAPPER
+                MAPPER --> CTRL : stationResponseDTO
+            deactivate MAPPER
+
+            CTRL --> UI : stationResponseDTO
+        deactivate CTRL
+
+        UI -> UI : displayStationCreated(stationResponseDTO)
+        UI --> PLAYER : displays operation success with station details
+    deactivate UI
+
+deactivate PLAYER
+@enduml

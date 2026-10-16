@@ -1,0 +1,29 @@
+@startuml USEI07-ssd
+
+autonumber
+
+actor "Data Engineer" as Engineer
+participant ":System" as System
+
+activate Engineer
+
+    Engineer -> System : requests balanced 2D-tree construction
+    activate System
+    
+        System --> Engineer : requests station dataset
+    deactivate System
+    
+    Engineer -> System : provides stations data\n(lat, lon, name, country, timezone, flags)
+    activate System
+    
+        System -> System : validates station data\n(non-empty name, valid coordinates, etc.)
+        System -> System : filters invalid stations
+        System -> System : builds balanced KD-tree\nusing median partitioning
+        System -> System : handles coordinate duplicates\nby sorting stations by name
+        
+        System --> Engineer : returns tree statistics\n(size, height, balance ratio)
+    deactivate System
+
+deactivate Engineer
+
+@enduml

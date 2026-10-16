@@ -1,0 +1,81 @@
+@startuml US04-SD-split
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US04 Create a Scenario for a Selected Map - Split
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant "selectedMap:Map" as MAP
+participant "scenario:Scenario" as SCENARIO
+
+
+activate EDITOR
+
+    EDITOR -> UI : asks to create a scenario
+    activate UI
+        UI -> CTRL : getCurrentUserRole()
+        activate CTRL
+            CTRL --> UI : roles
+        deactivate CTRL
+        
+        UI -> UI : validateRole("Editor")
+        
+        ref over UI, CTRL
+            Get Maps List
+        end ref
+        
+        UI --> EDITOR : shows map list and asks to select one
+    deactivate UI
+            EDITOR -> UI : selects a map
+
+    activate UI
+        UI --> EDITOR : requests data (name, start time, end time)
+
+    deactivate UI
+        EDITOR -> UI : types requested data
+
+    activate UI        
+        ref over UI, CTRL
+            Get Locomotive Types List
+        end ref
+        
+        UI --> EDITOR : shows locomotive types and asks to select
+    deactivate UI
+
+    EDITOR -> UI : selects locomotive types
+    activate UI        
+        ref over UI, CTRL
+            Get Industry Types List
+        end ref
+        
+        UI --> EDITOR : shows industry types and asks to select
+    deactivate UI
+        EDITOR -> UI : selects industry types
+    activate UI        
+        UI --> EDITOR : asks for historical events
+    deactivate UI
+
+    EDITOR -> UI : adds historical events
+    activate UI        
+        UI --> EDITOR : shows all data and requests confirmation
+    deactivate UI
+        EDITOR -> UI : confirms data
+    activate UI
+        UI -> UI : collectScenarioData()
+        note right : Creates CreateScenarioRequestDTO
+        
+        ref over UI, CTRL, MAP, SCENARIO
+            Create Scenario
+        end ref
+        
+        UI --> EDITOR : displays operation success
+    deactivate UI
+
+deactivate EDITOR
+
+@enduml

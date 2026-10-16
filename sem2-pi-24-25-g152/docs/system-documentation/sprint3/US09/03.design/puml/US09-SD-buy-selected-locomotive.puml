@@ -1,0 +1,82 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuyLocomotiveController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "locomotiveRepository\n:LocomotiveRepository" as LOCOMOTIVE_REPO
+participant "ApplicationSession" as APP_SESSION
+participant "appSession\n:ApplicationSession" as APP_SESSION_SINGLETON
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+participant "locomotive\n:Locomotive" as LOCOMOTIVE
+
+autonumber 7
+-> CTRL : buyLocomotive(locomotiveId)
+
+autonumber 7.1
+activate CTRL
+    group Buy Selected Locomotive
+        CTRL -> REPOS : getInstance()
+        activate REPOS
+            REPOS --> CTRL: repositories
+        deactivate REPOS
+
+        CTRL -> REPOS_SINGLETON : getLocomotiveRepository()
+        activate REPOS_SINGLETON
+            REPOS_SINGLETON --> CTRL: locomotiveRepository
+        deactivate REPOS_SINGLETON
+
+        CTRL -> LOCOMOTIVE_REPO : getLocomotiveById(locomotiveId)
+        activate LOCOMOTIVE_REPO
+            LOCOMOTIVE_REPO --> CTRL : locomotive
+        deactivate LOCOMOTIVE_REPO
+
+        CTRL -> APP_SESSION : getInstance()
+        activate APP_SESSION
+            APP_SESSION --> CTRL : appSession
+        deactivate APP_SESSION
+
+        CTRL -> APP_SESSION_SINGLETON : getCurrentSession()
+        activate APP_SESSION_SINGLETON
+            APP_SESSION_SINGLETON --> CTRL : currentSession
+        deactivate APP_SESSION_SINGLETON
+
+        CTRL -> CURRENT_SESSION : getPlayer()
+        activate CURRENT_SESSION
+            CURRENT_SESSION --> CTRL : player
+        deactivate CURRENT_SESSION
+
+        CTRL -> LOCOMOTIVE : getPrice()
+        activate LOCOMOTIVE
+            LOCOMOTIVE --> CTRL : price
+        deactivate LOCOMOTIVE
+
+        CTRL -> CTRL : validatePurchase(player, locomotive)
+
+        ref over CTRL
+            Validate Purchase
+        end ref
+
+        CTRL --> CTRL : isValid (boolean)
+
+
+            CTRL -> CURRENT_SESSION : updateBudget(-price)
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : newBudget
+            deactivate CURRENT_SESSION
+
+            CTRL -> CURRENT_SESSION : addLocomotiveToFleet(locomotive)
+            activate CURRENT_SESSION
+                CURRENT_SESSION --> CTRL : success
+            deactivate CURRENT_SESSION
+
+
+
+    end
+
+    autonumber 8
+    <-- CTRL : success
+deactivate CTRL
+@enduml

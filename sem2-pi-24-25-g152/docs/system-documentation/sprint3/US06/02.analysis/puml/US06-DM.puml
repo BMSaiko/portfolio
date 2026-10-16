@@ -1,0 +1,60 @@
+@startuml US06-DM
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam padding 4
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam defaultTextAlignment center
+
+hide circle
+hide methods
+
+class Station {
+  name
+  type
+  buildings
+}
+
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
+}
+
+class Building {
+  name
+}
+
+class Player {
+  id
+  name
+}
+
+class RailwayNetwork {
+  stations
+}
+
+enum BuildingType {
+  TELEGRAPH
+  TELEPHONE
+  SMALL_CAFE
+  LARGE_CAFE
+  CUSTOMS
+  POST_OFFICE
+  SMALL_HOTEL
+  LARGE_HOTEL
+  SILO
+  LIQUID_STORAGE
+}
+
+Station "1" -- "0..*" Building: has
+Player "1" -- "0..*" Station: can upgrade
+RailwayNetwork "1" -- "0..*" Station: manages
+Station "1" --> "1" StationType : is classified as
+Building "1" --> "1" BuildingType : is of type
+
+@enduml

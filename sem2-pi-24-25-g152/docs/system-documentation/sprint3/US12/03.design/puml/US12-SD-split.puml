@@ -1,0 +1,67 @@
+@startuml US12-SD-split
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US12 Generate Cargoes Automatically - Split
+
+autonumber
+
+actor "Admin" as ADMIN
+participant ":CargoGenerationUI" as UI
+participant ":CargoGenerationController" as CTRL
+participant ":SimulationService" as SIMSERVICE
+participant ":CargoDistributionService" as DISTSERVICE
+
+activate ADMIN
+
+    ADMIN -> UI : requests to start cargo generation simulation
+    activate UI
+        ref over UI, CTRL
+            Get Stations List
+        end ref
+        
+        UI --> ADMIN : shows stations and asks for confirmation to start generation
+    deactivate UI
+    
+    ADMIN -> UI : confirms cargo generation
+    activate UI
+        UI -> CTRL : startCargoGeneration()
+        activate CTRL
+            CTRL -> SIMSERVICE : configureSimulation(/* params */)
+            activate SIMSERVICE
+                SIMSERVICE --> CTRL : configOK
+            deactivate SIMSERVICE
+
+            ref over CTRL
+                Get Stations List
+            end ref
+
+            loop for each station in stationList
+                ref over CTRL
+                    Generate Industry Cargoes
+                end ref
+
+                ref over CTRL
+                    Generate City Cargoes
+                end ref
+
+                ref over CTRL
+                    Store Cargoes
+                end ref
+            end
+
+            CTRL -> DISTSERVICE : calculateStatistics()
+            activate DISTSERVICE
+                DISTSERVICE --> CTRL : stats
+            deactivate DISTSERVICE
+
+            CTRL --> UI : cargoGenerationResultDTO
+        deactivate CTRL
+
+        UI --> ADMIN : displays operation success and statistics
+    deactivate UI
+
+deactivate ADMIN
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml USLP08-ssd
+
+autonumber
+actor "Freight Manager" as Manager
+participant ":System" as System
+
+activate Manager
+
+' 1. Start of Process
+Manager -> System : selects "Route Planner" option
+activate System
+System --> Manager : requests route type (Simple/Complex)
+deactivate System
+
+' 2. Select Route Type
+Manager -> System : selects route type
+activate System
+
+System --> Manager : displays list of Pending Freights
+deactivate System
+
+' 3. Select Freights
+Manager -> System : enters Freight ID(s)
+activate System
+
+System --> Manager : displays Route Plan (stations + operations)
+deactivate System
+
+' 4. Optional Assignment
+Manager -> System : assigns route to Train ID
+activate System
+
+System --> Manager : confirms assignment success
+deactivate System
+
+deactivate Manager
+
+@enduml

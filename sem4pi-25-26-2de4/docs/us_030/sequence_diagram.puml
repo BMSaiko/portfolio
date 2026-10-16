@@ -1,0 +1,153 @@
+@startuml US030_Auth_Sequence
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam sequence {
+    ParticipantBorderColor #2C3E50
+    ParticipantBackgroundColor #ECF0F1
+    ArrowColor #2C3E50
+}
+
+title US030 - Authentication and Authorization Sequence Diagram
+
+actor User
+participant "AISafeBackoffice" as Bootstrap
+participant "MasterUsersBootstrapper" as Boot
+participant "MainMenu" as Menu
+participant "LoginUI" as Login
+participant "AuthService" as Auth
+participant "JpaUserRepository" as Repo
+database "H2 DB" as DB
+participant "User" as Entity
+participant "PasswordHasher" as Hash
+participant "LogoutUI" as Logout
+participant "Controller" as Ctrl
+
+== Startup & Bootstrap ==
+
+Bootstrap -> Boot : new MasterUsersBootstrapper(userRepo, ...)
+activate Boot
+Boot -> Repo : findAll()
+activate Repo
+Repo -> DB : SELECT u FROM User u
+DB --> Repo : (empty)
+Repo --> Boot : empty
+deactivate Repo
+Boot -> Entity : new User(email, pwd, name, phone, roles)
+activate Entity
+Entity -> Hash : hashPassword(pwd)
+activate Hash
+Hash -> Hash : generateSalt()\npbkdf2(pwd, salt, 10000, 256)
+Hash --> Entity : "iterations:salt:hash"
+deactivate Hash
+Entity --> Boot : User (active=true)
+deactivate Entity
+Boot -> Repo : save(user)
+activate Repo
+Repo -> DB : INSERT INTO T_USER ...
+Repo --> Boot : saved
+deactivate Repo
+note right: Repeat for all 6 users
+Boot --> Bootstrap : done
+deactivate Boot
+
+Bootstrap -> Menu : new MainMenu(authService, ...)
+Bootstrap -> Menu : show()
+activate Menu
+
+== Anonymous State ==
+
+Menu -> Auth : currentUser()
+activate Auth
+Auth --> Menu : Optional.empty()
+deactivate Auth
+note right: Show only Login and Exit
+Menu -> User : "1. Login / 0. Exit"
+User -> Menu : selects "1"
+
+== Login ==
+
+Menu -> Login : new LoginUI(auth).show()
+activate Login
+Login -> User : "Email:" / "Password:"
+User -> Login : email + password
+Login -> Auth : login(email, password)
+activate Auth
+Auth -> Repo : findActiveByEmail(email)
+activate Repo
+Repo -> DB : SELECT ... WHERE email=? AND active=true
+DB --> Repo : User
+Repo --> Auth : Optional<User>
+deactivate Repo
+Auth -> Entity : passwordMatches(password)
+activate Entity
+Entity -> Hash : verifyPassword(pwd, storedHash)
+activate Hash
+Hash -> Hash : split, decode, pbkdf2, slowEquals
+Hash --> Entity : true
+deactivate Hash
+Entity --> Auth : true
+deactivate Entity
+alt valid credentials
+    Auth -> Auth : currentUser.set(user)
+    Auth --> Login : Optional<User> (present)
+    Login -> User : "Login successful!"
+else invalid credentials
+    Auth --> Login : Optional.empty()
+    Login -> User : "Invalid credentials or inactive user."
+end
+deactivate Auth
+Login --> Menu : return
+deactivate Login
+
+== Authenticated State ==
+
+Menu -> Auth : currentUser()
+activate Auth
+Auth --> Menu : Optional<User>
+deactivate Auth
+Menu -> Entity : hasRole(ADMIN)
+activate Entity
+Entity --> Menu : true
+deactivate Entity
+note right: Show role-based options\n(Users, Customer Mgmt, etc.)
+User -> Menu : selects an option
+
+== Authorization in Controller ==
+
+Menu -> Ctrl : registerCompany(...)
+activate Ctrl
+Ctrl -> Auth : ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+Auth -> Auth : ensureAuthenticated()
+Auth -> Entity : hasRole(BACKOFFICE_OPERATOR)
+activate Entity
+Entity --> Auth : true
+deactivate Entity
+Auth --> Ctrl : (authorized)
+deactivate Auth
+Ctrl --> Menu : success
+deactivate Ctrl
+note right: Throws SecurityException\nif role check fails
+
+== Logout ==
+
+User -> Menu : selects "Logout"
+Menu -> Logout : new LogoutUI(auth).show()
+activate Logout
+Logout -> Auth : logout()
+activate Auth
+Auth -> Auth : currentUser.remove()
+deactivate Auth
+Logout -> User : "Logged out."
+Logout --> Menu : return
+deactivate Logout
+note right: Back to anonymous state
+
+== Exit ==
+
+User -> Menu : selects "0"
+Menu --> Bootstrap : return
+deactivate Menu
+Bootstrap -> User : "AISafe - Goodbye!"
+
+@enduml

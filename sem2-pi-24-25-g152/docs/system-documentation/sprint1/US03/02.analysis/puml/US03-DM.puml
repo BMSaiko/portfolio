@@ -1,0 +1,34 @@
+@startuml US03-DM
+
+title Domain Model (DM) - US03 As an Editor, I want to add a city in a position XY of the selected map, with a name and a positive number of house blocks.
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Map {
+  name
+  width
+  height
+}
+
+class City {
+  name
+  population
+  numberOfHouseBlocks
+}
+
+class Location {
+  x
+  y
+}
+
+Map "1" -- "*" City : contains >
+City "1" -- "1" Location : has central position >
+
+@enduml

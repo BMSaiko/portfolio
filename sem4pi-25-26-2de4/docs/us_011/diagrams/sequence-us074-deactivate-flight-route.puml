@@ -1,0 +1,87 @@
+@startuml
+title Sequence Diagram - US074 Deactivate Flight Route
+
+actor "Air Transport Company\nCollaborator" as ATCC
+participant "DeactivateFlightRouteUI" as UI
+participant "TCP Server / Handler" as Server
+participant "DeactivateFlightRouteController" as Controller
+participant "AuthService" as Auth
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "FlightRouteRepository" as RouteRepo
+participant "FlightPlanRepository" as FlightPlanRepo
+participant "FlightRoute" as Route
+
+ATCC -> UI: select "Deactivate Flight Route"
+UI -> ATCC: request route designator and date
+ATCC -> UI: designator, deactivationDate
+
+UI -> Server: DEACTIVATE_ROUTE designator date
+activate Server
+Server -> Controller: deactivateRoute(designator, deactivationDate)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(AIR_TRANSPORT_COMPANY_COLLABORATOR, ADMIN)
+activate Auth
+Auth --> Controller: authorized
+deactivate Auth
+
+Controller -> Auth: currentUser()
+Auth --> Controller: User
+
+Controller -> CollabRepo: findByUserEmail(user.email)
+activate CollabRepo
+CollabRepo --> Controller: CustomerCollaborator
+deactivate CollabRepo
+
+Controller -> CompanyRepo: findByIcaoCode(collaborator.customerCode)
+activate CompanyRepo
+CompanyRepo --> Controller: AirTransportCompany
+deactivate CompanyRepo
+
+Controller -> RouteRepo: findByDesignator(normalizedDesignator)
+activate RouteRepo
+RouteRepo --> Controller: FlightRoute
+deactivate RouteRepo
+
+alt route belongs to another company
+    Controller --> Server: error
+    Server --> UI: ERROR route does not belong to company
+else route belongs to authenticated company
+    Controller -> FlightPlanRepo: existsPlannedForRouteFrom(route, deactivationDate)
+    activate FlightPlanRepo
+    FlightPlanRepo --> Controller: true/false
+    deactivate FlightPlanRepo
+
+    alt planned flights exist from date onwards
+        Controller --> Server: error
+        Server --> UI: ERROR route cannot be deactivated
+    else no planned flights from date onwards
+        Controller -> Route: deactivateFrom(deactivationDate)
+        activate Route
+        note right of Route
+            Invariants enforced by FlightRoute:
+            - Deactivation date is required
+            - Route cannot be deactivated twice
+            - Route becomes unavailable on
+              deactivationDate and later dates
+        end note
+        Route --> Controller: route inactive
+        deactivate Route
+
+        Controller -> RouteRepo: save(route)
+        activate RouteRepo
+        RouteRepo --> Controller: persisted route
+        deactivate RouteRepo
+
+        Controller --> Server: success
+        Server --> UI: OK route deactivated
+    end
+end
+
+deactivate Controller
+deactivate Server
+
+UI --> ATCC: show result
+
+@enduml

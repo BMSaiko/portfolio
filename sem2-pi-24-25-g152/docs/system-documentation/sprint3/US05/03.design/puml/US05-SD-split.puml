@@ -1,0 +1,83 @@
+@startuml US05-BuildStation-Partial-SD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Player" as PLAYER
+participant ":BuildStationUI" as UI
+participant ":BuildStationController" as CTRL
+participant "currentMap\n:Map" as CURRENT_MAP
+
+activate PLAYER
+
+    PLAYER -> UI : asks to build a station
+    activate UI
+        UI --> CTRL** : create()
+
+        UI -> CTRL : getStationTypes()
+        activate CTRL
+            CTRL --> UI : stationTypes (depot, station, terminal)
+        deactivate CTRL
+
+        UI --> PLAYER : shows station types and asks to select one
+    deactivate UI
+
+    PLAYER -> UI : selects a station type
+    activate UI
+        UI -> CTRL : getCurrentMap()
+        ref over CTRL
+            Get Current Map
+        end ref
+
+        activate CTRL
+            CTRL --> UI : currentMap
+        deactivate CTRL
+
+        UI --> PLAYER : requests position (X,Y coordinates)
+    deactivate UI
+
+    PLAYER -> UI : inputs position (X,Y)
+    activate UI
+        UI -> CTRL : validatePosition(x, y, stationType)
+        activate CTRL
+            CTRL -> CURRENT_MAP : validateStationPosition(x, y, stationType)
+            activate CURRENT_MAP
+                CURRENT_MAP --> CTRL : isValid (boolean)
+            deactivate CURRENT_MAP
+
+            CTRL --> UI : isValid
+        deactivate CTRL
+
+
+            UI -> CTRL : generateStationName(x, y)
+            ref over CTRL
+                Generate Station Name
+            end ref
+
+            activate CTRL
+                CTRL --> UI : proposedName (e.g. "Porto Terminal")
+            deactivate CTRL
+
+            UI --> PLAYER : shows proposed name and asks for confirmation
+
+    deactivate UI
+
+    PLAYER -> UI : confirms name
+    activate UI
+        UI -> CTRL : buildStation(x, y, stationType, stationName)
+        ref over CTRL
+            Build Station
+        end ref
+
+        activate CTRL
+            CTRL --> UI : station
+        deactivate CTRL
+
+        UI --> PLAYER : displays operation success
+    deactivate UI
+
+deactivate PLAYER
+@enduml

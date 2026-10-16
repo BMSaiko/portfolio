@@ -1,0 +1,26 @@
+@startuml USEI12 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+
+class Station {
+    name
+    coordX
+    coordY
+}
+
+class TrackConnection {
+    distance
+    cost
+}
+
+' Relationships
+Station "*" -- "*" Station : "connected to"
+TrackConnection "*" -- "2" Station : "connects"
+
+@enduml

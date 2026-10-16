@@ -1,0 +1,71 @@
+@startuml
+title US090 — Remote Access Login Flow (UDP Logging)
+
+participant "Client" as C
+participant "AISafe TCP Server\n(US078/US044/US086)" as S
+participant "AuthService" as A
+participant "RemoteLoggingService" as R
+participant "UdpLogClient" as U
+participant "Logging Server\nUDP :9999" as L
+
+== TCP Connection & Authentication ==
+
+C -> S: TCP connect(ip, port)
+activate S
+S -> A: authenticate(email, password)
+activate A
+
+alt successful auth
+    A --> S: AuthResult.OK
+    S -> C: AUTH_OK welcome
+
+    == Fire-and-forget UDP Logging ==
+    S -> R: logEvent(user, ip, port, US078, LOGIN_SUCCESS)
+    activate R
+    R -> U: sendLogEvent(event)
+    U -> U: event.toLogString()
+    note right
+        Format:
+        "2026-05-25T14:30:22|
+         john.doe|10.9.0.45|54321|
+         US078|LOGIN_SUCCESS"
+    end note
+    U -> L: UDP datagram :9999
+    note right of L
+        Non-blocking.
+        If server down,
+        main system continues.
+    end note
+    L -> L: processEvent(rawData)
+    L -> L: LogStore.store(entry)
+    L -> L: SessionTracker.update(entry)
+    L --> R: (ack implicit — UDP)
+    deactivate U
+    deactivate R
+
+else failed auth
+    A --> S: AuthResult.FAIL
+    S -> C: AUTH_FAIL
+    S -> R: logEvent(user, ip, port, US078, LOGIN_FAILURE)
+    activate R
+    R -> U: sendLogEvent(event)
+    U -> L: UDP datagram :9999
+    deactivate U
+    deactivate R
+end
+
+== Logout / Disconnect ==
+
+C -> C: logout / disconnect
+S -> R: logEvent(user, ip, port, US078, LOGOUT)
+activate R
+R -> U: sendLogEvent(event)
+U -> L: UDP datagram :9999
+L -> L: SessionTracker.remove(session)
+deactivate U
+deactivate R
+
+deactivate A
+deactivate S
+
+@enduml

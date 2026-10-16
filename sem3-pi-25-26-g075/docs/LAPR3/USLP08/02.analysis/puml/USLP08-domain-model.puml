@@ -1,0 +1,77 @@
+@startuml USLP08 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+left to right direction
+
+
+class "Station/Terminal" as Facility {
+    facilityId
+    name
+    isIntermodal
+}
+
+
+
+class Freight {
+    freightId
+    freightDate
+    status
+}
+
+class Train {
+    trainId
+    departureDateTime
+}
+
+class TrainFreight <<Junction Table>> {
+    trainId
+    freightId
+}
+
+class Route {
+    routeName
+    routeType
+}
+
+class RouteStop {
+    stopOrder
+    cumulativeDistance
+}
+
+
+
+class FreightManager {
+    name
+}
+
+
+' Relationships
+
+' Freight Origin/Destination
+Freight "*" --> "1" Facility : origin
+Freight "*" --> "1" Facility : destination
+
+' Route Composition
+Route "1" *-- "2..*" RouteStop : "contains ordered"
+RouteStop "*" --> "1" Facility : "located at"
+
+' Load/Unload Operations
+RouteStop "1" o-- "0..*" Freight : "loads"
+RouteStop "1" o-- "0..*" Freight : "unloads"
+
+' Train-Freight Assignment
+Train "1" -- "0..*" TrainFreight : "assigned via"
+Freight "1" -- "0..*" TrainFreight : "transported by"
+TrainFreight "*" --> "1" Train
+TrainFreight "*" --> "1" Freight
+
+' Role Usage
+FreightManager "1" -- "0..*" Route : "plans"
+FreightManager "1" -- "0..*" Freight : "manages"
+
+
+@enduml

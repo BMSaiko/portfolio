@@ -1,0 +1,4 @@
+article;priority;name_oper1;name_oper2
+1;HIGH;CUT;POLISH
+2;NORMAL;CUT;DRILL
+3;LOW;CUT;POLISH;VARNISH

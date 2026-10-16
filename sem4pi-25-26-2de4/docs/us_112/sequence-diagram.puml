@@ -1,0 +1,85 @@
+@startuml
+title US112 — Monthly Report Generation
+
+participant "Admin" as A
+participant "GenerateMonthlyReportUI" as UI
+participant "MonthlyReportService" as S
+participant "AuthService" as Auth
+participant "MonthlyReportGenerator" as G
+participant "FlightPlanRepository" as FPR
+participant "MonthlyStatisticsRepository" as MSR
+participant "Report File" as F
+
+== Authorization ==
+
+A -> UI: select month/year, click "Generate"
+UI -> S: generateMonthlyReport(period)
+activate S
+S -> Auth: ensureHasAnyRole(ADMIN, FLIGHT_CONTROL_OPERATOR)
+activate Auth
+Auth --> S: authorized
+deactivate Auth
+
+== Data Collection ==
+
+S -> G: generate(period)
+activate G
+G -> G: collectData(period)
+
+G -> FPR: findAll()
+activate FPR
+FPR --> G: List<FlightPlan>
+deactivate FPR
+
+G -> G: filter by departureDateTime within period
+G -> G: aggregate totals
+note right
+    totalFlights
+    validatedFlights
+    completedFlights
+    cancelledFlights
+    totalDistance
+    totalFuel
+end note
+
+G -> G: scanSimulationViolations(period)
+note right
+    Reads reports/simulation/
+    files matching period prefix
+end note
+
+G -> G: buildSections(period)
+note right
+    1. Summary
+    2. Fleet
+    3. Safety
+    4. Top Routes
+end note
+
+G -> F: writeToFile(period, sections)
+note right
+    AISAFE_MonthlyReport_
+    YYYY_MM.txt
+end note
+F --> G: Path
+deactivate G
+
+== Persist Statistics ==
+
+S -> MSR: findByYearAndMonth(year, month)
+activate MSR
+MSR --> S: empty (not cached)
+deactivate MSR
+
+S -> MSR: save(MonthlyStatistics)
+note right
+    Pre-computed aggregates
+    for fast regeneration
+end note
+
+S --> UI: reportPath
+deactivate S
+
+A -> F: open report
+
+@enduml

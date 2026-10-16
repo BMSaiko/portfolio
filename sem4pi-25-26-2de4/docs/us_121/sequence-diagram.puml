@@ -1,0 +1,94 @@
+@startuml
+title US121 — Create Flight Plan from DSL File (Sprint 3 LPROG)
+
+participant "Pilot / Backoffice\nOperator" as P
+participant "FlightPlanService" as S
+participant "AuthService" as Auth
+participant "FileFormatValidator" as FV
+participant "FlightPlanImportService\n(ANTLR/LPROG)" as ANTLR
+participant "AircraftModelRepository" as AMR
+participant "FlightPlanRepository" as FPR
+participant "FlightPlan" as FP
+
+== Authorization ==
+
+P -> S: importFlightPlan(filePath, modelId, makerName, distance)
+activate S
+S -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+Auth --> S: authorized
+deactivate Auth
+
+== Step 1: File Format Validation ==
+
+S -> FV: validate(filePath)
+activate FV
+FV -> FV: check file exists + readable
+FV -> FV: check extension == ".dsl"
+FV -> FV: check file not empty
+FV -> FV: check no BOM marker
+FV --> S: FormatValidationResult(valid, FLIGHT_DSL)
+deactivate FV
+
+alt invalid format
+    S --> P: IllegalArgumentException\n"File format validation failed"
+end
+
+== Step 2: DSL Parsing (ANTLR) ==
+
+S -> ANTLR: importFlightPlan(filePath)
+activate ANTLR
+ANTLR -> ANTLR: lexical analysis
+ANTLR -> ANTLR: syntactic analysis
+ANTLR -> ANTLR: semantic validation
+note right
+    - Flight ID uniqueness
+    - Leg sequence coherence
+    - Segment coordinates
+    - Airport codes format
+    - Numeric values > 0
+end note
+ANTLR --> S: ImportResult(success, parsedFlightPlan)
+deactivate ANTLR
+
+alt DSL validation failed
+    S --> P: IllegalArgumentException\n"DSL validation failed: ..."
+end
+
+== Step 3: Domain Construction ==
+
+S -> AMR: findById(AircraftModelId)
+activate AMR
+AMR --> S: AircraftModel
+deactivate AMR
+
+S -> S: buildLegs(parsed)
+note right
+    For each parsed leg:
+    - departure, arrival
+    - fuel quantity
+    - segments (mode, start, end)
+end note
+
+S -> S: buildRoute(parsed)
+note right
+    "OPO-LIS-MAD"
+    from leg chain
+end note
+
+S -> FP: new FlightPlan(id, route, departureAirport,\narrivalAirport, aircraft, legs,\ndistance, estimatedFuel, now)
+activate FP
+FP --> S: FlightPlan (DRAFT status)
+deactivate FP
+
+== Step 4: Persistence ==
+
+S -> FPR: save(flightPlan)
+activate FPR
+FPR --> S: FlightPlan saved
+deactivate FPR
+
+S --> P: FlightPlan created (DRAFT)
+deactivate S
+
+@enduml

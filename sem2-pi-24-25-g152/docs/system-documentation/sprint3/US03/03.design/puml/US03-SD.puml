@@ -1,0 +1,148 @@
+@startuml US03-SD-full
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US03 Add City to Map - Full
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant ":MapMapper" as MAPMAPPER
+participant ":CityMapper" as CITYMAPPER
+participant ":AuthenticationService" as AUTH
+participant ":UserSession" as USESSION
+participant ":GameRepository" as GAMEREPO
+participant ":MapRepository" as MAPREPO
+participant ":CityRepository" as CITYREPO
+participant "city:City" as CITY
+participant ":CityService" as CITYSERVICE
+participant ":CityValidator" as VALIDATOR
+
+activate EDITOR
+
+    EDITOR -> UI : asks to add a city
+    activate UI
+        UI -> CTRL : getCurrentUserRole()
+        activate CTRL
+            CTRL -> AUTH : getCurrentUserSession()
+            activate AUTH
+                AUTH --> CTRL : userSession
+            deactivate AUTH
+            
+            CTRL -> USESSION : getUserRoles()
+            activate USESSION
+                USESSION --> CTRL : roles
+            deactivate USESSION
+            
+            CTRL --> UI : roles
+        deactivate CTRL
+        
+        UI -> UI : validateRole("Editor")
+        
+        UI -> CTRL : getMapList()
+        activate CTRL
+            CTRL -> GAMEREPO : getMapRepository()
+            activate GAMEREPO
+                GAMEREPO --> CTRL : mapRepository
+            deactivate GAMEREPO
+            
+            CTRL -> MAPREPO : getAllMaps()
+            activate MAPREPO
+                MAPREPO --> CTRL : mapList
+            deactivate MAPREPO
+            
+            CTRL -> MAPMAPPER : toDTOList(mapList)
+            activate MAPMAPPER
+                MAPMAPPER --> CTRL : mapDTOList
+            deactivate MAPMAPPER
+            
+            CTRL --> UI : mapDTOList
+        deactivate CTRL
+        
+        UI --> EDITOR : shows map list and asks to select one
+    deactivate UI
+
+    EDITOR -> UI : selects map
+    activate UI
+        UI --> EDITOR : requests city data (name, coordinates, house blocks count)
+    deactivate UI
+
+    EDITOR -> UI : provides city data
+    activate UI
+        UI -> CTRL : validateCityData(request)
+        activate CTRL
+            CTRL -> VALIDATOR : validateCityData(request)
+            activate VALIDATOR
+                VALIDATOR --> CTRL : validationResult
+            deactivate VALIDATOR
+            
+            CTRL -> CITYSERVICE : isNameUniqueInMap(request.name, request.mapId)
+            activate CITYSERVICE
+                CITYSERVICE -> CITYREPO : findByNameAndMap(request.name, request.mapId)
+                activate CITYREPO
+                    CITYREPO --> CITYSERVICE : existingCity
+                deactivate CITYREPO
+                CITYSERVICE --> CTRL : isUnique
+            deactivate CITYSERVICE
+            
+            CTRL --> UI : validationResult
+        deactivate CTRL
+        
+        UI --> EDITOR : requests block assignment method (manual/automatic)
+    deactivate UI
+
+    EDITOR -> UI : selects block assignment method
+    activate UI
+
+    alt manual placement
+        UI --> EDITOR : requests coordinates for each house block
+        deactivate UI
+        EDITOR -> UI : provides coordinates for each block
+        activate UI
+    else automatic placement
+        UI --> EDITOR : confirms automatic placement using normal distribution
+    end
+
+    UI -> UI : collectCityData()
+    
+    UI -> CTRL : addCity(request)
+    activate CTRL
+        CTRL -> MAPREPO : findById(request.mapId)
+        activate MAPREPO
+            MAPREPO --> CTRL : selectedMap
+        deactivate MAPREPO
+        
+        CTRL -> CITYSERVICE : createCity(request, selectedMap)
+        activate CITYSERVICE
+            CITYSERVICE --> CITY** : create city from request data
+            
+            CITYSERVICE -> CITY : validateData()
+            activate CITY
+                CITY --> CITYSERVICE : validationResult
+            deactivate CITY
+            
+            CITYSERVICE -> CITYREPO : saveCity(city)
+            activate CITYREPO
+                CITYREPO --> CITYSERVICE : success
+            deactivate CITYREPO
+            
+            CITYSERVICE --> CTRL : city
+        deactivate CITYSERVICE
+        
+        CTRL -> CITYMAPPER : toDTO(city)
+        activate CITYMAPPER
+            CITYMAPPER --> CTRL : cityDTO
+        deactivate CITYMAPPER
+        
+        CTRL --> UI : cityDTO
+    deactivate CTRL
+    
+    UI --> EDITOR : confirms successful addition with population summary
+    deactivate UI
+
+deactivate EDITOR
+
+@enduml

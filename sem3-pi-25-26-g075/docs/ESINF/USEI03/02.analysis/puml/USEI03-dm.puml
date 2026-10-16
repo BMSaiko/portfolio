@@ -1,0 +1,89 @@
+@startuml USEI03 - Domain Model Excerpt
+
+hide circle
+
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+' Picking & Returns Package
+package "Picking & Returns" {
+  class PickingPlan {
+    strategy
+    totalDistance
+  }
+
+  class Trolley {
+    capacityWeight
+    usedWeight
+  }
+
+  class Picker {
+    name
+  }
+
+  class Planner {
+    name
+  }
+}
+
+' Order Management Package
+package "Order Management" {
+  class Order {
+    status
+    dueDate
+    priority
+  }
+
+  class OrderLine {
+    requestedQty
+    status
+    allocatedQty
+  }
+
+  class Item {
+    sku
+    name
+    category
+    unit
+    volume
+    unitWeight
+  }
+
+  class Allocation {
+    quantity
+    status
+  }
+}
+
+' Warehouse Management Package
+package "Warehouse Management" {
+  class Bay {
+    capacityOfBoxes
+    coordinates
+  }
+
+  class Box {
+    quantity
+    sku
+    expireDate
+    receivedAt
+  }
+}
+
+' Relationships
+Order "1" -- "1" PickingPlan : "generates"
+Order "1" -- "1..*" OrderLine : "contains"
+
+PickingPlan "1" -- "1..*" Trolley : "uses"
+PickingPlan "*" -- "1" Picker : "assigned to"
+PickingPlan "*" -- "1" Planner : "created by"
+
+Trolley "1" -- "1" Bay : "accessed via"
+
+Allocation "*" -- "1" Box : "allocates from"
+Allocation "*" -- "1" OrderLine : "fulfills"
+
+Bay "1" -- "0..*" Box : "stored in"
+Box "*" -- "1" Item : "contains"
+
+@enduml

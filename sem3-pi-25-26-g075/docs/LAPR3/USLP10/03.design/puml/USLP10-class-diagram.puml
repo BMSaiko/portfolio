@@ -1,0 +1,31 @@
+@startuml USLP10-class-diagram
+
+class TrainMovementController {
+    - scanner: Scanner
+    - service: TrainMovementService
+    + show(): void
+}
+
+class TrainMovementService {
+    - URL: String
+    - USER: String
+    - PASS: String
+    + showMenu(scanner: Scanner): void
+    - runScheduler(conn: Connection, scanner: Scanner): void
+    - calculateAndPrintPath(...): void
+    - getTechnicalData(...): TechnicalData
+}
+
+class TechnicalData <<DTO>> {
+    + departureTime: Timestamp
+    + mass: double
+    + power: double
+    + maxVehicleSpeed: double
+}
+
+' Relationships
+TrainMovementController --> TrainMovementService : uses
+TrainMovementService +-- TechnicalData : inner class usage
+TrainMovementService ..> java.sql.CallableStatement : uses for PL/SQL
+
+@enduml

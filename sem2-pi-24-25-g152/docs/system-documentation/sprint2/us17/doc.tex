@@ -1,0 +1,58 @@
+%! Author = Bruno Silva 1221514
+%! Date = 15/05/2025
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+
+\begin{document}
+
+    \section{Analysis of Cargo Arrivals for Steel at Frankfurt Station}
+
+    \subsection{Data Source}
+    The analysis is based on the provided histogram titled "Distribution for Steel at Frankfurt Station", which visualizes the frequency distribution of steel shipment amounts arriving at this station.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{histogram}
+        \caption{Histogram of Steel Amount at Frankfurt Station}
+        \label{fig:histogram}
+    \end{figure}
+
+    \subsection{Frequency Distribution and Shape}
+    The histogram displays the frequency of different steel amounts per arrival.
+    \begin{itemize}
+        \item The distribution appears unimodal, with the highest frequency occurring in the lowest range of steel amounts (approximately 0-300 units).
+        \item The distribution is \textbf{positively skewed (skewed to the right)}. This is indicated by the long tail extending towards higher steel amounts and is confirmed by the mean being greater than the median.
+    \end{itemize}
+
+    \subsection{Descriptive Statistics}
+    Key descriptive measures derived from the histogram legend:
+    \begin{itemize}
+        \item \textbf{Measures of Central Location}:
+        \begin{itemize}
+            \item Mean ($\overline{x}$): $722.10$ units. This average is pulled higher by the larger shipment values in the tail.
+            \item Median ($\tilde{x}$): $633.21$ units. This indicates that 50\% of steel shipments were below 633.21 units and 50\% were above. It is less affected by extreme values than the mean.
+            \item Mode: The modal class (most frequent) corresponds to the leftmost bar, representing the lowest range of steel amounts (approx. 0-300 units), which has a frequency of 30.
+        \end{itemize}
+        \item \textbf{Measures of Variability}:
+        \begin{itemize}
+            \item Minimum: $4.01$ units. The smallest recorded steel amount.
+            \item Maximum: $2911.20$ units. The largest recorded steel amount.
+            \item Range ($r = \text{Max} - \text{Min}$): $2911.20 - 4.01 = 2907.19$ units. This shows a very large spread between the smallest and largest shipments.
+            \item Standard Deviation ($s$): $599.70$ units. This value reflects significant variability in the steel amounts per shipment, indicating that shipment sizes often deviate considerably from the average amount.
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{Interpretation}
+    The analysis of steel shipments arriving at Frankfurt Station reveals:
+    \begin{itemize}
+        \item Shipments are highly variable in size, ranging from approximately 4 units to over 2900 units.
+        \item Most shipments contain relatively smaller amounts of steel (concentrated below the median of 633.21 units), as shown by the high frequency in the lower bins and the positive skewness.
+        \item Occasionally, very large shipments arrive (indicated by the tail to the right and the maximum value), which significantly increases the overall average (mean) compared to the median.
+        \item The large standard deviation ($s=599.70$) compared to the central tendency measures further emphasizes the lack of consistency in shipment sizes. Understanding the reasons for this variability (e.g., different suppliers, seasonal demand, project types) could be a next step.
+    \end{itemize}
+
+\end{document}

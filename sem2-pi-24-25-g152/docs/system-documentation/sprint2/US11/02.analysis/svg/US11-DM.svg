@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:plantuml="http://plantuml.com/plantuml" xmlns:svg="http://www.w3.org/2000/svg" width="1200" height="800">
+    <title>Domain Model (DM) - US11 List Trains</title>
+    <g>
+        <!-- Train -->
+        <rect x="50" y="50" width="200" height="100" fill="white" stroke="black"/>
+        <text x="150" y="80" text-anchor="middle" font-size="16">Train</text>
+        <line x1="50" y1="90" x2="250" y2="90" stroke="black"/>
+        <text x="60" y="120" font-size="14">- name: String</text>
+        <text x="60" y="140" font-size="14">- locomotiveType: String</text>
+        <text x="60" y="160" font-size="14">- currentCargoes: List&lt;Cargo&gt;</text>
+
+        <!-- Locomotive -->
+        <rect x="300" y="50" width="200" height="100" fill="white" stroke="black"/>
+        <text x="400" y="80" text-anchor="middle" font-size="16">Locomotive</text>
+        <line x1="300" y1="90" x2="500" y2="90" stroke="black"/>
+        <text x="310" y="120" font-size="14">- type: String</text>
+        <text x="310" y="140" font-size="14">- specifications: String</text>
+
+        <!-- Cargo -->
+        <rect x="550" y="50" width="200" height="100" fill="white" stroke="black"/>
+        <text x="650" y="80" text-anchor="middle" font-size="16">Cargo</text>
+        <line x1="550" y1="90" x2="750" y2="90" stroke="black"/>
+        <text x="560" y="120" font-size="14">- type: String</text>
+        <text x="560" y="140" font-size="14">- quantity: int</text>
+        <text x="560" y="160" font-size="14">- status: CargoStatus</text>
+
+        <!-- Route -->
+        <rect x="50" y="200" width="200" height="100" fill="white" stroke="black"/>
+        <text x="150" y="230" text-anchor="middle" font-size="16">Route</text>
+        <line x1="50" y1="240" x2="250" y2="240" stroke="black"/>
+        <text x="60" y="270" font-size="14">- stations: List&lt;Station&gt;</text>
+        <text x="60" y="290" font-size="14">- path: Path</text>
+
+        <!-- Station -->
+        <rect x="300" y="200" width="200" height="100" fill="white" stroke="black"/>
+        <text x="400" y="230" text-anchor="middle" font-size="16">Station</text>
+        <line x1="300" y1="240" x2="500" y2="240" stroke="black"/>
+        <text x="310" y="270" font-size="14">- name: String</text>
+
+        <!-- Path -->
+        <rect x="550" y="200" width="200" height="100" fill="white" stroke="black"/>
+        <text x="650" y="230" text-anchor="middle" font-size="16">Path</text>
+        <line x1="550" y1="240" x2="750" y2="240" stroke="black"/>
+        <text x="560" y="270" font-size="14">- segments: List&lt;Segment&gt;</text>
+
+        <!-- Relationships -->
+        <line x1="250" y1="100" x2="300" y2="100" stroke="black" marker-end="url(#arrow)"/>
+        <text x="275" y="90" text-anchor="middle" font-size="12">has</text>
+
+        <line x1="250" y1="150" x2="550" y1="150" stroke="black" marker-end="url(#arrow)"/>
+        <text x="400" y="140" text-anchor="middle" font-size="12">carries</text>
+
+        <line x1="250" y1="200" x2="50" y1="200" stroke="black" marker-end="url(#arrow)"/>
+        <text x="150" y="190" text-anchor="middle" font-size="12">follows</text>
+
+        <line x1="250" y1="250" x2="300" y1="250" stroke="black" marker-end="url(#arrow)"/>
+        <text x="275" y="240" text-anchor="middle" font-size="12">contains</text>
+
+        <line x1="250" y1="250" x2="550" y1="250" stroke="black" marker-end="url(#arrow)"/>
+        <text x="400" y="240" text-anchor="middle" font-size="12">defined by</text>
+
+        <!-- Arrow marker -->
+        <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="black"/>
+            </marker>
+        </defs>
+    </g>
+</svg> 

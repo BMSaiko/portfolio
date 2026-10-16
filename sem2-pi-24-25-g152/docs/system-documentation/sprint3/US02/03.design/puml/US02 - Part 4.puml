@@ -1,0 +1,60 @@
+@startuml US02-SD-partial-create-industry
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US02 - Create Industry - Partial Sequence Diagram
+
+participant ":AddIndustryUI" as UI
+participant ":AddIndustryController" as CTRL
+participant ":MapRepository" as MAPREPO
+participant ":IndustryTypeRepository" as INDUSTRYREPO
+participant "industry:Industry" as INDUSTRY
+participant ":IndustryService" as INDUSTRYSERVICE
+participant ":IndustryRepository" as INDUSTRYREPOSITORY
+
+UI -> CTRL : addIndustry(request)
+activate CTRL
+    group Create Industry
+    CTRL -> MAPREPO : findById(request.mapId)
+    activate MAPREPO
+        MAPREPO --> CTRL : selectedMap
+    deactivate MAPREPO
+    
+    CTRL -> INDUSTRYREPO : findSubtypeById(request.industrySubtypeId)
+    activate INDUSTRYREPO
+        INDUSTRYREPO --> CTRL : selectedSubtype
+    deactivate INDUSTRYREPO
+    
+    CTRL -> INDUSTRYSERVICE : createIndustry(request, selectedMap, selectedSubtype)
+    activate INDUSTRYSERVICE
+        INDUSTRYSERVICE --> INDUSTRY** : create industry from request data
+        
+        INDUSTRYSERVICE -> INDUSTRY : validateData()
+        activate INDUSTRY
+            INDUSTRY --> INDUSTRYSERVICE : validationResult
+        deactivate INDUSTRY
+        
+        INDUSTRYSERVICE -> INDUSTRYREPOSITORY : saveIndustry(industry)
+        activate INDUSTRYREPOSITORY
+            INDUSTRYREPOSITORY --> INDUSTRYSERVICE : success
+        deactivate INDUSTRYREPOSITORY
+        
+        INDUSTRYSERVICE --> CTRL : industry
+    deactivate INDUSTRYSERVICE
+    end group
+    CTRL --> UI : success
+deactivate CTRL GAMEREPO
+    
+    CTRL -> MAPREPO : getAllMaps()
+    activate MAPREPO
+        MAPREPO --> CTRL : mapList
+    deactivate MAPREPO
+    
+    CTRL -> MAPMAPPER : toDTOList(mapList)
+    activate MAPMAPPER
+        MAPMAPPER --> CTRL : mapDTOList
+    deactivate MAPMAPPER
+    end group
+    CTRL --> UI : mapDTOList
+deactivate

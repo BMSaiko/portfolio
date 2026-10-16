@@ -1,0 +1,127 @@
+@startuml US032_Disable_Enable_User_Sequence
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam sequence {
+    ParticipantBorderColor #2C3E50
+    ParticipantBackgroundColor #ECF0F1
+    ArrowColor #2C3E50
+}
+
+title US032 - Disable/Enable User Sequence Diagram
+
+actor "Admin User" as Admin
+participant "MainMenu" as Menu
+participant "UsersMenuUI" as UsersMenu
+participant "ManageUserUI" as UI
+participant "ManageUserController" as Ctrl
+participant "AuthService" as Auth
+participant "User" as CurrentUser
+participant "JpaUserRepository" as Repo
+database "H2 DB" as DB
+participant "User (target)" as TargetUser
+
+== Navigate to Manage Users ==
+
+Admin -> Menu : selects "Users" option
+activate Menu
+note right of Menu : MainMenu checks\nhasRole(ADMIN)
+Menu -> UsersMenu : new UsersMenuUI(...).show()
+activate UsersMenu
+UsersMenu -> Admin : "1. List users\n2. Register user\n3. Enable/Disable user\n0. Back"
+Admin -> UsersMenu : selects "3"
+UsersMenu -> UI : new ManageUserUI(controller).show()
+activate UI
+
+== List All Users ==
+
+UI -> Ctrl : findAllUsers()
+activate Ctrl
+Ctrl -> Auth : ensureHasAnyRole(Role.ADMIN)
+activate Auth
+Auth -> Auth : ensureAuthenticated()
+Auth -> CurrentUser : hasRole(ADMIN)
+activate CurrentUser
+CurrentUser --> Auth : true
+deactivate CurrentUser
+Auth --> Ctrl : (authorized)
+deactivate Auth
+Ctrl -> Repo : findAll()
+activate Repo
+Repo -> DB : SELECT u FROM User u
+DB --> Repo : all users
+Repo --> Ctrl : Iterable<User>
+deactivate Repo
+Ctrl --> UI : users
+deactivate Ctrl
+
+UI -> Admin : display user list\n(#, Email, Name, Status)
+
+== Select User and Toggle Status ==
+
+Admin -> UI : selects user number
+UI -> Admin : "Selected: email (name)\nCurrent status: ACTIVE"
+
+alt User is ACTIVE -> DISABLE
+    UI -> Admin : "Do you want to DISABLE this user? (y/n)"
+    Admin -> UI : "y"
+    UI -> Ctrl : disableUser(email)
+    activate Ctrl
+    Ctrl -> Auth : ensureHasAnyRole(Role.ADMIN)
+    activate Auth
+    Auth --> Ctrl : (authorized)
+    deactivate Auth
+    Ctrl -> Repo : findByEmail(email)
+    activate Repo
+    Repo -> DB : SELECT ... WHERE email = ?
+    DB --> Repo : User
+    Repo --> Ctrl : Optional<User>
+    deactivate Repo
+    Ctrl -> TargetUser : deactivate()
+    activate TargetUser
+    TargetUser -> TargetUser : active = false
+    deactivate TargetUser
+    Ctrl -> Repo : save(user)
+    activate Repo
+    Repo -> DB : UPDATE T_USER SET active=false ...
+    Repo --> Ctrl : updated
+    deactivate Repo
+    Ctrl --> UI : (void)
+    deactivate Ctrl
+    UI -> Admin : "User disabled successfully."
+
+else User is DISABLED -> ENABLE
+    UI -> Admin : "Do you want to ENABLE this user? (y/n)"
+    Admin -> UI : "y"
+    UI -> Ctrl : enableUser(email)
+    activate Ctrl
+    Ctrl -> Auth : ensureHasAnyRole(Role.ADMIN)
+    activate Auth
+    Auth --> Ctrl : (authorized)
+    deactivate Auth
+    Ctrl -> Repo : findByEmail(email)
+    activate Repo
+    Repo --> Ctrl : Optional<User>
+    deactivate Repo
+    Ctrl -> TargetUser : activate()
+    activate TargetUser
+    TargetUser -> TargetUser : active = true
+    deactivate TargetUser
+    Ctrl -> Repo : save(user)
+    activate Repo
+    Repo -> DB : UPDATE T_USER SET active=true ...
+    Repo --> Ctrl : updated
+    deactivate Repo
+    Ctrl --> UI : (void)
+    deactivate Ctrl
+    UI -> Admin : "User enabled successfully."
+end
+
+== Error: User Not Found ==
+
+note over UI, DB : If findByEmail returns empty:\nCtrl throws IllegalArgumentException\n("User not found with email: ...")\nUI catches and shows "Error: ..."
+
+== Error: Non-Admin Attempt ==
+
+note over UI, Auth : If current user is not ADMIN:\nAuth.ensureHasAnyRole(ADMIN) throws\nSecurityException("User does not have required role")
+
+@enduml

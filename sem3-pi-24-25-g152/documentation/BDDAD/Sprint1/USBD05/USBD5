@@ -1,0 +1,15 @@
+SELECT
+    o.OID AS "Order ID",
+    c.Name AS "Customer Name",
+    p.Name AS "Product Name",
+    op.Quantity AS "Ordered Quantity",
+    o.DateDelivery AS "Delivery Date"
+FROM
+    "Order" o
+    JOIN Client c ON o.ClientNIF = c.NIF
+    JOIN OrderProduct op ON o.OID = op.OID
+    JOIN Product p ON op.ProductPartID = p.PartID
+WHERE
+    o.DateDelivery BETWEEN TO_DATE('2020-10-01', 'YYYY-MM-DD') AND TO_DATE('2030-12-31', 'YYYY-MM-DD')
+ORDER BY
+    o.DateDelivery ASC, p.Name ASC;

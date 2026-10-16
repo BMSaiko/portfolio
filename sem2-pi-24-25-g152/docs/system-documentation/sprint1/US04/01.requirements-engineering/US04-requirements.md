@@ -1,0 +1,68 @@
+# US04 - Create a Scenario for a Selected Map
+
+## 1. Requirements Engineering
+
+### 1.1. User Story Description
+
+As an Editor, I want to create a scenario for a selected map.
+
+### 1.2. Customer Specifications and Clarifications 
+
+**From the specifications document:**
+
+> Scenarios represent specific historical periods and geographical regions. Each scenario is defined for a specific map, with a start and end date, and includes technological restrictions (available locomotive types and industries) and historical events that impact gameplay.
+
+**From the client clarifications:**
+
+> **Question:** What information is required when creating a scenario?
+>
+> **Answer:** Each scenario must have a name, be tied to a specific map, have a defined time period (start and end dates), and include technological restrictions and at least one historical event.
+
+> **Question:** Are there any limits to how many technological restrictions can be added?
+>
+> **Answer:** There is no limit to the number of restrictions, but at least one type of locomotive and one type of industry must be available.
+
+### 1.3. Acceptance Criteria
+
+* **AC1:** All required fields must be filled in (name, map, start time, end time).
+* **AC2:** At least one locomotive type must be available.
+* **AC3:** At least one industry type must be available.
+* **AC4:** At least one historical event must be added.
+* **AC5:** The end date must be after the start date.
+
+### 1.4. Found out Dependencies
+
+* There is a dependency on having maps already created in the system, as scenarios are created for existing maps.
+
+### 1.5 Input and Output Data
+
+**Input Data:**
+
+* Typed data:
+    * scenario name
+    * start time (date)
+    * end time (date)
+    * historical events
+    
+* Selected data:
+    * map
+    * available locomotive types
+    * available industry types 
+
+**Output Data:**
+
+* List of existing maps
+* List of all locomotive types
+* List of all industry types
+* (In)Success of the operation
+
+### 1.6. System Sequence Diagram (SSD)
+
+![System Sequence Diagram](svg/US04-SSD.svg)
+
+**_Other alternatives might exist._**
+
+### 1.7 Other Relevant Remarks
+
+* Created scenarios become available for players to select when starting a new game.
+* Historical events provide context and challenges that affect gameplay.

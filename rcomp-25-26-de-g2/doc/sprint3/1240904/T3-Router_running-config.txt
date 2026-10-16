@@ -1,0 +1,195 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T3-Router
+!
+!
+!
+!
+ip dhcp excluded-address 10.61.156.1
+ip dhcp excluded-address 10.61.136.1
+ip dhcp excluded-address 10.61.166.1
+ip dhcp excluded-address 10.61.172.1
+ip dhcp excluded-address 10.61.172.10
+ip dhcp excluded-address 10.61.172.11
+!
+ip dhcp pool t3-outlets-pool
+ network 10.61.156.0 255.255.252.0
+ default-router 10.61.156.1
+ dns-server 10.61.172.10
+ domain-name terminal-3.rcomp-25-26-de-g2
+ip dhcp pool t3-wifi-pool
+ network 10.61.136.0 255.255.248.0
+ default-router 10.61.136.1
+ dns-server 10.61.172.10
+ domain-name terminal-3.rcomp-25-26-de-g2
+ip dhcp pool t3-voip-pool
+ network 10.61.166.0 255.255.254.0
+ default-router 10.61.166.1
+ option 150 ip 10.61.166.1
+ dns-server 10.61.172.10
+ domain-name terminal-3.rcomp-25-26-de-g2
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO2811/K9 sn FTX1017O236-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.769
+ encapsulation dot1Q 769
+ ip address 10.61.174.3 255.255.255.0
+ ip nat outside
+ ip access-group 100 in
+!
+interface FastEthernet0/0.775
+ encapsulation dot1Q 775
+ ip address 10.61.156.1 255.255.252.0
+ ip nat inside
+!
+interface FastEthernet0/0.776
+ encapsulation dot1Q 776
+ ip address 10.61.136.1 255.255.248.0
+ ip nat inside
+!
+interface FastEthernet0/0.777
+ encapsulation dot1Q 777
+ ip address 10.61.166.1 255.255.254.0
+ ip nat inside
+!
+interface FastEthernet0/0.778
+ encapsulation dot1Q 778
+ ip address 10.61.172.1 255.255.255.0
+ ip nat inside
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ network 10.61.174.0 0.0.0.255 area 0
+ network 10.61.156.0 0.0.3.255 area 3
+ network 10.61.136.0 0.0.7.255 area 3
+ network 10.61.166.0 0.0.1.255 area 3
+ network 10.61.172.0 0.0.0.255 area 3
+!
+ip nat inside source static tcp 10.61.172.10 80 10.61.174.3 80 
+ip nat inside source static tcp 10.61.172.10 443 10.61.174.3 443 
+ip classless
+!
+ip flow-export version 9
+!
+!
+access-list 100 deny ip 10.61.156.0 0.0.3.255 any
+access-list 100 deny ip 10.61.136.0 0.0.7.255 any
+access-list 100 deny ip 10.61.166.0 0.0.1.255 any
+access-list 100 deny ip 10.61.172.0 0.0.0.255 any
+access-list 100 deny ip 10.61.170.0 0.0.1.255 any
+access-list 100 permit icmp any any echo
+access-list 100 permit icmp any any echo-reply
+access-list 100 permit udp any host 10.61.172.10 eq domain
+access-list 100 permit tcp any host 10.61.172.10 eq domain
+access-list 100 permit tcp any host 10.61.172.10 eq www
+access-list 100 permit tcp any host 10.61.172.10 eq 443
+access-list 100 permit tcp any host 10.61.172.11 eq www
+access-list 100 permit tcp any host 10.61.172.11 eq 443
+access-list 100 deny ip any 10.61.172.0 0.0.0.255
+access-list 100 permit ospf any any
+access-list 100 permit udp host 0.0.0.0 host 255.255.255.255 eq bootps
+access-list 100 permit udp any any eq tftp
+access-list 100 permit tcp any any eq 2000
+access-list 100 permit tcp any host 10.61.174.3 eq www
+access-list 100 permit tcp any host 10.61.174.3 eq 443
+access-list 100 deny ip any host 10.61.174.3
+access-list 100 deny ip any host 10.61.156.1
+access-list 100 deny ip any host 10.61.136.1
+access-list 100 deny ip any host 10.61.166.1
+access-list 100 deny ip any host 10.61.172.1
+access-list 100 permit ip any any
+!
+!
+!
+!
+!
+dial-peer voice 2 voip
+ destination-pattern 2...
+ session target ipv4:10.61.174.2
+!
+dial-peer voice 4 voip
+ destination-pattern 4...
+ session target ipv4:10.61.174.4
+!
+telephony-service
+ max-ephones 2
+ max-dn 2
+ ip source-address 10.61.166.1 port 2000
+ auto assign 1 to 2
+!
+ephone-dn 1
+ number 3001
+!
+ephone-dn 2
+ number 3002
+!
+ephone 1
+ device-security-mode none
+ mac-address 00D0.FFA5.D52E
+ type 7960
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 00D0.BC11.5AC3
+ type 7960
+ button 1:2
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+

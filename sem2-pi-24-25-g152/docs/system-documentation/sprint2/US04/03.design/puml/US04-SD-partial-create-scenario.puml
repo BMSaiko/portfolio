@@ -1,0 +1,42 @@
+@startuml US04-SD-partial-create-scenario
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US04 - Create Scenario - Partial Sequence Diagram
+
+participant ":CreateScenarioUI" as UI
+participant ":CreateScenarioController" as CTRL
+participant "selectedMap:Map" as MAP
+participant "scenario:Scenario" as SCENARIO
+participant ":ScenarioService" as SCENARIOSERVICE
+participant ":ScenarioRepository" as SCENARIOREPO
+
+UI -> CTRL : createScenario(map, name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+activate CTRL
+    group Create Scenario
+    CTRL -> MAP : createScenario(name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+    activate MAP
+        MAP --> SCENARIO** : create(name, startTime, endTime, \nlocomotiveTypes, industryTypes, historicalEvents)
+        
+        MAP -> SCENARIO : validateData()
+        activate SCENARIO
+            SCENARIO --> MAP : validationResult
+        deactivate SCENARIO
+        
+        MAP --> CTRL : scenario
+    deactivate MAP
+    
+    CTRL -> SCENARIOSERVICE : validateScenario(scenario)
+    activate SCENARIOSERVICE
+        SCENARIOSERVICE --> CTRL : validationResult
+    deactivate SCENARIOSERVICE
+    
+    CTRL -> SCENARIOREPO : saveScenario(scenario)
+    activate SCENARIOREPO
+        SCENARIOREPO --> CTRL : success
+    deactivate SCENARIOREPO
+    end group
+    CTRL --> UI : success
+deactivate CTRL
+@enduml

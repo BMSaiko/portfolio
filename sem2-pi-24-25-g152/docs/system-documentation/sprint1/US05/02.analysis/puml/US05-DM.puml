@@ -1,0 +1,55 @@
+@startuml US05-DM
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam padding 4
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam defaultTextAlignment center
+
+hide circle
+hide methods
+
+class Map {
+  name
+  width
+  height
+}
+
+class Station {
+  name
+  type
+  radius
+  cost
+}
+
+enum StationType {
+  DEPOT
+  STATION
+  TERMINAL
+}
+
+class Location {
+  x
+  y
+}
+
+class Player {
+  id
+  name
+}
+
+class RailwayNetwork {
+  stations
+}
+
+Map "1" --> "0..*" Station: contains
+Station "1" --> "1" Location: has position
+Player "1" --> "0..*" Station: can build
+RailwayNetwork "1" --> "0..*" Station: manages
+Station "1" --> "1" StationType : is classified as
+
+@enduml

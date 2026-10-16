@@ -1,0 +1,44 @@
+@startuml US05-SD-CreateStation
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant ":BuildStationController" as CTRL
+participant "Repositories" as REPOS
+participant "repositories\n:Repositories" as REPOS_SINGLETON
+participant "stationRepository\n:StationRepository" as STATION_REPO
+participant "station\n:Station" as STATION
+participant "currentSession\n:UserSession" as CURRENT_SESSION
+
+autonumber 20
+-> CTRL : createAndSaveStation(x, y, stationName, stationType, cost, player, currentMap)
+autonumber 20.1
+activate CTRL
+    group Create Station
+        CTRL -> REPOS : getInstance()
+        activate REPOS
+            REPOS --> CTRL : repositories
+        deactivate REPOS
+
+        CTRL -> REPOS_SINGLETON : getStationRepository()
+        activate REPOS_SINGLETON
+            REPOS_SINGLETON --> CTRL : stationRepository
+        deactivate REPOS_SINGLETON
+
+        CTRL --> STATION** : create(x, y, stationName, stationType, currentMap)
+
+        CTRL -> STATION_REPO : addStation(station)
+        activate STATION_REPO
+            STATION_REPO --> CTRL : success
+        deactivate STATION_REPO
+
+        CTRL -> CURRENT_SESSION : updateBudget(-cost)
+        activate CURRENT_SESSION
+            CURRENT_SESSION --> CTRL : newBudget
+        deactivate CURRENT_SESSION
+    end
+    autonumber 21
+    <-- CTRL : station
+deactivate CTRL
+
+@enduml

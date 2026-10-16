@@ -1,0 +1,49 @@
+@startuml
+title Sequence Diagram - Weather Data Registration (Weather Aggregate)
+
+actor "Weather Person" as WP
+participant "WeatherController" as Controller
+participant "WeatherService" as Service
+participant "WeatherRepository" as Repo
+participant "WeatherData" as Aggregate
+
+WP -> Controller: registerWeather(areaId, date, source, windSpeed, windDirection, temperature, pressure, visibility)
+activate Controller
+
+Controller -> Service: addWeatherData(data)
+activate Service
+
+Service -> Repo: findByAreaDateAndSource(areaId, date, source)
+activate Repo
+Repo --> Service: existingRecord (or null)
+deactivate Repo
+
+alt Record already exists
+    Service --> Controller: throw DuplicateWeatherDataException
+    Controller --> WP: error: "Weather data for this area, date, and source already exists"
+else No duplicate
+    Service -> Aggregate: new WeatherData(areaId, date, source, windSpeed, windDirection, temperature, pressure, visibility)
+    activate Aggregate
+    note right of Aggregate
+        **Invariants enforced inside constructor:**
+        - Wind speed >= 0
+        - Temperature between -100°C and +70°C
+        - Pressure between 800 hPa and 1100 hPa
+        - Visibility >= 0
+        - Wind direction between 0° and 359°
+    end note
+    Aggregate --> Service: weatherData
+    deactivate Aggregate
+    
+    Service -> Repo: save(weatherData)
+    activate Repo
+    Repo --> Service: saved
+    deactivate Repo
+    
+    Service --> Controller: weatherData
+    Controller --> WP: success: "Weather data registered successfully"
+end
+
+deactivate Service
+deactivate Controller
+@enduml

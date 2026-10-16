@@ -1,0 +1,48 @@
+@startuml US02-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US02 As an Editor, I want to add an industry in a position XY of the selected map.
+
+autonumber
+
+actor "Editor" as EDITOR
+participant ":System" as SYSTEM
+
+activate EDITOR
+
+    EDITOR -> SYSTEM : asks to add an industry
+    activate SYSTEM
+        SYSTEM --> EDITOR : requests authentication
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : provides credentials
+    activate SYSTEM
+        SYSTEM --> EDITOR : validates Editor role
+        SYSTEM --> EDITOR : shows map list and asks to select one
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects map
+    activate SYSTEM
+        SYSTEM --> EDITOR : shows industry type options
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects industry type
+    activate SYSTEM
+        SYSTEM --> EDITOR : shows industry subtype options (filtered by type)
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : selects industry subtype
+    activate SYSTEM
+        SYSTEM --> EDITOR : requests XY coordinates
+    deactivate SYSTEM
+
+    EDITOR -> SYSTEM : inputs X and Y coordinates
+    activate SYSTEM
+        SYSTEM --> EDITOR : validates placement (boundaries, occupation, spacing)
+        SYSTEM --> EDITOR : confirms successful addition
+    deactivate SYSTEM
+
+deactivate EDITOR
+@enduml

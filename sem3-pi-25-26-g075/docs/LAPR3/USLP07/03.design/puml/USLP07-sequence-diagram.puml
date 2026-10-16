@@ -1,0 +1,75 @@
+@startuml USLP07-sequence-diagram
+
+actor "Freight Manager" as FM
+participant ":FreightDispatchService" as FDS
+participant ":RouteCalculator" as RC
+participant ":ConflictResolver" as CR
+participant ":Train" as Train
+participant ":Route" as Route
+participant ":LineSegment" as LS
+
+FM -> FDS : dispatchTrain(trainId, routePath, departureTime)
+activate FDS
+
+' 1. Load Data and Setup
+FDS -> FDS : setupDispatch(trainId, routePath)
+' Assuming Train and Route objects are loaded/created here
+FDS -> Train : getRollingStockWeight()
+activate Train
+Train --> FDS : totalTrainWeight
+deactivate Train
+
+FDS -> Route : getOrderedSegments()
+activate Route
+Route --> FDS : segmentsList
+deactivate Route
+
+' 2. Core Calculation Loop (Vmax and Time)
+loop for each segment in segmentsList
+
+    FDS -> LS : getMaxTrackSpeed()
+    activate LS
+    LS --> FDS : Vtrack
+    deactivate LS
+
+    FDS -> RC : calculateMaxTractionSpeed(Train.power, totalTrainWeight)
+    activate RC
+    RC --> FDS : Vtraction
+    deactivate RC
+
+    FDS -> FDS : Vmax = min(Vtrack, Vtraction)
+
+    FDS -> RC : calculateTravelTime(segment.length, Vmax)
+    activate RC
+    RC --> FDS : estimatedTime
+    deactivate RC
+
+    FDS -> Route : addPassageEvent(endpoint, estimatedTime)
+
+end
+
+' 3. Conflict Resolution
+FDS -> CR : resolveConflicts(Route)
+activate CR
+
+CR -> CR : identifySingleTrackConflicts()
+
+alt conflicts detected
+    CR -> CR : determineCrossingPoint(conflictTime)
+    CR -> Route : updateCrossingEvents(crossingPoint, requiredDelay)
+    activate Route
+    Route --> CR
+    deactivate Route
+end
+
+CR --> FDS : updatedRoute
+deactivate CR
+
+' 4. Final Output / Persistence
+FDS -> FDS : logDispatch(Route)
+FDS -> FDS : formatDispatchPlan(Route)
+
+FDS --> FM : dispatchPlan(path, times, crossings)
+deactivate FDS
+
+@enduml

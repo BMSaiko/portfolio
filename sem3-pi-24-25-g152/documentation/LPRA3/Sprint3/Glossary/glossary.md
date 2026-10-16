@@ -1,0 +1,63 @@
+| Term | Definition | Data Type | Additional Notes |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|---------------------------------------------------------------------|
+| Administrator | A user role responsible for managing system configurations, user accounts, and permissions within the production management system. | Text | Essential for system maintenance and security |
+| Agile Methodology | An iterative and incremental project management approach emphasizing collaboration, flexibility, and customer-focused development. | Text | Commonly used in software development and project management |
+| Arduino IDE | An integrated development environment used for programming Arduino-compatible boards, supporting C/C++ languages. | Text | Essential tool for hardware programming and prototyping |
+| Assembly Operations | Processes in manufacturing involving putting together components or raw materials to create a finished product. | Text | Fundamental to production processes |
+| Bill of Materials (BOM) | A detailed tree-like structure representing the components and raw materials needed for a product. | Text | Essential for inventory management and production planning |
+| Bill of Operations (BOO) | A hierarchical structure defining the sequence of operations needed to produce a product. | Text | Critical for production scheduling and resource allocation |
+| BOM | Bill of Materials, tree representation with final products (root), raw materials (leaf nodes), and components (intermediate nodes), as well as the required quantities of each of those elements to produce the final product. | Text | Also known as product structure or product recipe |
+| BOO | Bill of Operations, a group of several operations with one or more possible sequences throughout its production process, it's also represented by a tree-like structure. | Text | Helps in determining production time and resource requirements |
+| Capacity Planning | Basic materials used in the production of components, which cannot be broken down into smaller parts within the context of the product in question. | Text | Important for resource optimization and production scheduling |
+| Circular Buffer | A data structure that uses a single, fixed-size buffer as if it were connected end-to-end. Used for storing and processing a continuous stream of data. | Data Structure | Efficient for managing continuous data streams |
+| Components | Parts that make up the final product but are not sold separately. Each component may, in turn, consist of other components. | Text | Key elements in product assembly and manufacturing |
+| Critical Path | The sequence of tasks in a project that determines the minimum completion time, with no slack time available. | Text | Essential for project timeline management |
+| Critical Path Method (CPM) | A project management technique identifying essential tasks directly affecting project timelines. | Text | Used alongside PERT for project scheduling |
+| CSV (Comma-Separated Values) | A file format used to store tabular data where each line represents a record and each field is separated by a comma. | Text | Common format for data exchange and storage |
+| Customer/Client | An individual or company who places an order. Clients are identified primarily by their tax identification number (NIF), with additional information stored, such as names, addresses, and contact details. | Text | Essential for order management and customer relationship |
+| Database Management System (DBMS) | A software system that uses a standard method to store and organize data, ensuring data integrity and security. | Text | Critical for data organization and management |
+| Dependency Graph | A directed graph representing dependencies between operations, crucial for managing project schedules. | Data Structure | Used for visualizing task relationships |
+| Dynamic Memory Allocation | The process of allocating and freeing memory during runtime, ensuring efficient resource management in applications. | Text | Important for optimizing memory usage |
+| Flow-Shop | A manufacturing process where items are produced in a sequential flow through a fixed set of operations. | Text | Suitable for high-volume production |
+| Functional Requirements | Specific behaviors or functions that a system must support, such as data processing, interactions, and user interface actions. | Text | Defines system capabilities |
+| Job-Shop | A flexible manufacturing process where a variety of products are produced, typically in smaller batches, with machines arranged by function. | Text | Ideal for custom manufacturing |
+| Layout | The physical arrangement of stations on the factory floor, which impacts how products move through the production process. | Text | Affects production efficiency and material flow |
+| MachManager | A software component responsible for managing plant floor machines and forwarding commands. | Text | Core component for machine control and monitoring |
+| Manufacturing Plant | A facility with organized operations, machines, and layouts dedicated to producing goods or components. | Text | Central to production operations |
+| Minimum Viable Product (MVP) | Basic version of a product with just enough features to attract early users and validate the concept. | Text | Used in product development and market testing |
+| Moving Median Filter | A technique that smoothens data by replacing each data point with the median of its surrounding points within a fixed-size window. | Algorithm | Used for data smoothing and noise reduction |
+| NIF (Número de Identificação Fiscal) | The unique tax identification number used to identify customers in the system. | Text | Required for customer identification |
+| Non-functional Requirements | Criteria that define the system's operation rather than specific behaviors, such as performance, scalability, and maintainability. | Text | Defines system quality attributes |
+| Operation | The specific tasks performed to produce a product, operations include cutting, drilling, gluing, assembly, polishing, varnishing and painting. | Text | Fundamental to manufacturing processes |
+| Operations Sequence | A predefined order of tasks or steps performed in manufacturing to produce a product. | Text | Critical for process flow |
+| Order | A Client request that can include one or more items, each with its own delivery details (date, location). Orders store customer information like Identification (NIF), name, and delivery address. | Text | Central to order fulfillment and tracking |
+| Order Fulfillment | The process of managing customer orders, including production planning, scheduling, and delivery. | Text | Key business process |
+| Part | A Part consists of every kind of items, can be a product, component or even a raw material | Text | Generic term encompassing all manufacturing items |
+| PERT | Program Evaluation and Review Technique, a method for analyzing project tasks to identify critical paths and slack time. | Text | Complementary to CPM in project management |
+| PL/SQL | A procedural extension for SQL used for database programming in Oracle systems. | Text | Used for database programming |
+| Plant Floor Manager | A role responsible for overseeing the layout, machines, and operations of the manufacturing facility. | Text | Key management position |
+| Preventive Maintenance | Scheduled maintenance tasks performed to prevent unexpected machine failures and ensure smooth operations. | Text | Reduces equipment downtime |
+| Product | An Item that can be final or a component (can be differentiated by some attributes). | Text | Basic unit of production |
+| Product Control | The monitoring and management of the production process to ensure it aligns with the plan, making adjustments as needed. | Text | Essential for quality assurance and efficiency |
+| Product Engineering | The process of designing and planning the technical and economic feasibility of products and components. | Text | Crucial for product development and optimization |
+| Product Family | Group of products with similar operation sequence but with different characteristics (material, size) in other words is an abstraction of product. | Text | Helps in standardizing production processes |
+| Product Planning | The process of deciding what to produce, how much, and when, ensuring efficient use of resources to meet demand. | Text | Key for production scheduling and resource allocation |
+| Production Manager | A role that manages production plans, schedules, and resources to meet customer demand efficiently. | Text | Critical management role |
+| Production Order | Created from an order, this includes the list of materials (BOM) and operations (BOO) necessary to produce each item. Each item from an order has a distinct production order. | Text | Links customer orders to manufacturing processes |
+| Production Plan | A schedule that defines what products will be made, when, and how, based on customer orders and available resources. | Text | Guides production activities |
+| Project Management | The application of skills, tools, and techniques to project activities to meet project requirements within constraints like scope, time, and budget. | Text | Essential for project success |
+| Project-Based Manufacturing | A manufacturing approach focused on creating unique products for specific customer projects, often requiring custom production plans. | Text | Suitable for custom projects |
+| Raspberry PI Pico | A hardware device used to emulate production machines in the project. | Hardware | Cost-effective solution for machine simulation |
+| Raw Materials | Basic materials used in the production of components, which cannot be broken down into smaller parts within the context of the product in question. | Text | Foundation of manufacturing processes |
+| Raw Materials Inventory | A stock of basic materials used as inputs for production processes. | Text | Critical for production continuity |
+| Root Cause Analysis | A systematic method used to identify the primary cause of an issue or problem in the production process. | Text | Important for problem-solving |
+| SCRUM | An Agile framework for team collaboration in software development, emphasizing iterative progress through sprints. | Text | Popular agile methodology |
+| Simulation Tool | Software designed to replicate production scenarios for analysis, optimization, and decision-making. | Software | Valuable for process optimization and planning |
+| Sprint | A time-boxed iteration in SCRUM during which specific work must be completed and made ready for review. | Text | Basic unit of scrum development |
+| System Users | Individuals or roles in a management information system (MIS) who interact with the system to carry out specific tasks related to the operation and management of processes in a manufacturing facility or organization. Each user has a distinct profile with unique responsibilities and permissions, ensuring the system is used effectively and efficiently. | Text | Critical for system security and accountability |
+| Test-Driven Development (TDD) | A software development process where tests are written before the code, ensuring functionality and reducing bugs. | Text | Promotes code quality |
+| UI (User Interface) | A console-based interface for interacting with the Plant-floor Machine Management system. | Text | Primary means of system interaction |
+| User Stories (US) | Short, simple descriptions of a feature told from the perspective of the person who desires the functionality, typically formatted as 'As a [persona], I want [feature], so that [benefit].' | Text | Used in agile development |
+| Working Station | A work area that may include robotic units, automated machines, human-operated machines, or manual workstations. Each station can perform specific manufacturing operations and has its own production capacity. | Text | Basic unit of production facility organization |
+| Workstation | A specific location in a manufacturing plant where operations are performed, ranging from automated to manual setups. | Text | Fundamental production unit |
+| Workstation Efficiency | A measure of how effectively a workstation performs its assigned tasks, including factors like utilization and downtime. | Text | Key performance indicator |

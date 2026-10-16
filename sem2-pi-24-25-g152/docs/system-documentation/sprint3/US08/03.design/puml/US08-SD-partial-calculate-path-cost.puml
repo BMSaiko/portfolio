@@ -1,0 +1,48 @@
+@startuml US08-SD-partial-calculate-path-cost
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US08 - Calculate Path and Cost - Partial Sequence Diagram
+
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant ":PathMapper" as PATHMAPPER
+participant ":StationRepository" as STATIONREPO
+participant "startStation:Station" as START_STATION
+participant "endStation:Station" as END_STATION
+participant ":PathFinderService" as PATHFINDER
+participant "path:Path" as PATH
+participant ":RailwayLineService" as LINESERVICE
+
+UI -> CTRL : calculatePathAndCost(startStationName, endStationName)
+activate CTRL
+    group Calculate Path and Cost
+    CTRL -> STATIONREPO : getStationByName(startStationName)
+    activate STATIONREPO
+        STATIONREPO --> CTRL : startStation
+    deactivate STATIONREPO
+    
+    CTRL -> STATIONREPO : getStationByName(endStationName)
+    activate STATIONREPO
+        STATIONREPO --> CTRL : endStation
+    deactivate STATIONREPO
+    
+    CTRL -> PATHFINDER : findPath(startStation, endStation)
+    activate PATHFINDER
+        PATHFINDER --> CTRL : path
+    deactivate PATHFINDER
+
+    CTRL -> LINESERVICE : calculateConstructionCost(path)
+    activate LINESERVICE
+        LINESERVICE --> CTRL : cost
+    deactivate LINESERVICE
+    
+    CTRL -> PATHMAPPER : toPathCostDTO(path, cost)
+    activate PATHMAPPER
+        PATHMAPPER --> CTRL : pathCostDTO
+    deactivate PATHMAPPER
+    end group
+    CTRL --> UI : pathCostDTO
+deactivate CTRL
+@enduml

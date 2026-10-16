@@ -1,0 +1,70 @@
+@startuml US09-DM
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam padding 4
+skinparam nodesep 80
+skinparam ranksep 100
+skinparam defaultTextAlignment center
+
+hide circle
+hide methods
+
+class Train {
+  id
+  locomotive
+  carriages
+}
+
+class Locomotive {
+  id
+  type
+  power
+  speed
+  cost
+  availableFrom
+  availableUntil
+}
+
+enum LocomotiveType {
+  STEAM
+  DIESEL
+  ELECTRIC
+}
+
+class Carriage {
+  id
+  cargoType
+}
+
+enum CargoType {
+  PASSENGERS
+  MAIL
+  COAL
+  IRON_ORE
+  STEEL
+  CARS
+}
+
+class Player {
+  id
+  name
+  funds
+}
+
+class RailwayNetwork {
+  trains
+}
+
+Train "1" --> "1" Locomotive: has
+Train "1" --> "1..*" Carriage: consists of
+Player "1" --> "0..*" Train: can own
+RailwayNetwork "1" --> "0..*" Train: manages
+Locomotive "1" --> "1" LocomotiveType : is classified as
+Carriage "1" --> "1" CargoType : is classified as
+
+
+@enduml

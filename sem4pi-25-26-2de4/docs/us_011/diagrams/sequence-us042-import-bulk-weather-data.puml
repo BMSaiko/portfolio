@@ -1,0 +1,67 @@
+@startuml
+title Sequence Diagram - US042 Import Bulk Weather Data
+
+actor "Weather Person" as WP
+participant "ImportWeatherDataUI" as UI
+participant "ImportWeatherDataController" as Controller
+participant "AuthService" as Auth
+participant "WeatherDataImporter" as Importer
+participant "AirControlAreaRepository" as AreaRepo
+participant "WeatherData" as WeatherData
+participant "WeatherDataRepository" as WeatherRepo
+
+WP -> UI: select "Import bulk weather data"
+UI -> WP: request CSV file path
+WP -> UI: provide path
+
+UI -> Controller: importFrom(path)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(WEATHER_PERSON, ADMIN)
+activate Auth
+Auth --> Controller: authorized
+deactivate Auth
+
+Controller -> Importer: parse(path)
+activate Importer
+Importer --> Controller: List<WeatherImportRecord>
+deactivate Importer
+
+loop for each imported record
+    Controller -> AreaRepo: findByCode(record.areaCode)
+    activate AreaRepo
+    AreaRepo --> Controller: Optional<AirControlArea>
+    deactivate AreaRepo
+
+    alt area does not exist
+        Controller -> Controller: result.recordError(line, reason)
+    else area exists
+        Controller -> WeatherData: new WeatherData(area, TimePeriod,\nTemperature, WindSpeed,\nWindDirection, Humidity, Pressure)
+        activate WeatherData
+        note right of WeatherData
+            Invariants enforced by aggregate/value objects:
+            - AirControlArea is required
+            - TimePeriod start/end are valid
+            - Temperature is physically valid
+            - WindSpeed is non-negative
+            - WindDirection is within valid degrees
+            - Humidity and pressure are valid
+        end note
+        WeatherData --> Controller: weatherData
+        deactivate WeatherData
+
+        Controller -> WeatherRepo: save(weatherData)
+        activate WeatherRepo
+        WeatherRepo --> Controller: persisted
+        deactivate WeatherRepo
+
+        Controller -> Controller: result.recordImported()
+    end
+end
+
+Controller --> UI: WeatherImportResult
+deactivate Controller
+
+UI --> WP: show imported/rejected records
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+title Sequence Diagram - Airport Creation (Airport Aggregate)
+
+actor "Backoffice Operator" as BO
+participant "AirportController" as Controller
+participant "AirportService" as Service
+participant "AirportRepository" as Repo
+participant "Airport" as Aggregate
+
+BO -> Controller: createAirport(icao, iata, name, coordinates, altitude, areaId)
+activate Controller
+
+Controller -> Service: registerAirport(airportData)
+activate Service
+
+Service -> Repo: findByICAO(icao)
+activate Repo
+Repo --> Service: existingAirport (or null)
+deactivate Repo
+
+alt ICAO already exists
+    Service --> Controller: throw DuplicateICAOException
+    Controller --> BO: error: "ICAO code already exists"
+else ICAO is unique
+    Service -> Aggregate: new Airport(icao, iata, name, coordinates, altitude, areaId)
+    activate Aggregate
+    note right of Aggregate
+        **Invariant enforced inside constructor:**
+        - ICAO format validation (4 letters)
+        - IATA format validation (3 letters)
+        - Coordinates must be valid
+        - Altitude must be >= 0
+    end note
+    Aggregate --> Service: airport
+    deactivate Aggregate
+    
+    Service -> Repo: save(airport)
+    activate Repo
+    Repo --> Service: saved
+    deactivate Repo
+    
+    Service --> Controller: airport
+    Controller --> BO: success: "Airport created successfully"
+end
+
+deactivate Service
+deactivate Controller
+@enduml

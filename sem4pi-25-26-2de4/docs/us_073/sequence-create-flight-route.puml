@@ -1,0 +1,128 @@
+@startuml
+title Sequence Diagram - US073: Create Flight Route
+
+actor "Company Collaborator" as Collab
+participant "CreateFlightRouteUI" as UI
+participant "CreateFlightRouteController" as Controller
+participant "AuthService" as Auth
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "FlightRouteRepository" as RouteRepo
+participant "AirportRepository" as AirportRepo
+participant "RouteDesignator" as Designator
+participant "FlightRoute" as Aggregate
+
+activate UI
+
+' --- 1. Input Phase ---
+Collab -> UI: enters designator, origin IATA, destination IATA
+
+UI -> Controller: createRoute(dto)
+activate Controller
+
+' --- 2. Authentication ---
+Controller -> Auth: currentUser()
+activate Auth
+Auth --> Controller: Optional<User>
+deactivate Auth
+
+alt no active session
+    Controller --> UI: throw IllegalStateException
+    UI --> Collab: error: "No active session."
+else user logged in
+
+    ' --- 3. Resolve company ---
+    Controller -> CollabRepo: findByUserEmail(userEmail)
+    activate CollabRepo
+    CollabRepo --> Controller: Optional<CustomerCollaborator>
+    deactivate CollabRepo
+
+    alt collaborator not found
+        Controller --> UI: throw IllegalStateException
+        UI --> Collab: error: "Not registered as collaborator."
+    else collaborator found
+
+        Controller -> CompanyRepo: findByIcaoCode(collab.customerCode())
+        activate CompanyRepo
+        CompanyRepo --> Controller: Optional<AirTransportCompany>
+        deactivate CompanyRepo
+
+        alt company not found
+            Controller --> UI: throw IllegalStateException
+            UI --> Collab: error: "Company not found."
+        else company found
+
+            ' --- 4. Uniqueness check ---
+            Controller -> RouteRepo: existsByDesignator(designator)
+            activate RouteRepo
+            RouteRepo --> Controller: boolean
+            deactivate RouteRepo
+
+            alt designator already exists
+                Controller --> UI: throw IllegalArgumentException
+                UI --> Collab: error: "Route already exists."
+            else designator is unique
+
+                ' --- 5. Resolve airports ---
+                Controller -> AirportRepo: findByIataCode(originIata)
+                activate AirportRepo
+                AirportRepo --> Controller: Optional<Airport>
+                deactivate AirportRepo
+
+                alt origin airport not found
+                    Controller --> UI: throw IllegalArgumentException
+                    UI --> Collab: error: "Origin airport not found."
+                else origin found
+
+                    Controller -> AirportRepo: findByIataCode(destIata)
+                    activate AirportRepo
+                    AirportRepo --> Controller: Optional<Airport>
+                    deactivate AirportRepo
+
+                    alt destination airport not found
+                        Controller --> UI: throw IllegalArgumentException
+                        UI --> Collab: error: "Destination airport not found."
+                    else destination found
+
+                        ' --- 6. Build value object (validates format + prefix) ---
+                        Controller -> Designator: new RouteDesignator(designator, company.iataCode())
+                        activate Designator
+                        Designator --> Controller: routeDesignator
+                        deactivate Designator
+
+                        alt invalid format or prefix mismatch
+                            Controller --> UI: throw IllegalArgumentException
+                            UI --> Collab: error: "Invalid designator."
+                        else designator valid
+
+                            ' --- 7. Build aggregate (validates origin ≠ destination) ---
+                            Controller -> Aggregate: new FlightRoute(designator, company, origin, destination)
+                            activate Aggregate
+                            Aggregate --> Controller: flightRoute
+                            deactivate Aggregate
+
+                            alt origin equals destination
+                                Controller --> UI: throw IllegalArgumentException
+                                UI --> Collab: error: "Origin and destination must differ."
+                            else route valid
+
+                                ' --- 8. Persist ---
+                                Controller -> RouteRepo: save(flightRoute)
+                                activate RouteRepo
+                                RouteRepo --> Controller: savedRoute
+                                deactivate RouteRepo
+
+                                Controller --> UI: savedRoute
+                                UI --> Collab: success: "Route TP123 created successfully."
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

@@ -1,0 +1,33 @@
+@startuml US03-SD-partial-validate-city-data
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US03 - Validate City Data - Partial Sequence Diagram
+
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant ":CityValidator" as VALIDATOR
+participant ":CityService" as CITYSERVICE
+participant ":CityRepository" as CITYREPO
+
+UI -> CTRL : validateCityData(request)
+activate CTRL
+    group Validate City Data
+    CTRL -> VALIDATOR : validateCityData(request)
+    activate VALIDATOR
+        VALIDATOR --> CTRL : validationResult
+    deactivate VALIDATOR
+
+    CTRL -> CITYSERVICE : isNameUniqueInMap(request.name, request.mapId)
+    activate CITYSERVICE
+        CITYSERVICE -> CITYREPO : findByNameAndMap(request.name, request.mapId)
+        activate CITYREPO
+            CITYREPO --> CITYSERVICE : existingCity
+        deactivate CITYREPO
+        CITYSERVICE --> CTRL : isUnique
+    deactivate CITYSERVICE
+    end group
+    CTRL --> UI : validationResult
+deactivate CTRL
+@enduml

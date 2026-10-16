@@ -1,0 +1,26 @@
+@startuml
+
+title Sequence Diagram for Map Creation
+
+actor Editor
+participant "CreateMapUI" as UI
+participant "CreateMapController" as Controller
+participant "MapService" as Service
+participant "MapRepository" as Repository
+
+Editor -> UI: Open map creation interface
+UI -> Editor: Request map name, width, height
+Editor -> UI: Input map name, width, height
+UI -> Controller: Submit map creation request
+Controller -> Service: Validate map name
+Service -> Repository: Check name uniqueness
+Repository -> Service: Return uniqueness result
+Service -> Controller: Validate map size
+Controller -> Service: Create map
+Service -> Repository: Save map
+Repository -> Service: Confirm save
+Service -> Controller: Return success message
+Controller -> UI: Display success message
+UI -> Editor: Show map creation success
+
+@enduml

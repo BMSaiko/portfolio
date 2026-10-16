@@ -1,0 +1,64 @@
+@startuml USLP10-sequence-diagram
+
+autonumber
+actor "Traffic Manager" as TM
+participant ":TrainMovementController" as Controller
+participant ":TrainMovementService" as Service
+participant "Database (Oracle)" as DB
+
+' 1. Initialization
+TM -> Controller : show()
+activate Controller
+
+Controller -> Service : showMenu(scanner)
+activate Service
+
+Service -> Service : connect()
+
+' 2. User Input
+Service -> TM : prompt("Train ID")
+TM --> Service : trainId
+Service -> TM : prompt("Mode (1/2)")
+TM --> Service : mode
+
+' 3. PL/SQL Call - Technical Data
+Service -> DB : prepareCall("{ ? = call func_get_train_tech_data(?) }")
+activate DB
+Service -> DB : execute()
+DB --> Service : ResultSet (Mass, Power, StartTime)
+deactivate DB
+
+Service -> Service : create TechnicalData DTO
+
+' 4. PL/SQL Call - Path Data
+Service -> DB : prepareCall("{ ? = call func_get_train_path(?) }")
+activate DB
+Service -> DB : execute()
+DB --> Service : ResultSet (Stations, Distances, Limits, Tracks)
+deactivate DB
+
+' 5. Core Logic Loop
+loop while ResultSet.next()
+
+    Service -> Service : calculateTravelTime(dist, limit, maxSpeed)
+
+    ' Manual Mode Logic
+    alt Mode == 2 AND tracks == 1 (Single Line)
+        Service -> TM : display("Crossing Alert! Wait or Proceed?")
+        TM --> Service : input("1" or "2")
+
+        opt input == "1" (Wait)
+            Service -> Service : addDelay(10 mins)
+            Service -> TM : display("Train Waiting...")
+        end
+    end
+
+    Service -> TM : print("Arrival at Station: " + time)
+
+end
+
+Service -> Service : disconnect()
+
+deactivate Service
+deactivate Controller
+@enduml

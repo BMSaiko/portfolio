@@ -1,0 +1,97 @@
+@startuml
+title Sequence Diagram - US050: Register Air Control Area
+
+actor "Backoffice Operator" as BO
+participant "RegisterAirControlAreaUI" as UI
+participant "RegisterAirControlAreaController" as Controller
+participant "AuthService" as Auth
+participant "AirControlAreaRepository" as Repo
+participant "AirControlAreaCode" as Code
+participant "GeoBoundary" as Boundary
+participant "AirControlArea" as Aggregate
+
+BO -> UI: enter(code, name, minFuel, northLat, southLat, eastLon, westLon)
+activate UI
+
+UI -> Controller: registerAirControlArea(code, name, minFuel, northLat, southLat, eastLon, westLon)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt not authenticated or wrong role
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: SecurityException
+    UI --> BO: error: "Access denied"
+else authorized
+    Auth --> Controller: ok
+    deactivate Auth
+
+    Controller -> Code: of(code)
+    activate Code
+    alt code null or blank or wrong format
+        Code --> Controller: throw IllegalArgumentException
+        Controller --> UI: IllegalArgumentException
+        UI --> BO: error: "Invalid area code format"
+    else valid
+        Code --> Controller: areaCode
+        deactivate Code
+
+        Controller -> Repo: findByCode(areaCode)
+        activate Repo
+        Repo --> Controller: Optional<AirControlArea>
+        deactivate Repo
+
+        alt code already exists
+            Controller --> UI: throw IllegalStateException
+            UI --> BO: error: "Area code already exists"
+        else code is unique
+
+            Controller -> Boundary: new GeoBoundary(northLat, southLat, eastLon, westLon)
+            activate Boundary
+            alt northLat <= southLat
+                Boundary --> Controller: throw IllegalArgumentException
+                Controller --> UI: IllegalArgumentException
+                UI --> BO: error: "North latitude must be greater than south latitude"
+            else eastLon <= westLon
+                Boundary --> Controller: throw IllegalArgumentException
+                Controller --> UI: IllegalArgumentException
+                UI --> BO: error: "East longitude must be greater than west longitude"
+            else coordinates out of range
+                Boundary --> Controller: throw IllegalArgumentException
+                Controller --> UI: IllegalArgumentException
+                UI --> BO: error: "Coordinates out of valid range"
+            else boundary valid
+                Boundary --> Controller: geoBoundary
+                deactivate Boundary
+
+                loop for each existing AirControlArea
+                    Controller -> Boundary: overlapsWith(existingBoundary)
+                    activate Boundary
+                    Boundary --> Controller: boolean
+                    deactivate Boundary
+                    alt overlap detected
+                        Controller --> UI: throw IllegalStateException
+                        UI --> BO: error: "Boundary overlaps with existing area"
+                    end
+                end
+
+                Controller -> Aggregate: new AirControlArea(areaCode, name, minFuel, geoBoundary)
+                activate Aggregate
+                Aggregate --> Controller: airControlArea
+                deactivate Aggregate
+
+                Controller -> Repo: save(airControlArea)
+                activate Repo
+                Repo --> Controller: saved
+                deactivate Repo
+
+                Controller --> UI: airControlArea
+                UI --> BO: success: "Air Control Area registered successfully"
+            end
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

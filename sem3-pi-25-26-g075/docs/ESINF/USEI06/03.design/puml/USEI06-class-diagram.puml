@@ -1,0 +1,74 @@
+@startuml USEI06-class-diagram
+
+class PlannerMenuController {
+  - stationSearchService: StationSearchService
+  + searchStationsByTimeZoneGroup(): void
+  + searchStationsByCoordinates(): void
+  + searchStationsByCountry(): void
+}
+
+class StationSearchService {
+  - repository: StationsRepository
+  + getStationsByTimeZoneGroup(String timeZoneGroup): List<Station>
+  + getStationsByCoordinates(double latitude, double longitude): List<Station>
+  + getStationsByCountry(String country): List<Station>
+}
+
+class StationsRepository <<singleton>> {
+  - instance: StationsRepository
+  - timeZones: BST<TimeZone>
+  - timeZoneStationMap: Map<TimeZone, List<Station>>
+  - stationsByLetter: Map<String, BST<Station>>
+  + getInstance(): StationsRepository
+  + getTimeZones(): BST<TimeZone>
+  + getTimeZoneStationMap(): Map<TimeZone, List<Station>>
+  + getAllStations(): List<Station>
+}
+
+class Station {
+  - name: String
+  - isCity: boolean
+  - isMainStation: boolean
+  - isAirport: boolean
+  - coordinates: Coordinates
+  - timeZone: TimeZone
+  + getName(): String
+  + getCountry(): String
+  + getCoordinates(): Coordinates
+  + getTimeZone(): TimeZone
+  + compareTo(Station other): int
+}
+
+class TimeZone {
+  - country: String
+  - zone: String
+  - group: String
+  + getCountry(): String
+  + getZone(): String
+  + getGroup(): String
+  + compareTo(TimeZone other): int
+}
+
+class Coordinates {
+  - latitude: double
+  - longitude: double
+  + getLatitude(): double
+  + getLongitude(): double
+  + equals(Object o): boolean
+}
+
+class "BST<E extends Comparable<E>>" as BST {
+  - root: Node<E>
+  + insert(E element): void
+  + inOrder(): List<E>
+  + size(): int
+}
+
+PlannerMenuController --> StationSearchService : uses
+StationSearchService --> StationsRepository : accesses
+StationsRepository --> BST : contains
+StationsRepository --> Station : manages
+Station *-- Coordinates : has
+Station --> TimeZone : belongs to
+
+@enduml

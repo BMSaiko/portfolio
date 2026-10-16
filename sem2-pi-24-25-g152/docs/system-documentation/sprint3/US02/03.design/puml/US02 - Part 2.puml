@@ -1,0 +1,28 @@
+@startuml US02-SD-partial-get-industry-types-list
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US02 - Get Industry Types List - Partial Sequence Diagram
+
+participant ":AddIndustryUI" as UI
+participant ":AddIndustryController" as CTRL
+participant ":IndustryTypeRepository" as INDUSTRYREPO
+participant ":IndustryTypeMapper" as INDUSTRYMAPPER
+
+UI -> CTRL : getIndustryTypeList()
+activate CTRL
+    group Get Industry Types List
+    CTRL -> INDUSTRYREPO : getAllIndustryTypes()
+    activate INDUSTRYREPO
+        INDUSTRYREPO --> CTRL : industryTypeList
+    deactivate INDUSTRYREPO
+    
+    CTRL -> INDUSTRYMAPPER : toDTOList(industryTypeList)
+    activate INDUSTRYMAPPER
+        INDUSTRYMAPPER --> CTRL : industryTypeDTOList
+    deactivate INDUSTRYMAPPER
+    end group
+    CTRL --> UI : industryTypeDTOList
+deactivate CTRL
+@enduml

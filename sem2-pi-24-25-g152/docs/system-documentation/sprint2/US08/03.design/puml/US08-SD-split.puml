@@ -1,0 +1,68 @@
+@startuml US08-SD-split
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US08 Build Railway Line - Split
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":BuildRailwayLineUI" as UI
+participant ":BuildRailwayLineController" as CTRL
+participant "player:Player" as PLAYER_CLASS
+participant "startStation:Station" as START_STATION
+participant "endStation:Station" as END_STATION
+participant "path:Path" as PATH
+participant "cost:Money" as COST
+participant "railwayLine:RailwayLine" as LINE
+
+activate PLAYER
+
+    PLAYER -> UI : requests to build a railway line
+    activate UI
+        UI -> CTRL : getCurrentPlayer()
+        activate CTRL
+            CTRL --> UI : player
+        deactivate CTRL
+
+        ref over UI, CTRL
+            Get Available Stations
+        end ref
+
+        UI --> PLAYER : shows available stations and asks to select starting station
+    deactivate UI
+
+    PLAYER -> UI : selects starting station
+    activate UI
+        UI -> UI : saveSelectedStartStation(startStation)
+
+        ref over UI, CTRL
+            Get End Stations
+        end ref
+
+        UI --> PLAYER : shows available destination stations
+    deactivate UI
+
+    PLAYER -> UI : selects destination station
+    activate UI
+        UI -> UI : saveSelectedEndStation(endStation)
+
+        ref over UI, CTRL
+            Calculate Path and Cost
+        end ref
+        UI --> PLAYER : shows path preview and construction cost, asks for confirmation
+    deactivate UI
+
+    PLAYER -> UI : confirms construction
+    activate UI
+        ref over UI, CTRL, PLAYER_CLASS, LINE
+            Build Railway Line
+        end ref
+
+        UI --> PLAYER : displays operation success
+    deactivate UI
+
+deactivate PLAYER
+
+@enduml

@@ -1,0 +1,70 @@
+@startuml
+title US111 — Simulation Report Generation
+
+participant "Main Thread\n(simulator.c)" as M
+participant "Detection Thread" as D
+participant "Report Thread" as R
+participant "ViolationNotifier" as N
+participant "Report File" as F
+
+== Simulation Run ==
+
+M -> M: load_config(argv[1])
+M -> M: create_shared_memory(num_flights)
+M -> M: launch_flights() → fork() per flight
+
+M -> N: notifier_init()
+M -> D: pthread_create(detection_thread)
+M -> R: pthread_create(report_thread)
+
+== Time Step Loop ==
+
+loop step = time_start to time_end
+    M -> M: sem_post(step_go_sem) for each active flight
+    M -> D: signals scan via g_detect_cond_start
+    M -> M: wait_for_step_done() per flight
+    M -> M: read PositionUpdate from pipe
+    M -> M: process_position_update()
+    M -> D: g_detect_scan_requested = 1
+
+    D -> D: check_safety_violations()
+    alt violation found
+        D -> N: notify_violation(event)
+        R -> N: dequeue → accumulate
+    end
+
+    D -> M: g_detect_scan_requested = 0
+end
+
+== Report Generation ==
+
+M -> D: g_detect_sim_finished = 1
+M -> N: notifier_signal_finished()
+note right
+    sim_running = 0
+    pthread_cond_broadcast()
+end note
+
+R -> R: exits while loop
+R -> F: write_report_file(filename, accumulated)
+note right
+    Sections:
+    1. Header
+    2. Flight Details
+    3. Safety Violations
+    4. Validation Result
+end note
+
+M -> D: pthread_join()
+M -> R: pthread_join()
+
+M -> M: run_report_process() via fork()
+note right
+    Child process reads
+    violations.log and
+    generates simulation_report
+end note
+
+M -> M: destroy_shared_memory()
+
+@enduml

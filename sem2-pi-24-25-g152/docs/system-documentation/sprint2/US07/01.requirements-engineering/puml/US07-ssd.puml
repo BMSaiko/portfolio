@@ -1,0 +1,25 @@
+@startuml
+ skinparam sequenceMessageAlign center
+ skinparam sequenceArrowThickness 2
+ skinparam roundcorner 5
+ skinparam sequenceParticipant underline
+ autonumber
+ 
+ 
+ actor "Player" as PL
+ participant "System" as SYS
+ 
+ PL -> SYS: request to view stations
+ SYS --> PL: list all stations
+ PL -> SYS: select a station
+ SYS --> PL: presents the selected station
+ PL -> SYS: view details of selected station
+ SYS --> PL: present details about that station
+ PL -> SYS: select the existing building
+ SYS --> PL: show building details
+ PL -> SYS: see  loads
+ SYS --> PL:present loads
+ SYS --> PL:listing confirmation successful
+ 
+ 
+ @enduml

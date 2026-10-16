@@ -1,0 +1,16 @@
+--made by Vitor Carneiro 1240580
+
+SELECT 
+po.PrOrID AS "Production Order ID",
+p.PartID AS "Material Component ID",
+p.Description AS "Material/Component Description",
+bp.Quantity AS "Quantity To Order"
+    
+FROM ProductionOrder po
+JOIN BOM b 
+ON po.BOMID = b.BOMID
+JOIN BOMPart BP
+ON b.BOMID = bp.BOMID 
+JOIN Part p 
+ON bp.PartID = p.PartID
+WHERE po.PrOrID = 'PO100'; --trocar pelo id pedido

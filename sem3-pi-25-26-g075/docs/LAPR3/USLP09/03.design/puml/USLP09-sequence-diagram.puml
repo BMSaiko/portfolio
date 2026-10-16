@@ -1,0 +1,61 @@
+@startuml USLP09-sequence-diagram
+
+actor "Traffic Manager" as TM
+participant ":TrafficManagerMenuController" as Controller
+participant ":TrafficManagerService" as Service
+participant "Database (JDBC)" as DB
+participant ":SelectableVehicle" as Vehicle
+
+' 1. Start UI Interaction
+TM -> Controller : selects "Assemble Train"
+activate Controller
+
+Controller -> TM : prompts for Starting Facility ID
+TM --> Controller : enters ID (e.g., "12")
+
+' 2. Service Invocation
+Controller -> Service : getSelectableVehiclesForAssembly(facilityId)
+activate Service
+
+' 3. Database Connection & Query
+Service -> Service : connect()
+Service -> DB : prepareStatement(SQL_QUERY)
+activate DB
+Service -> DB : executeQuery()
+DB --> Service : ResultSet
+deactivate DB
+
+' 4. Object Mapping Loop (Data Retrieval)
+loop while ResultSet.next()
+
+    Service -> Service : extract fields (id, type, location...)
+
+    ' Creation of the DTO object
+    create Vehicle
+    Service -> Vehicle : new(id, name, location, ...)
+    activate Vehicle
+    Vehicle --> Service : instance
+    deactivate Vehicle
+
+    Service -> Service : addToList(instance)
+
+end
+
+Service -> Service : disconnect()
+
+Service --> Controller : List<SelectableVehicle>
+deactivate Service
+
+' 5. Display Logic
+loop for each vehicle in list
+    Controller -> Vehicle : toString()
+    activate Vehicle
+    Vehicle --> Controller : formatted string info
+    deactivate Vehicle
+
+    Controller -> TM : displays vehicle information
+end
+
+deactivate Controller
+
+@enduml

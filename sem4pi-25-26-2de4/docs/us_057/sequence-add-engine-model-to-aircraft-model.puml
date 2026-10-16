@@ -1,0 +1,116 @@
+@startuml
+title Sequence Diagram - Add Engine Model to Aircraft Model (US057)
+
+actor "Backoffice Operator" as BO
+participant "AddEngineToAircraftModelUI" as UI
+participant "AddEngineToAircraftModelController" as Controller
+participant "AuthService" as Auth
+participant "AircraftModelRepository" as AircraftRepo
+participant "EngineModelRepository" as EngineRepo
+participant "AircraftModel" as Aggregate
+
+BO -> UI: show()
+activate UI
+
+UI -> Controller: allAircraftModels()
+activate Controller
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+Auth --> Controller: ok
+deactivate Auth
+Controller -> AircraftRepo: findAll()
+activate AircraftRepo
+AircraftRepo --> Controller: Iterable<AircraftModel>
+deactivate AircraftRepo
+Controller --> UI: Iterable<AircraftModel>
+deactivate Controller
+
+UI -> UI: display aircraft list\nwith certified engine count
+BO -> UI: select aircraft model
+
+UI -> Controller: allEngineModels()
+activate Controller
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+Auth --> Controller: ok
+deactivate Auth
+Controller -> EngineRepo: findAll()
+activate EngineRepo
+EngineRepo --> Controller: Iterable<EngineModel>
+deactivate EngineRepo
+Controller --> UI: Iterable<EngineModel>
+deactivate Controller
+
+UI -> UI: display engine list
+BO -> UI: select engine model to add
+BO -> UI: confirm (y/n)
+
+UI -> Controller: addEngineToAircraftModel(aircraftModelId, engineModelId)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(BACKOFFICE_OPERATOR, ADMIN)
+activate Auth
+alt unauthorized
+    Auth --> Controller: throw SecurityException
+    Controller --> UI: throw SecurityException
+    UI --> BO: ACCESS DENIED
+end
+deactivate Auth
+
+Controller -> AircraftRepo: findById(aircraftModelId)
+activate AircraftRepo
+AircraftRepo --> Controller: Optional<AircraftModel>
+deactivate AircraftRepo
+
+alt aircraft model not found
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "aircraft model not found"
+end
+
+Controller -> EngineRepo: findById(engineModelId)
+activate EngineRepo
+EngineRepo --> Controller: Optional<EngineModel>
+deactivate EngineRepo
+
+alt engine model not found
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "engine model not found"
+end
+
+Controller -> Aggregate: addCertifiedEngine(engine)
+activate Aggregate
+note right of Aggregate
+    **Invariants enforced in addCertifiedEngine():**
+    - engine must not be null
+    - engine must not already be certified
+      (certifiedEngines.contains() check)
+    - engine type must match existing certified
+      engines (EngineType homogeneity)
+end note
+
+alt engine already certified
+    Aggregate --> Controller: throw IllegalStateException
+    Controller --> UI: throw IllegalStateException
+    UI --> BO: ERROR: "engine already certified"
+end
+
+alt incompatible engine type
+    Aggregate --> Controller: throw IllegalArgumentException
+    Controller --> UI: throw IllegalArgumentException
+    UI --> BO: ERROR: "engine type mismatch"
+end
+
+Aggregate --> Controller: (mutated AircraftModel)
+deactivate Aggregate
+
+Controller -> AircraftRepo: save(aircraftModel)
+activate AircraftRepo
+AircraftRepo --> Controller: aircraftModel
+deactivate AircraftRepo
+
+Controller --> UI: updated AircraftModel
+UI --> BO: Success: updated certified engine list
+
+deactivate Controller
+deactivate UI
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+participant "station\n:Station" as STATION
+participant "buildingUpgrade\n:BuildingUpgrade" as BUILDING
+
+autonumber 11.4
+-> STATION : addUpgrade(buildingUpgrade)
+
+autonumber 11.4.1
+activate STATION
+    group Validate and Add Upgrade
+        STATION -> STATION : validateUpgrade(buildingUpgrade)
+        activate STATION
+            STATION --> STATION : isValid (boolean)
+        deactivate STATION
+
+
+            STATION -> STATION : buildings.add(buildingUpgrade)
+            STATION --> STATION : success
+    end
+
+    autonumber 11.5
+    <-- STATION : success (true/false)
+deactivate STATION
+@enduml

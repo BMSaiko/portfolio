@@ -1,0 +1,33 @@
+@startuml US09-SSD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US09: As a Player, I want to buy a locomotive
+
+autonumber
+
+actor "Player" as PLAYER
+participant ":System" as SYSTEM
+
+activate PLAYER
+
+PLAYER -> SYSTEM : request locomotive list
+activate SYSTEM
+
+SYSTEM --> PLAYER : show available locomotives
+deactivate SYSTEM
+
+
+PLAYER -> SYSTEM : buy locomotive
+
+activate SYSTEM
+
+SYSTEM --> PLAYER : validate purchase
+SYSTEM --> PLAYER : deduct funds
+
+SYSTEM --> PLAYER : purchase confirmed
+
+deactivate SYSTEM
+deactivate PLAYER
+@enduml

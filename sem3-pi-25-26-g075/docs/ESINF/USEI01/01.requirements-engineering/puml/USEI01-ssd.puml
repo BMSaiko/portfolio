@@ -1,0 +1,26 @@
+@startuml USEI01 - System Sequence Diagram
+
+actor "Station Storage Manager" as Manager
+participant ":System" as System
+
+Manager -> System : loadWarehouseData(baysCsv, wagonsCsv)
+activate System
+System --> Manager : status (success/failure)
+deactivate System
+
+Manager -> System : allocateBoxesToBays()
+activate System
+System --> Manager : allocationResult
+deactivate System
+
+Manager -> System : viewWarehouseInventory()
+activate System
+System --> Manager : inventoryBySkuList
+deactivate System
+
+Manager -> System : dispatchBoxes(sku, quantity)
+activate System
+System --> Manager : dispatchResult
+deactivate System
+
+@enduml

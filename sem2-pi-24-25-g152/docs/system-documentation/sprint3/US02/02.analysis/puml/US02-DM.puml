@@ -1,0 +1,68 @@
+@startuml US02-DM
+
+title Domain Model (DM) - US02 As an Editor, I want to add an industry in a position XY of the selected map.
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Map {
+  name
+  width
+  height
+  scale
+}
+
+abstract class Industry {
+  name
+  productionRate
+}
+
+class PrimaryIndustry {
+  resourceType
+  outputRate
+}
+
+class TransformingIndustry {
+  inputResources
+  outputProduct
+  transformationRatio
+}
+
+class MixedIndustry {
+  importCapabilities
+  exportCapabilities
+}
+
+class Location {
+  x
+  y
+}
+
+class CargoType {
+  name
+  unit
+  baseValue
+}
+
+class Editor {
+  name
+  email
+  role
+}
+
+Map "1" -- "*" Industry : contains >
+Industry "1" -- "1" Location : has position >
+Industry "*" -- "*" CargoType : associated with >
+Editor "1" -- "*" Industry : creates >
+
+Industry <|-- PrimaryIndustry
+Industry <|-- TransformingIndustry
+Industry <|-- MixedIndustry
+
+@enduml

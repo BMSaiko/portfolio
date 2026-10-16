@@ -1,0 +1,89 @@
+@startuml US11-SD
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US11 List Trains
+
+actor "Player" as player
+participant "UI" as ui
+participant "TrainController" as ctrl
+participant "Response" as resp
+participant "TrainService" as svc
+participant "TrainRepository" as repo
+participant "Train" as domain
+participant "TrainDTO" as dto
+
+activate player
+player -> ui : listTrains()
+activate ui
+
+ui -> ctrl : listAllTrains()
+activate ctrl
+
+ctrl -> svc : getAllTrainsGrouped()
+activate svc
+
+svc -> repo : findAll()
+activate repo
+repo --> svc : List<Train>
+deactivate repo
+
+svc -> svc : groupAndSortTrains(trains)
+activate svc
+    svc -> svc : Group trains by locomotive type
+    svc -> svc : Sort trains alphabetically
+    
+    loop for each train in trains
+        svc -> svc : convertToDTO(train)
+        activate svc
+            svc -> domain : train.getId()
+            domain --> svc : id
+            svc -> domain : train.getName()
+            domain --> svc : name
+            svc -> domain : train.getLocomotive().getType().getName()
+            domain --> svc : locomotiveType
+            
+            svc -> dto : new TrainDTO(id, name, locomotiveType)
+            activate dto
+            dto --> svc : trainDTO
+            deactivate dto
+            
+            svc -> domain : train.getCargo()
+            domain --> svc : List<Cargo>
+            
+            loop for each cargo
+                svc -> dto : trainDTO.addCargo(cargoDTO)
+            end
+            
+            svc -> domain : train.getRoute()
+            alt train has route
+                domain --> svc : route
+                svc -> dto : trainDTO.setRoute(routeDTO)
+            end
+        deactivate svc
+    end
+deactivate svc
+
+svc --> ctrl : List<TrainDTO>
+deactivate svc
+
+ctrl -> resp : Response.ok(trainDTOs)
+activate resp
+resp --> ctrl : response
+deactivate resp
+
+ctrl --> ui : Response<List<TrainDTO>>
+deactivate ctrl
+
+ui -> resp : response.getData()
+activate resp
+resp --> ui : List<TrainDTO>
+deactivate resp
+
+ui --> player : display trains
+deactivate ui
+
+deactivate player
+
+@enduml 

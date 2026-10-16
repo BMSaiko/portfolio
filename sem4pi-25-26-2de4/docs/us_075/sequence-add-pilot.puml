@@ -1,0 +1,81 @@
+@startuml
+title Sequence Diagram - US075: Add Pilot
+
+actor "Company Collaborator" as Collab
+participant "AddPilotUI" as UI
+participant "AddPilotController" as Controller
+participant "AuthService" as Auth
+participant "PilotRepository" as PilotRepo
+participant "UserRepository" as UserRepo
+participant "AircraftModelRepository" as ModelRepo
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "User" as SystemUser
+participant "Pilot" as Aggregate
+
+activate UI
+
+' --- 1. Selection Phase ---
+UI -> Controller: getAvailableAircraftModels()
+activate Controller
+Controller -> ModelRepo: findAll()
+activate ModelRepo
+ModelRepo --> Controller: models (Iterable<AircraftModel>)
+deactivate ModelRepo
+Controller --> UI: models
+deactivate Controller
+
+Collab -> UI: fills pilot info (email, name, phone, position, password, models)
+
+' --- 2. Registration Phase ---
+UI -> Controller: addPilot(email, name, phone, position, models, password)
+activate Controller
+
+Controller -> Auth: ensureHasAnyRole(AIR_TRANSPORT_COMPANY_COLLABORATOR)
+Controller -> Auth: currentUser()
+activate Auth
+Auth --> Controller: Optional<User>
+deactivate Auth
+
+Controller -> CollabRepo: findByUserEmail(userEmail)
+activate CollabRepo
+CollabRepo --> Controller: Optional<CustomerCollaborator>
+deactivate CollabRepo
+
+Controller -> CompanyRepo: findByIcaoCode(collab.customerCode())
+activate CompanyRepo
+CompanyRepo --> Controller: Optional<AirTransportCompany>
+deactivate CompanyRepo
+
+Controller -> PilotRepo: existsByEmail(email)
+activate PilotRepo
+PilotRepo --> Controller: boolean
+deactivate PilotRepo
+
+alt duplicate found
+    Controller --> UI: throw IllegalArgumentException
+    UI --> Collab: error: "Pilot/User already exists."
+else unique
+
+    Controller -> SystemUser: new User(email, password, name, phone, roles)
+    activate SystemUser
+    SystemUser --> Controller: systemUser
+    deactivate SystemUser
+
+    Controller -> Aggregate: new Pilot(systemUser, email, name, position, company, certifications)
+    activate Aggregate
+    Aggregate --> Controller: newPilot
+    deactivate Aggregate
+
+    Controller -> PilotRepo: save(newPilot)
+    activate PilotRepo
+    PilotRepo --> Controller: savedPilot
+    deactivate PilotRepo
+
+    Controller --> UI: savedPilot
+    UI --> Collab: success: "Pilot successfully added!"
+end
+
+deactivate Controller
+deactivate UI
+@enduml

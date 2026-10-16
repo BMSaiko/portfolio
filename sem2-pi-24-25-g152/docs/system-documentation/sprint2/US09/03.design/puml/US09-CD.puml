@@ -1,0 +1,156 @@
+@startuml US09-CD
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class ApplicationSession {
+    - ApplicationSession()
+    + {static} getInstance() : ApplicationSession
+    + getCurrentSession() : UserSession
+}
+
+class UserSession {
+    - player : Player
+    - currentDate : Date
+    + getCurrentDate() : Date
+    + updateBudget(amount : double) : double
+    + getPlayer() : Player
+    + addLocomotiveToFleet(locomotive : Locomotive) : boolean
+}
+
+class Player {
+    - id : String
+    - name : String
+    - funds : double
+    - trains : List<Train>
+
+    + updateBudget(amount : double) : double
+    + addLocomotive(locomotive : Locomotive) : Train
+}
+
+class Train {
+    - id : String
+    - locomotive : Locomotive
+    - carriages : List<Carriage>
+
+    + Train(id : String, locomotive : Locomotive)
+    + addCarriage(carriage : Carriage) : boolean
+}
+
+class Locomotive {
+    - id : String
+    - name : String
+    - type : LocomotiveType
+    - power : double
+    - speed : double
+    - price : double
+    - availableFrom : Date
+    - availableUntil : Date
+
+    + Locomotive(id : String, name : String, type : LocomotiveType, power : double, speed : double, price : double, availableFrom : Date, availableUntil : Date)
+    + getPrice() : double
+    + getType() : LocomotiveType
+    + getAvailableFrom() : Date
+    + getAvailableUntil() : Date
+}
+
+enum LocomotiveType {
+    STEAM
+    DIESEL
+    ELECTRIC
+}
+
+class Carriage {
+    - id : String
+    - cargoType : CargoType
+
+    + Carriage(id : String, cargoType : CargoType)
+    + getCargoType() : CargoType
+}
+
+enum CargoType {
+    PASSENGERS
+    MAIL
+    COAL
+    IRON_ORE
+    STEEL
+    CARS
+}
+
+class LocomotiveRepository {
+    + getAvailableLocomotives(currentDate : Date) : List<Locomotive>
+    + getLocomotiveById(locomotiveId : String) : Locomotive
+}
+
+class Repositories {
+    - static instance : Repositories
+    - locomotiveRepository : LocomotiveRepository
+
+    - Repositories()
+    + {static} getInstance() : Repositories
+    + getLocomotiveRepository() : LocomotiveRepository
+}
+
+class BuyLocomotiveController {
+    + BuyLocomotiveController()
+    + getAvailableLocomotives() : List<Locomotive>
+    + buyLocomotive(locomotiveId : String) : boolean
+    - validatePurchase(player : Player, locomotive : Locomotive) : boolean
+}
+
+class BuyLocomotiveUI {
+}
+
+class RailwayNetwork {
+    - trains : List<Train>
+
+    + addTrain(train : Train) : boolean
+}
+
+note right of BuyLocomotiveController
+    Validates if player has
+    enough funds for purchase
+end note
+
+note bottom of LocomotiveRepository
+    Filters locomotives based on:
+    - Current date in scenario
+    - Available types for the player
+end note
+
+BuyLocomotiveUI ..> BuyLocomotiveController
+
+BuyLocomotiveController ..> ApplicationSession
+BuyLocomotiveController ..> UserSession
+BuyLocomotiveController ..> Locomotive
+BuyLocomotiveController ..> LocomotiveRepository
+BuyLocomotiveController ..> Repositories
+BuyLocomotiveController ..> Player
+
+Repositories "1" --> "1" Repositories : instance
+Repositories "1" --> "1" LocomotiveRepository : locomotiveRepository
+
+ApplicationSession "1" --> "1" ApplicationSession : instance
+ApplicationSession ..> "1" UserSession : currentSession
+
+LocomotiveRepository ..> "*" Locomotive : locomotives
+
+Locomotive --> "1" LocomotiveType : type
+
+Carriage --> "1" CargoType : type
+
+UserSession --> "1" Player : player
+
+Player "1" --> "*" Train : trains
+
+Train "1" --> "1" Locomotive : locomotive
+Train "1" --> "*" Carriage : carriages
+
+RailwayNetwork "1" --> "*" Train : trains
+@enduml

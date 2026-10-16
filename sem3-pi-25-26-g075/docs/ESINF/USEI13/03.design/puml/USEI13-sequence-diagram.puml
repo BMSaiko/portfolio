@@ -1,0 +1,122 @@
+@startuml USEI13-sequence-diagram
+
+actor "Network Analyst" as NA
+participant ":HubCentralityAnalysisService" as HCAS
+participant ":RailwayNetworkRepository" as RNR
+participant "graph:Graph<Station,\nTrackConnection>" as GRAPH
+participant ":Algorithms" as ALG
+participant "degreeMap:Map" as DMAP
+participant "betweennessMap:Map" as BMAP
+participant "closenessMap:Map" as CMAP
+participant "results:List<HubScoreResult>" as RESULTS
+
+== Compute Hub Ranking ==
+
+NA -> HCAS : computeHubRanking()
+activate HCAS
+
+HCAS -> HCAS : centrality()
+activate HCAS
+
+loop for each station
+    HCAS -> GRAPH : inDegree(station)
+    activate GRAPH
+    GRAPH --> HCAS : inDeg
+    deactivate GRAPH
+    
+    HCAS -> GRAPH : outDegree(station)
+    activate GRAPH
+    GRAPH --> HCAS : outDeg
+    deactivate GRAPH
+    
+    HCAS -> DMAP : put(station, inDeg + outDeg)
+end
+
+HCAS --> HCAS : degreeMap
+deactivate HCAS
+
+HCAS -> HCAS : betweennessCentrality()
+activate HCAS
+
+HCAS -> BMAP : initialize all stations to 0.0
+
+loop for each source station
+    HCAS -> ALG : shortestPaths(graph, source, comparator, sum, zero, paths, distances)
+    activate ALG
+    ALG --> HCAS : paths and distances
+    deactivate ALG
+    
+    loop for each destination
+        alt path exists
+            loop for each intermediate station
+                HCAS -> BMAP : increment betweenness
+            end
+        end
+    end
+end
+
+HCAS --> HCAS : betweennessMap
+deactivate HCAS
+
+HCAS -> HCAS : closenessCentrality()
+activate HCAS
+
+loop for each source station
+    HCAS -> ALG : shortestPaths(graph, source, comparator, sum, zero, paths, distances)
+    activate ALG
+    ALG --> HCAS : paths and distances
+    deactivate ALG
+    
+    HCAS -> HCAS : harmonicSum = 0.0
+    
+    loop for each destination
+        alt distance exists and > 0
+            HCAS -> HCAS : harmonicSum += 1/distance
+        end
+    end
+    
+    HCAS -> CMAP : put(source, harmonicSum)
+end
+
+HCAS --> HCAS : closenessMap
+deactivate HCAS
+
+HCAS -> HCAS : normalizeInt(degreeMap)
+activate HCAS
+HCAS -> HCAS : normalize(degreeMapDouble)
+activate HCAS
+HCAS --> HCAS : degreeNormalized
+deactivate HCAS
+HCAS --> HCAS : degreeNorm
+deactivate HCAS
+
+HCAS -> HCAS : normalize(betweennessMap)
+activate HCAS
+HCAS --> HCAS : betweennessNorm
+deactivate HCAS
+
+HCAS -> HCAS : normalize(closenessMap)
+activate HCAS
+HCAS --> HCAS : closenessNorm
+deactivate HCAS
+
+loop for each station
+    HCAS -> HCAS : hubScore = 0.35*betweennessNorm + \n                 0.35*closenessNorm + \n                 0.30*degreeNorm
+    
+    HCAS -> RESULTS : create HubScoreResult(\n    stationId, name, degree,\n    betweenness, closeness, hubScore)
+    activate RESULTS
+    RESULTS --> HCAS : result
+    deactivate RESULTS
+    
+    HCAS -> RESULTS : add(result)
+end
+
+HCAS -> RESULTS : Collections.sort(results)
+activate RESULTS
+RESULTS --> HCAS : sorted results
+deactivate RESULTS
+
+HCAS --> NA : hubRanking
+deactivate HCAS
+
+@enduml

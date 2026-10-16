@@ -1,0 +1,113 @@
+@startuml
+title Sequence Diagram - US070: Add Aircraft to Fleet
+
+actor "Company Collaborator" as Collab
+participant "AddAircraftUI" as UI
+participant "AddAircraftController" as Controller
+participant "AuthService" as Auth
+participant "AircraftModelRepository" as ModelRepo
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "AircraftRepository" as Repo
+participant "AircraftRegistrationDTO" as DTO
+participant "CabinConfiguration" as CabinConfig
+participant "Aircraft" as Aggregate
+
+activate UI
+
+' --- 1. Interactive Selection Phase ---
+UI -> Controller: getAircraftMakers()
+activate Controller
+Controller -> ModelRepo: findAllMakers()
+activate ModelRepo
+ModelRepo --> Controller: makers (Iterable<String>)
+deactivate ModelRepo
+Controller --> UI: makers
+deactivate Controller
+
+Collab -> UI: selects Maker (makerName)
+
+UI -> Controller: getModelsByMaker(makerName)
+activate Controller
+Controller -> ModelRepo: findByMaker(makerName)
+activate ModelRepo
+ModelRepo --> Controller: models (Iterable<AircraftModel>)
+deactivate ModelRepo
+Controller --> UI: models
+deactivate Controller
+
+Collab -> UI: selects Model, seats, year, status
+
+' --- 2. Registration Phase ---
+UI -> DTO: new AircraftRegistrationDTO(...)
+activate DTO
+DTO --> UI: dto
+deactivate DTO
+
+UI -> Controller: addAircraft(dto)
+activate Controller
+
+Controller -> Auth: currentUser()
+activate Auth
+Auth --> Controller: Optional<User>
+deactivate Auth
+
+alt no active session
+    Controller --> UI: throw IllegalStateException
+    UI --> Collab: error: "No active session."
+else user logged in
+
+    Controller -> CollabRepo: findByUserEmail(userEmail)
+    activate CollabRepo
+    CollabRepo --> Controller: Optional<CustomerCollaborator>
+    deactivate CollabRepo
+
+    Controller -> CompanyRepo: findByIcaoCode(collab.customerCode())
+    activate CompanyRepo
+    CompanyRepo --> Controller: Optional<AirTransportCompany>
+    deactivate CompanyRepo
+
+    Controller -> Repo: existsByRegistration(dto.registration)
+    activate Repo
+    Repo --> Controller: boolean
+    deactivate Repo
+
+    alt registration already exists
+        Controller --> UI: throw IllegalArgumentException
+        UI --> Collab: error: "An aircraft already exists..."
+    else registration is unique
+
+        Controller -> ModelRepo: findById(AircraftModelId)
+        activate ModelRepo
+        ModelRepo --> Controller: Optional<AircraftModel>
+        deactivate ModelRepo
+
+        alt model not found
+            Controller --> UI: throw IllegalArgumentException
+            UI --> Collab: error: "Aircraft model not found."
+        else model is valid
+
+            Controller -> CabinConfig: new CabinConfiguration(dto.firstClass, dto.business, dto.economy)
+            activate CabinConfig
+            CabinConfig --> Controller: cabinConfig
+            deactivate CabinConfig
+
+            Controller -> Aggregate: new Aircraft(dto.registration, model, company, dto.country, cabinConfig, status, dto.year)
+            activate Aggregate
+            Aggregate --> Controller: newAircraft
+            deactivate Aggregate
+
+            Controller -> Repo: save(newAircraft)
+            activate Repo
+            Repo --> Controller: savedAircraft
+            deactivate Repo
+
+            Controller --> UI: savedAircraft
+            UI --> Collab: success: "Aircraft successfully added!"
+        end
+    end
+end
+
+deactivate Controller
+deactivate UI
+@enduml

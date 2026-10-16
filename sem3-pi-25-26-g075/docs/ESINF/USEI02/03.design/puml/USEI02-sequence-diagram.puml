@@ -1,0 +1,100 @@
+@startuml USEI02-sequence-diagram
+
+actor "Station Storage Manager" as SSM
+participant ":MenuController" as MC
+participant ":WarehouseManagementService" as WMS
+participant ":OrderAllocationService" as OAS
+participant ":CsvImportService" as CSV
+participant ":Warehouse" as WH
+participant ":Order" as ORD
+participant ":AllocationResult" as AR
+
+SSM -> MC : handleProcessOrders()
+activate MC
+
+MC -> CSV : getOrdersList()
+activate CSV
+CSV --> MC : orders
+deactivate CSV
+
+MC -> MC : selectMode(STRICT/PARTIAL)
+
+MC -> WMS : processOrders(orders, warehouse, mode)
+activate WMS
+
+WMS -> OAS : allocateOrders(orders, warehouse, mode)
+activate OAS
+
+OAS -> OAS : sortOrders()
+note right: Sort by priority, dueDate, orderId
+
+OAS -> OAS : createInventorySnapshot(warehouse)
+activate OAS
+OAS -> WH : getInventoryBySku()
+activate WH
+WH --> OAS : skuInventory
+deactivate WH
+deactivate OAS
+
+create AR
+OAS -> AR : create()
+
+loop for each order (sorted)
+    OAS -> ORD : getLines()
+    activate ORD
+    ORD --> OAS : sortedLines
+    deactivate ORD
+    
+    loop for each line
+        OAS -> OAS : allocateLine(line, inventorySnapshot)
+        
+        loop while remainingQty > 0
+            OAS -> OAS : getNextAvailableBox(sku)
+            
+            alt box available
+                OAS -> OAS : calculateAllocation(availableQty, remainingQty)
+                OAS -> OAS : createAllocationFragment(orderId, lineNo, sku, qty, boxId, aisle, bay)
+                OAS -> OAS : updateInventorySnapshot(boxId, allocatedQty)
+            else no box available
+                OAS -> OAS : break allocation loop
+            end
+        end
+        
+        OAS -> OAS : determineEligibilityStatus(allocatedQty, requestedQty, mode)
+        
+        alt STRICT mode and UNDISPATCHABLE
+            OAS -> OAS : markOrderFailed()
+            OAS -> OAS : discardOrderAllocations()
+        else PARTIAL mode or ELIGIBLE
+            OAS -> AR : addLineEligibility(eligibility)
+            OAS -> AR : addAllocationFragments(fragments)
+        end
+    end
+    
+    alt order failed in STRICT mode
+        OAS -> OAS : revertInventorySnapshot()
+    end
+end
+
+OAS --> WMS : allocationResult
+deactivate OAS
+
+WMS --> MC : allocationResult
+deactivate WMS
+
+MC -> AR : getEligibilities()
+activate AR
+AR --> MC : eligibilities
+deactivate AR
+
+MC -> AR : getAllocations()
+activate AR
+AR --> MC : allocations
+deactivate AR
+
+MC -> MC : displayStatistics()
+
+MC --> SSM : display results
+deactivate MC
+
+@enduml

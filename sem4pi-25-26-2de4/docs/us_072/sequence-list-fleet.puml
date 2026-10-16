@@ -1,0 +1,98 @@
+@startuml
+title Sequence Diagram - US072: List Fleet (with Dynamic Filters)
+
+actor "Company Collaborator" as Collab
+participant "ListFleetUI" as UI
+participant "ListFleetController" as Controller
+participant "AuthService" as Auth
+participant "CustomerCollaboratorRepository" as CollabRepo
+participant "AirTransportCompanyRepository" as CompanyRepo
+participant "AircraftRepository" as Repo
+
+activate UI
+
+Collab -> UI: enters "List Fleet" menu
+UI -> Controller: getMyCompanyFleet()
+activate Controller
+
+' --- Authentication & Authorization ---
+Controller -> Auth: currentUser()
+activate Auth
+Auth --> Controller: Optional<User>
+deactivate Auth
+
+Controller -> CollabRepo: findByUserEmail(userEmail)
+activate CollabRepo
+CollabRepo --> Controller: Optional<CustomerCollaborator>
+deactivate CollabRepo
+
+Controller -> CompanyRepo: findByIcaoCode(collab.customerCode())
+activate CompanyRepo
+CompanyRepo --> Controller: Optional<AirTransportCompany>
+deactivate CompanyRepo
+
+' --- Initial Data Fetch ---
+Controller -> Repo: findByCompany(company)
+activate Repo
+Repo --> Controller: myFleet (Iterable<Aircraft>)
+deactivate Repo
+
+Controller --> UI: myFleet
+deactivate Controller
+
+' --- Dynamic Menu Generation ---
+UI -> UI: extract unique filter options\n(models, makers, capacities, ages)
+UI --> Collab: display filter menu & dynamic options
+
+Collab -> UI: selects filter type and option (e.g., Model "777")
+
+' --- Filtering Phase ---
+alt Option 1: List Entire Fleet
+    UI -> UI: fleet = myFleet
+
+else Option 2: Filter by Model
+    UI -> Controller: getFleetByModel(selectedModel)
+    activate Controller
+    Controller -> Repo: findByCompanyAndModel(company, selectedModel)
+    activate Repo
+    Repo --> Controller: Iterable<Aircraft>
+    deactivate Repo
+    Controller --> UI: fleet
+    deactivate Controller
+
+else Option 3: Filter by Maker
+    UI -> Controller: getFleetByMaker(selectedMaker)
+    activate Controller
+    Controller -> Repo: findByCompanyAndMaker(company, selectedMaker)
+    activate Repo
+    Repo --> Controller: Iterable<Aircraft>
+    deactivate Repo
+    Controller --> UI: fleet
+    deactivate Controller
+
+else Option 4: Filter by Capacity
+    UI -> Controller: getFleetByCapacity(selectedCapacity)
+    activate Controller
+    Controller -> Repo: findByCompanyAndCapacity(company, selectedCapacity)
+    activate Repo
+    Repo --> Controller: Iterable<Aircraft>
+    deactivate Repo
+    Controller --> UI: fleet
+    deactivate Controller
+
+else Option 5: Filter by Age
+    UI -> Controller: getFleetByAge(selectedAge)
+    activate Controller
+    Controller -> Repo: findByCompanyAndAge(company, selectedAge)
+    activate Repo
+    Repo --> Controller: Iterable<Aircraft>
+    deactivate Repo
+    Controller --> UI: fleet
+    deactivate Controller
+end
+
+UI -> UI: printFleet(fleet)
+UI --> Collab: display search results
+
+deactivate UI
+@enduml

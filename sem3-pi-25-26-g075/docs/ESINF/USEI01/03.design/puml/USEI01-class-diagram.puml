@@ -1,0 +1,115 @@
+@startuml USEI01-class-diagram
+
+class MenuController {
+    - scanner: Scanner
+    - dataInitService: DataInitializationService
+    - warehouseService: WarehouseManagementService
+    - warehouse: Warehouse
+    + run(): void
+    - showMainMenu(): void
+    - handleViewBayContents(): void
+    - handleDispatchSku(): void
+}
+
+class DataInitializationService {
+    - csvImportService: CsvImportService
+    - warehouseAllocator: WarehouseAllocator
+    + initializeWarehouse(): Warehouse
+    + getCsvImportService(): CsvImportService
+}
+
+class CsvImportService {
+    - items: Map<String, Item>
+    - bays: Map<String, Bay>
+    - boxes: List<Box>
+    + importItems(InputStream): void
+    + importBays(InputStream): void
+    + importWagons(InputStream): void
+    + getItems(): Map<String, Item>
+    + getBays(): Map<String, Bay>
+    + getBoxes(): List<Box>
+}
+
+class WarehouseAllocator {
+    + allocateBoxesToWarehouse(boxes: List<Box>, warehouse: Warehouse): void
+}
+
+class WarehouseManagementService {
+    + displayBayContents(warehouse: Warehouse): void
+    + dispatchSku(warehouse: Warehouse, sku: String, qty: int): boolean
+    + displayInventoryBySku(warehouse: Warehouse): void
+    + getAllAvailableBoxes(warehouse: Warehouse): Map<String, String>
+    + relocateBox(warehouse: Warehouse, boxId: String, newBayLocation: String): boolean
+}
+
+class Warehouse {
+    - bays: Map<String, Bay>
+    - skuToBays: Map<String, List<Bay>>
+    - allocatedBoxIds: Set<String>
+    + addBay(bay: Bay): void
+    + getBay(locationCode: String): Bay
+    + getAllBays(): Collection<Bay>
+    + allocateBox(box: Box): boolean
+    + dispatch(sku: String, qty: int): int
+    + getInventoryBySku(): Map<String, List<Box>>
+}
+
+class Bay {
+    - warehouseZone: String
+    - aisle: int
+    - bayNumber: int
+    - capacityBoxes: int
+    - storedBoxes: List<Box>
+    + getLocationCode(): String
+    + addBox(box: Box): boolean
+    + removeBox(boxId: String): Box
+    + getStoredBoxes(): List<Box>
+    + hasCapacity(): boolean
+}
+
+class Box {
+    - boxId: String
+    - sku: String
+    - quantity: int
+    - expiryDate: LocalDate
+    - arrivalTimestamp: Instant
+    + getBoxId(): String
+    + getSku(): String
+    + getQuantity(): int
+    + getExpiryDate(): LocalDate
+    + setQuantity(qty: int): void
+    + compareTo(other: Box): int
+}
+
+class Item {
+    - sku: String
+    - description: String
+    - unitWeight: double
+    + getSku(): String
+    + getDescription(): String
+    + getUnitWeight(): double
+}
+
+MenuController --> DataInitializationService
+MenuController --> WarehouseManagementService
+MenuController --> Warehouse
+
+DataInitializationService --> CsvImportService
+DataInitializationService --> WarehouseAllocator
+DataInitializationService --> Warehouse
+
+WarehouseAllocator --> Warehouse
+WarehouseAllocator --> Box
+
+WarehouseManagementService --> Warehouse
+
+Warehouse "1" *-- "many" Bay : contains
+Bay "1" *-- "many" Box : stores
+
+CsvImportService ..> Item : creates
+CsvImportService ..> Bay : creates
+CsvImportService ..> Box : creates
+
+Box --> Item : references via SKU
+
+@enduml

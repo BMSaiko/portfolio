@@ -1,0 +1,52 @@
+@startuml USLP10 - System Sequence Diagram
+
+autonumber
+actor "Traffic Manager" as Manager
+participant ":System" as System
+
+activate Manager
+
+' 1. Start Dispatch
+Manager -> System : selects "Dispatch & Schedule Train"
+activate System
+System --> Manager : requests Train ID
+deactivate System
+
+' 2. ID Input
+Manager -> System : enters Train ID (e.g., "5437")
+activate System
+System --> Manager : requests Operation Mode (1-Auto, 2-Manual)
+deactivate System
+
+' 3. Mode Input & Processing
+Manager -> System : selects Mode (e.g., "2 - Manual")
+activate System
+
+    note right of System
+        1. Calls PL/SQL to retrieve Mass/Power
+        2. Calls PL/SQL to retrieve Path Segments
+        3. Calculates travel times iteratively
+    end note
+
+System --> Manager : displays Technical Header (Mass/Power)
+
+loop for each segment in path
+
+    System --> Manager : displays Station Arrival Time
+
+    opt if Single Track Segment detected (in Manual Mode)
+        System --> Manager : alerts "Single Line Ahead" & requests decision
+
+        Manager -> System : selects decision (Wait / Proceed)
+
+        System --> System : applies delay if "Wait" selected
+        System --> Manager : confirms action
+    end
+
+end
+
+System --> Manager : displays Final Schedule Completion
+deactivate System
+
+deactivate Manager
+@enduml

@@ -1,0 +1,91 @@
+@startuml USLP10 - Domain Model Excerpt
+
+hide circle
+skinparam classFontStyle bold
+skinparam classArrowFontStyle italic
+left to right direction
+
+package "Infrastructure" {
+  class LineSegment {
+    length
+    speedLimit
+    numberOfTracks
+    isElectrified
+  }
+
+  class Siding {
+    length
+    id
+  }
+
+  class "Station" as Station {
+    name
+  }
+}
+
+package "Operations" {
+  class Train {
+    plannedDeparture
+    calculatedSpeed
+  }
+
+  class Locomotive {
+    power
+  }
+
+  class Wagon {
+    tare
+    capacity
+  }
+}
+
+package "Scheduling & Logistics" {
+  class Route {
+    type
+  }
+
+  class Path {
+    orderedStations
+  }
+
+  class PathSegment {
+    sequenceOrder
+  }
+
+  class TrainPassage {
+    plannedArrivalTime
+    sequenceNumber
+  }
+
+  class Crossing {
+    location
+    plannedTime
+  }
+}
+
+package "Roles" {
+  class "Traffic Manager" as TrafficManager {
+  }
+}
+
+
+Route "1" -- "1..*" LineSegment : "uses"
+LineSegment "1" -- "0..*" Siding : "has"
+
+Route "1" -- "1" Path : "uses"
+Path "1" -- "2..*" PathSegment : "composed of"
+PathSegment "*" -- "1" Station : "stops at"
+
+Train "1" -- "1" Route : "assigned to"
+TrafficManager "1" -- "0..*" Train : "dispatches"
+
+Train "1" -- "1..*" Locomotive : "uses power from"
+Train "1" -- "0..*" Wagon : "hauls weight of"
+
+Train "1" -- "0..*" TrainPassage : "schedule records"
+TrainPassage "*" -- "1" Station : "at"
+
+Crossing "0..*" -- "2" Train : "involves"
+Crossing "*" -- "1" Station : "occurs at"
+
+@enduml

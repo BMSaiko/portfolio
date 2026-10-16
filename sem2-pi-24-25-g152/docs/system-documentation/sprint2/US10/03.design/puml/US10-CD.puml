@@ -1,0 +1,63 @@
+@startuml US10-CD
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+class Player {
+    -id: int
+    -name: String
+    +assignTrainToRoute(train: Train, route: Route): void
+}
+
+
+class Train {
+    -id: int
+    -name: String
+    -capacity: int
+    -cargoAssignments: List<TrainCargoAssignment>
+    +getAssignedRoute(): Route
+    +getCargoManifest(): List<TrainCargoAssignment>
+}
+
+
+class Route {
+    -id: int
+    -name: String
+    -stations: List<Station>
+    +getStations(): List<Station>
+}
+
+
+class Station {
+    -id: int
+    -name: String
+    -location: String
+    -cargoes: List<Cargo>
+    +getAvailableCargo(): List<Cargo>
+}
+
+
+class Cargo {
+    -id: int
+    -type: String
+    -weight: float
+}
+
+
+class TrainCargoAssignment {
+    -cargo: Cargo
+    -station: Station
+    -quantity: int
+    +getDescription(): String
+}
+
+
+Player --> "*" Train : owns
+Train --> "1" Route : assigned to
+Route "1" *-- "1..*" Station : includes
+Station "1" *-- "0..*" Cargo : stores
+Train --> "*" TrainCargoAssignment : carries
+TrainCargoAssignment --> "1" Cargo : refers to
+TrainCargoAssignment --> "1" Station : picked from
+
+@enduml

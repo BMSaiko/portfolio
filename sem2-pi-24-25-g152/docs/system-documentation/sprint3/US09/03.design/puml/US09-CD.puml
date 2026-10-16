@@ -1,0 +1,508 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+' === SESSION MANAGEMENT ===
+class ApplicationSession {
+    - ApplicationSession()
+    + {static} getInstance() : ApplicationSession
+    + getCurrentSession() : UserSession
+}
+
+class UserSession {
+    - player : Player
+    - currentDate : Date
+    + getCurrentDate() : Date
+    + updateFunds(amount : double) : double
+    + getPlayer() : Player
+    + addLocomotiveToFleet(locomotive : Locomotive) : boolean
+}
+
+class Player {
+    - id : String
+    - name : String
+    - funds : double
+    - trains : List<Train>
+
+    + updateFunds(amount : double) : double
+    + addLocomotive(locomotive : Locomotive) : Train
+    + canAfford(amount : double) : boolean
+    + getFunds() : double
+}
+
+' === TRAIN COMPOSITION ===
+class Train {
+    - id : String
+    - locomotive : Locomotive
+    - carriages : List<Carriage>
+
+    + Train(id : String, locomotive : Locomotive)
+    + addCarriage(carriage : Carriage) : boolean
+    + getLocomotive() : Locomotive
+    + getCarriages() : List<Carriage>
+    + getTotalWeight() : double
+    + getMaxSpeed() : double
+}
+
+' === LOCOMOTIVE HIERARCHY WITH POLYMORPHISM ===
+abstract class Locomotive {
+    - id : String
+    - name : String
+    - power : double
+    - speed : double
+    - price : double
+    - availableFrom : Date
+    - availableUntil : Date
+    - maintenanceCost : double
+
+    + Locomotive(id, name, power, speed, price, availableFrom, availableUntil, maintenanceCost)
+    + {abstract} getType() : String
+    + {abstract} getFuelCost() : double
+    + {abstract} getEfficiency() : double
+    + {abstract} getMaxCarriages() : int
+    + {abstract} isCompatibleWith(carriage : Carriage) : boolean
+    + {abstract} getEnvironmentalImpact() : double
+    + getPrice() : double
+    + getAvailableFrom() : Date
+    + getAvailableUntil() : Date
+    + isAvailableAt(date : Date) : boolean
+    + getMaintenanceCost() : double
+    + calculateOperatingCost(distance : double) : double
+}
+
+class SteamLocomotive extends Locomotive {
+    - coalConsumption : double
+    - waterCapacity : double
+
+    + getType() : String
+    + getFuelCost() : double
+    + getEfficiency() : double
+    + getMaxCarriages() : int
+    + isCompatibleWith(carriage : Carriage) : boolean
+    + getEnvironmentalImpact() : double
+    + getCoalConsumption() : double
+    + getWaterCapacity() : double
+}
+
+class DieselLocomotive extends Locomotive {
+    - fuelCapacity : double
+    - horsePower : double
+
+    + getType() : String
+    + getFuelCost() : double
+    + getEfficiency() : double
+    + getMaxCarriages() : int
+    + isCompatibleWith(carriage : Carriage) : boolean
+    + getEnvironmentalImpact() : double
+    + getFuelCapacity() : double
+    + getHorsePower() : double
+}
+
+class ElectricLocomotive extends Locomotive {
+    - powerConsumption : double
+    - voltage : int
+
+    + getType() : String
+    + getFuelCost() : double
+    + getEfficiency() : double
+    + getMaxCarriages() : int
+    + isCompatibleWith(carriage : Carriage) : boolean
+    + getEnvironmentalImpact() : double
+    + getPowerConsumption() : double
+    + getVoltage() : int
+}
+
+' === CARRIAGE HIERARCHY WITH POLYMORPHISM ===
+abstract class Carriage {
+    - id : String
+    - weight : double
+    - capacity : double
+    - purchasePrice : double
+
+    + Carriage(id : String, weight : double, capacity : double, purchasePrice : double)
+    + {abstract} getCargoType() : String
+    + {abstract} getLoadingTime() : double
+    + {abstract} getSpecialRequirements() : List<String>
+    + {abstract} getRevenuePotential() : double
+    + getWeight() : double
+    + getCapacity() : double
+    + getPurchasePrice() : double
+}
+
+class PassengerCarriage extends Carriage {
+    - seatCount : int
+    - comfortLevel : String
+
+    + getCargoType() : String
+    + getLoadingTime() : double
+    + getSpecialRequirements() : List<String>
+    + getRevenuePotential() : double
+    + getSeatCount() : int
+    + getComfortLevel() : String
+}
+
+class FreightCarriage extends Carriage {
+    - cargoType : String
+    - loadingMechanism : String
+
+    + FreightCarriage(id, weight, capacity, price, cargoType, loadingMechanism)
+    + getCargoType() : String
+    + getLoadingTime() : double
+    + getSpecialRequirements() : List<String>
+    + getRevenuePotential() : double
+    + getLoadingMechanism() : String
+}
+
+class MailCarriage extends Carriage {
+    - securityLevel : String
+    - sortingCapability : boolean
+
+    + getCargoType() : String
+    + getLoadingTime() : double
+    + getSpecialRequirements() : List<String>
+    + getRevenuePotential() : double
+    + getSecurityLevel() : String
+    + hasSortingCapability() : boolean
+}
+
+' === FACTORY PATTERN FOR LOCOMOTIVE CREATION ===
+interface LocomotiveFactory {
+    + createLocomotive(specs : LocomotiveSpecsDTO) : Locomotive
+    + getSupportedType() : String
+}
+
+class SteamLocomotiveFactory implements LocomotiveFactory {
+    + createLocomotive(specs : LocomotiveSpecsDTO) : Locomotive
+    + getSupportedType() : String
+}
+
+class DieselLocomotiveFactory implements LocomotiveFactory {
+    + createLocomotive(specs : LocomotiveSpecsDTO) : Locomotive
+    + getSupportedType() : String
+}
+
+class ElectricLocomotiveFactory implements LocomotiveFactory {
+    + createLocomotive(specs : LocomotiveSpecsDTO) : Locomotive
+    + getSupportedType() : String
+}
+
+class LocomotiveFactoryProvider {
+    + {static} getFactory(locomotiveType : String) : LocomotiveFactory
+    + {static} getSupportedTypes() : List<String>
+}
+
+' === DTOs ===
+class LocomotivePurchaseRequestDTO {
+    - locomotiveId : String
+    - playerBudget : double
+    - currentDate : Date
+
+    + LocomotivePurchaseRequestDTO(locomotiveId, playerBudget, currentDate)
+    + getLocomotiveId() : String
+    + getPlayerBudget() : double
+    + getCurrentDate() : Date
+}
+
+class AvailableLocomotiveDTO {
+    - id : String
+    - name : String
+    - type : String
+    - power : double
+    - speed : double
+    - price : double
+    - maintenanceCost : double
+    - fuelCost : double
+    - efficiency : double
+    - maxCarriages : int
+    - environmentalImpact : double
+    - availableFrom : Date
+    - availableUntil : Date
+    - isAffordable : boolean
+    - estimatedOperatingCost : double
+
+    + AvailableLocomotiveDTO(locomotive : Locomotive, isAffordable : boolean)
+}
+
+class PurchaseResultDTO {
+    - success : boolean
+    - message : String
+    - trainId : String
+    - locomotiveId : String
+    - remainingFunds : double
+    - newTrain : TrainDTO
+
+    + PurchaseResultDTO(success, message, trainId, locomotiveId, remainingFunds, newTrain)
+    + isSuccess() : boolean
+   }
+
+class TrainDTO {
+    - id : String
+    - locomotiveInfo : LocomotiveInfoDTO
+    - carriageCount : int
+    - totalWeight : double
+    - maxSpeed : double
+
+    + TrainDTO(train : Train)
+
+}
+
+class LocomotiveInfoDTO {
+    - id : String
+    - name : String
+    - type : String
+    - power : double
+    - speed : double
+
+    + LocomotiveInfoDTO(locomotive : Locomotive)
+}
+
+class PlayerDTO {
+    - id : String
+    - name : String
+    - funds : double
+    - trainCount : int
+
+    + PlayerDTO(player : Player)
+}
+
+class LocomotiveSpecsDTO {
+    - id : String
+    - name : String
+    - power : double
+    - speed : double
+    - price : double
+    - availableFrom : Date
+    - availableUntil : Date
+    - maintenanceCost : double
+    - additionalSpecs : Map<String, Object>
+
+    + LocomotiveSpecsDTO(specs...)
+   }
+
+' === REPOSITORY INTERFACES (PROTECTED VARIATIONS) ===
+interface ILocomotiveRepository {
+    + getAvailableLocomotives(currentDate : Date) : List<Locomotive>
+    + getLocomotiveById(locomotiveId : String) : Locomotive
+    + getAllLocomotives() : List<Locomotive>
+    + getLocomotivesByType(type : String) : List<Locomotive>
+    + getLocomotivesByPowerRange(minPower : double, maxPower : double) : List<Locomotive>
+}
+
+interface ITrainRepository {
+    + saveTrainToFleet(train : Train) : boolean
+    + getTrainById(trainId : String) : Train
+    + getPlayerTrains(playerId : String) : List<Train>
+    + removeTrainFromFleet(trainId : String) : boolean
+}
+
+interface IRailwayNetworkRepository {
+    + addTrainToNetwork(train : Train) : boolean
+    + removeTrainFromNetwork(trainId : String) : boolean
+    + getNetworkTrains() : List<Train>
+    + isTrainInNetwork(trainId : String) : boolean
+}
+
+' === REPOSITORY IMPLEMENTATIONS ===
+class LocomotiveRepository implements ILocomotiveRepository {
+    + getAvailableLocomotives(currentDate : Date) : List<Locomotive>
+    + getLocomotiveById(locomotiveId : String) : Locomotive
+    + getAllLocomotives() : List<Locomotive>
+    + getLocomotivesByType(type : String) : List<Locomotive>
+    + getLocomotivesByPowerRange(minPower : double, maxPower : double) : List<Locomotive>
+    - filterByAvailabilityDate(locomotives : List<Locomotive>, currentDate : Date) : List<Locomotive>
+}
+
+class TrainRepository implements ITrainRepository {
+    + saveTrainToFleet(train : Train) : boolean
+    + getTrainById(trainId : String) : Train
+    + getPlayerTrains(playerId : String) : List<Train>
+    + removeTrainFromFleet(trainId : String) : boolean
+}
+
+class RailwayNetworkRepository implements IRailwayNetworkRepository {
+    + addTrainToNetwork(train : Train) : boolean
+    + removeTrainFromNetwork(trainId : String) : boolean
+    + getNetworkTrains() : List<Train>
+    + isTrainInNetwork(trainId : String) : boolean
+}
+
+' === REPOSITORIES FACTORY ===
+class Repositories {
+    - static instance : Repositories
+    - locomotiveRepository : ILocomotiveRepository
+    - trainRepository : ITrainRepository
+    - railwayNetworkRepository : IRailwayNetworkRepository
+
+    - Repositories()
+    + {static} getInstance() : Repositories
+    + getLocomotiveRepository() : ILocomotiveRepository
+    + getTrainRepository() : ITrainRepository
+    + getRailwayNetworkRepository() : IRailwayNetworkRepository
+}
+
+' === ENHANCED CONTROLLER ===
+class BuyLocomotiveController {
+    - locomotiveRepository : ILocomotiveRepository
+    - trainRepository : ITrainRepository
+    - railwayNetworkRepository : IRailwayNetworkRepository
+
+    + BuyLocomotiveController()
+    + getAvailableLocomotives() : List<AvailableLocomotiveDTO>
+    + buyLocomotive(request : LocomotivePurchaseRequestDTO) : PurchaseResultDTO
+    + getPlayerInfo() : PlayerDTO
+    + getLocomotiveDetails(locomotiveId : String) : AvailableLocomotiveDTO
+    - validatePurchase(player : Player, locomotive : Locomotive) : boolean
+    - calculateAffordability(locomotive : Locomotive, playerFunds : double) : boolean
+    - createTrainFromLocomotive(locomotive : Locomotive) : Train
+    - estimateOperatingCost(locomotive : Locomotive) : double
+}
+
+class BuyLocomotiveUI {
+    + displayAvailableLocomotives(locomotives : List<AvailableLocomotiveDTO>) : void
+    + selectLocomotive() : String
+    + getPurchaseRequest() : LocomotivePurchaseRequestDTO
+    + displayPurchaseResult(result : PurchaseResultDTO) : void
+    + displayPlayerInfo(player : PlayerDTO) : void
+    + displayLocomotiveDetails(locomotive : AvailableLocomotiveDTO) : void
+    + confirmPurchase(locomotive : AvailableLocomotiveDTO) : boolean
+}
+
+class RailwayNetwork {
+    - trains : List<Train>
+
+    + addTrain(train : Train) : boolean
+    + removeTrain(trainId : String) : boolean
+    + getTrains() : List<Train>
+}
+
+class LocomotiveMapper {
+    + toDTO(locomotive : Locomotive, isAffordable : boolean) : AvailableLocomotiveDTO
+    + toInfoDTO(locomotive : Locomotive) : LocomotiveInfoDTO
+}
+
+class TrainMapper {
+    + toDTO(train : Train) : TrainDTO
+}
+
+class PurchaseResultMapper {
+    + toDTO(success : boolean, message : String, train : Train, funds : double) : PurchaseResultDTO
+}
+
+class PlayerMapper {
+    + toDTO(player : Player) : PlayerDTO
+}
+
+
+
+
+' === RELATIONSHIPS ===
+BuyLocomotiveUI .> BuyLocomotiveController
+BuyLocomotiveUI ..> LocomotivePurchaseRequestDTO
+BuyLocomotiveUI ..> AvailableLocomotiveDTO
+BuyLocomotiveUI ..> PurchaseResultDTO
+BuyLocomotiveUI ..> PlayerDTO
+
+BuyLocomotiveController ..> ApplicationSession
+BuyLocomotiveController ..> UserSession
+BuyLocomotiveController ..> ILocomotiveRepository
+BuyLocomotiveController ..> ITrainRepository
+BuyLocomotiveController ..> IRailwayNetworkRepository
+BuyLocomotiveController ..> LocomotivePurchaseRequestDTO
+BuyLocomotiveController ..> AvailableLocomotiveDTO
+BuyLocomotiveController ..> PurchaseResultDTO
+BuyLocomotiveController ..> PlayerDTO
+BuyLocomotiveController .> Repositories
+BuyLocomotiveController ..> LocomotiveMapper
+BuyLocomotiveController ..> TrainMapper
+BuyLocomotiveController ..> PurchaseResultMapper
+BuyLocomotiveController ..> PlayerMapper
+
+Repositories "1" --> "1" Repositories : instance
+Repositories "1" --> "1" ILocomotiveRepository : locomotiveRepository
+Repositories "1" --> "1" ITrainRepository : trainRepository
+Repositories "1" --> "1" IRailwayNetworkRepository : railwayNetworkRepository
+
+ApplicationSession "1" --> "1" ApplicationSession : instance
+ApplicationSession ..> "1" UserSession : currentSession
+
+LocomotiveMapper ..> Locomotive
+LocomotiveMapper ..> AvailableLocomotiveDTO
+LocomotiveMapper ..> LocomotiveInfoDTO
+
+PurchaseResultMapper ..> Train
+PurchaseResultMapper ..> PurchaseResultDTO
+PurchaseResultMapper ..> TrainDTO
+
+TrainMapper ..> Train
+TrainMapper ..> TrainDTO
+TrainMapper ..> Locomotive
+TrainMapper ..> LocomotiveInfoDTO
+
+LocomotiveRepository ..> "*" Locomotive : locomotives
+TrainRepository ..> "*" Train : trains
+RailwayNetworkRepository ..> "*" Train : trains
+
+UserSession --> "1" Player : player
+Player "1" --> "*" Train : trains
+Train "1" --> "1" Locomotive : locomotive
+Train "1" --> "*" Carriage : carriages
+
+RailwayNetwork "1" --> "*" Train : trains
+
+TrainDTO --> "1" LocomotiveInfoDTO : locomotiveInfo
+PurchaseResultDTO --> "1" TrainDTO : newTrain
+
+' === FACTORY RELATIONSHIPS ===
+LocomotiveFactoryProvider ..> LocomotiveFactory
+LocomotiveFactoryProvider ..> SteamLocomotiveFactory
+LocomotiveFactoryProvider ..> DieselLocomotiveFactory
+LocomotiveFactoryProvider ..> ElectricLocomotiveFactory
+
+SteamLocomotiveFactory ..> SteamLocomotive
+DieselLocomotiveFactory ..> DieselLocomotive
+ElectricLocomotiveFactory ..> ElectricLocomotive
+
+' === NOTES ===
+note right of BuyLocomotiveController
+    Now uses DTOs for clean data transfer
+    and interfaces for repository access.
+    Validates affordability and creates
+    complete train objects.
+end note
+
+note bottom of ILocomotiveRepository
+    Interface provides protection against
+    implementation changes. Filtering
+    handles date availability and
+    performance specifications.
+end note
+
+note right of Locomotive
+    Abstract class enables polymorphism.
+    Each locomotive type implements
+    specific fuel costs, efficiency,
+    and compatibility rules.
+end note
+
+note bottom of LocomotiveFactory
+    Factory pattern protects against
+    locomotive creation complexity and
+    enables easy addition of new
+    locomotive technologies.
+end note
+
+note right of Carriage
+    Polymorphic carriage system allows
+    different cargo types with specific
+    loading requirements and revenue
+    potential calculations.
+end note
+
+@enduml

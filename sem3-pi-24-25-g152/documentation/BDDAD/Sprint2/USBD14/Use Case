@@ -1,0 +1,28 @@
+DECLARE
+    products_cursor SYS_REFCURSOR;
+    product_id Product.PartID%TYPE;
+    is_empty BOOLEAN := TRUE;
+    
+BEGIN
+    -- Chama a função
+    products_cursor := get_products_using_all_workstation_types;
+
+    -- Tenta buscar os resultados do cursor
+    LOOP
+        FETCH products_cursor INTO product_id;
+        EXIT WHEN products_cursor%NOTFOUND;
+
+        -- Se entrar aqui, significa que há pelo menos um registro
+        is_empty := FALSE;
+        DBMS_OUTPUT.PUT_LINE('Product PartID: ' || product_id);
+    END LOOP;
+
+    -- Verifica se o cursor estava vazio
+    IF is_empty THEN
+        DBMS_OUTPUT.PUT_LINE('Nenhum produto encontrado que utilize todos os tipos de estações de trabalho.');
+    END IF;
+
+    -- Fecha o cursor
+    CLOSE products_cursor;
+END;
+/

@@ -1,0 +1,97 @@
+@startuml USEI08-sequence-diagram
+
+title USEI08 - Range Search with KD-Tree Sequence Diagram
+
+actor User
+participant "PlannerMenuController" as Controller
+participant "StationSearchService" as Service
+participant "StationsRepository" as Repository
+participant "KDTree<Station>" as KDTree
+participant "StationFilter" as Filter
+
+User -> Controller: searchByRange()
+activate Controller
+
+Controller -> User: Request latitude range (min, max)
+User --> Controller: latMin, latMax
+
+Controller -> User: Request longitude range (min, max)
+User --> Controller: lonMin, lonMax
+
+Controller -> User: Apply filters? (y/n)
+User --> Controller: yes
+
+Controller -> User: Filter by city? (yes/no/skip)
+User --> Controller: yes
+
+Controller -> User: Filter by main station? (yes/no/skip)
+User --> Controller: skip
+
+Controller -> User: Filter by country? (PT/ES/all)
+User --> Controller: PT
+
+Controller -> Filter: new StationFilter()
+activate Filter
+Controller -> Filter: setIsCity(true)
+Controller -> Filter: setCountry("PT")
+deactivate Filter
+
+Controller -> Service: getStationsByRange(latMin, latMax,\nlonMin, lonMax, filter)
+activate Service
+
+Service -> Service: validate coordinates
+note right
+  Check:
+  - latMin/latMax in [-90, 90]
+  - lonMin/lonMax in [-180, 180]
+  - latMin <= latMax
+  - lonMin <= lonMax
+end note
+
+Service -> Repository: getKdTree()
+activate Repository
+Repository --> Service: kdTree
+deactivate Repository
+
+alt filter has active filters
+    Service -> KDTree: rangeSearch(latMin, latMax,\nlonMin, lonMax, filter::matches)
+else no filters
+    Service -> KDTree: rangeSearch(latMin, latMax,\nlonMin, lonMax)
+end
+
+activate KDTree
+
+KDTree -> KDTree: rangeSearchRecursive(root, ...)
+note right
+  Recursive traversal:
+  1. Check if current node is in range
+  2. If yes and passes filter, add to results
+  3. Decide which subtrees to explore:
+     - If dividing by X (longitude):
+       * Explore left if lonMin <= node.x
+       * Explore right if lonMax >= node.x
+     - If dividing by Y (latitude):
+       * Explore left if latMin <= node.y
+       * Explore right if latMax >= node.y
+end note
+
+loop for each matching station
+    KDTree -> Filter: test(station)
+    activate Filter
+    Filter --> KDTree: matches
+    deactivate Filter
+end
+
+KDTree --> Service: List<Station> (unsorted)
+deactivate KDTree
+
+Service -> Service: sort results by name
+Service --> Controller: List<Station> (sorted)
+deactivate Service
+
+Controller -> Controller: format results
+Controller -> User: Display results table
+
+deactivate Controller
+
+@enduml

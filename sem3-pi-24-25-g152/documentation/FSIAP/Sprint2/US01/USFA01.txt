@@ -1,0 +1,91 @@
+// arduino ide
+
+#include <DHT.h>
+
+// Definições dos pinos
+#define DHTPIN 0        // Pino onde o DHT11 está conectado
+#define DHTTYPE DHT11   // Tipo de sensor DHT
+
+#define LED_TEMP_PIN 9   // LED de Temperatura no pino digital 9
+#define LED_HUM_PIN 13   // LED de Umidade no pino digital 13
+
+DHT dht(DHTPIN, DHTTYPE);
+
+// Variáveis para armazenar as leituras iniciais
+float temp_initial = 0.0;
+float hum_initial = 0.0;
+
+void setup() {
+  // Inicializa a comunicação serial
+  Serial.begin(9600);
+  Serial.println("Iniciando o sensor DHT11 e LEDs...");
+
+  // Inicializa o sensor DHT11
+  dht.begin();
+
+  // Configura os pinos dos LEDs como saída
+  pinMode(LED_TEMP_PIN, OUTPUT);
+  pinMode(LED_HUM_PIN, OUTPUT);
+
+  // Garante que os LEDs estão desligados no início
+  digitalWrite(LED_TEMP_PIN, LOW);
+  digitalWrite(LED_HUM_PIN, LOW);
+
+  // Captura as leituras iniciais
+  delay(2000); // Espera 2 segundos para estabilizar o sensor
+  temp_initial = dht.readTemperature();
+  hum_initial = dht.readHumidity();
+
+  if (isnan(temp_initial) || isnan(hum_initial)) {
+    Serial.println("Falha ao ler o sensor DHT11.");
+  } else {
+    Serial.print("Leitura Inicial - Temperatura: ");
+    Serial.print(temp_initial);
+    Serial.print(" °C | Humidade: ");
+    Serial.print(hum_initial);
+    Serial.println(" %");
+  }
+}
+
+void loop() {
+  // Tenta ler o sensor DHT11
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  // Verifica se a leitura falhou
+  if (isnan(temp) || isnan(hum)) {
+    Serial.println("Falha ao ler o sensor DHT11.");
+  } else {
+    // Verifica se a temperatura excede 5°C acima da inicial
+    if (temp >= (temp_initial + 5.0)) {
+      digitalWrite(LED_TEMP_PIN, HIGH); // Liga o LED de temperatura
+    } else {
+      digitalWrite(LED_TEMP_PIN, LOW);  // Desliga o LED de temperatura
+    }
+
+    // Verifica se a umidade excede 5% acima da inicial
+    if (hum >= (hum_initial + 5.0)) {
+      digitalWrite(LED_HUM_PIN, HIGH);  // Liga o LED de umidade
+    } else {
+      digitalWrite(LED_HUM_PIN, LOW);   // Desliga o LED de umidade
+    }
+
+    // Exibe as leituras no Monitor Serial
+    Serial.print("Temperatura: ");
+    Serial.print(temp);
+    Serial.print(" °C ");
+    Serial.print("LED: ");
+    Serial.print(digitalRead(LED_TEMP_PIN) ? "ON" : "OFF");
+    Serial.print(" | Humidade: ");
+    Serial.print(hum);
+    Serial.print(" % ");
+    Serial.print("LED: ");
+    Serial.println(digitalRead(LED_HUM_PIN) ? "ON" : "OFF");
+  }
+
+  delay(1000); // Aguarda 1 segundo antes da próxima leitura
+}
+
+// Função para desligar os LEDs quando o programa é interrompido
+// No Arduino, não há uma maneira direta de capturar interrupções como em Python,
+// mas podemos garantir que os LEDs estejam desligados no início do setup.

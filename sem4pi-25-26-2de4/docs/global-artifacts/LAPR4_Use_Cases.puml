@@ -1,0 +1,60 @@
+@startuml "LAPR4 Use Cases"
+left to right direction
+skinparam actorStyle awesome
+
+actor "Admin" as Admin
+actor "Backoffice Operator" as BO
+actor "Air Transport Company\n Collaborator" as ATCC
+actor "Pilot" as Pilot
+actor "Flight Control Operator" as FCO
+actor "Weather Person" as WP
+
+  package "Backoffice Config" as bConfig {
+    usecase "Manage users" as UC07
+    usecase "Create air traffic area" as UC01
+    usecase "Create airport" as UC02
+    usecase "Create aircraft/engine maker" as UC03
+    usecase "Create aircraft model" as UC04
+    usecase "Create engine model" as UC05
+    usecase "Create air transport company" as UC06
+  }
+
+  package "Air Companies Configuration" as acConfig {
+    usecase "Create aircraft" as UC21
+    usecase "Create flight route" as UC22
+    usecase "Manage pilots" as UC23
+  }
+
+  package "Flight Management" as flightMng {
+    usecase "Register flight plan" as UC41
+    usecase "Test flight plan" as UC42
+    usecase "Simulate air control" as UC43
+  }
+
+  package "Weather Service" as wService {
+    usecase "Register weather data" as UC30
+    usecase "Import bulk weather data" as UC31
+    usecase "Consult weather data" as UC32
+  }
+
+Admin --> UC07
+BO --> UC01
+BO --> UC02
+BO --> UC03
+BO --> UC04
+BO --> UC05
+BO --> UC06
+BO --> UC07
+ATCC --> UC21
+ATCC --> UC22
+ATCC --> UC23
+Pilot --> UC41
+Pilot --> UC42
+Pilot --> UC32
+FCO --> UC42
+FCO --> UC43
+WP --> UC30
+WP --> UC31
+FCO --> UC32
+
+@enduml

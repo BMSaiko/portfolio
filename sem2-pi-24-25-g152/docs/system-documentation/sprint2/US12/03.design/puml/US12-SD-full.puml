@@ -1,0 +1,101 @@
+@startuml US12-SD-full
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Sequence Diagram (SD) - US12 Generate Cargoes Automatically - Full
+
+autonumber
+
+actor "Admin" as ADMIN
+participant ":CargoGenerationUI" as UI
+participant ":CargoGenerationController" as CTRL
+participant ":SimulationService" as SIMSERVICE
+participant ":StationRepository" as STATIONREPO
+participant "stationList:List<Station>" as STATIONLIST
+participant "station:Station" as STATION
+participant ":IndustryService" as INDSERVICE
+participant "industryCargoes:List<Cargo>" as IND_CARGOES
+participant ":CityService" as CITYSERVICE
+participant "cityCargoes:List<Cargo>" as CITY_CARGOES
+participant "cargo:Cargo" as CARGO
+participant ":CargoRepository" as CARGOREPO
+participant ":CargoDistributionService" as DISTSERVICE
+participant "stats:CargoStats" as STATS
+
+activate ADMIN
+
+    ADMIN -> UI : requests to start cargo generation simulation
+    activate UI
+        UI -> CTRL : startCargoGeneration()
+        activate CTRL
+            CTRL -> SIMSERVICE : configureSimulation(/* params */)
+            activate SIMSERVICE
+                SIMSERVICE --> CTRL : configOK
+            deactivate SIMSERVICE
+
+            CTRL -> STATIONREPO : getAllStations()
+            activate STATIONREPO
+                STATIONREPO --> CTRL : stationList
+            deactivate STATIONREPO
+
+            loop for each station in stationList
+                CTRL -> INDSERVICE : generateCargoForStation(station)
+                activate INDSERVICE
+                    INDSERVICE --> CTRL : industryCargoes
+                deactivate INDSERVICE
+
+                CTRL -> CITYSERVICE : generateCargoForStation(station)
+                activate CITYSERVICE
+                    CITYSERVICE --> CTRL : cityCargoes
+                deactivate CITYSERVICE
+
+                CTRL -> STATION : addCargoes(industryCargoes)
+                activate STATION
+                    loop for each cargo in industryCargoes
+                        STATION -> CARGO** : create(/* cargo data */)
+                        STATION -> CARGO : validateData()
+                        activate CARGO
+                            CARGO --> STATION : validationResult
+                        deactivate CARGO
+                        STATION -> CARGOREPO : saveCargo(cargo)
+                        activate CARGOREPO
+                            CARGOREPO --> STATION : savedCargo
+                        deactivate CARGOREPO
+                        STATION -> STATION : updateStorage(cargo)
+                    end
+                    STATION --> CTRL : addedIndustryCargoes
+                deactivate STATION
+
+                CTRL -> STATION : addCargoes(cityCargoes)
+                 activate STATION
+                    loop for each cargo in cityCargoes
+                        STATION -> CARGO** : create(/* cargo data */)
+                        STATION -> CARGO : validateData()
+                        activate CARGO
+                            CARGO --> STATION : validationResult
+                        deactivate CARGO
+                        STATION -> CARGOREPO : saveCargo(cargo)
+                        activate CARGOREPO
+                            CARGOREPO --> STATION : savedCargo
+                        deactivate CARGOREPO
+                        STATION -> STATION : updateStorage(cargo)
+                    end
+                    STATION --> CTRL : addedCityCargoes
+                deactivate STATION
+            end
+
+            CTRL -> DISTSERVICE : calculateStatistics()
+            activate DISTSERVICE
+                DISTSERVICE --> CTRL : stats
+            deactivate DISTSERVICE
+
+            CTRL --> UI : success, stats
+        deactivate CTRL
+
+        UI --> ADMIN : displays operation success and statistics
+    deactivate UI
+
+deactivate ADMIN
+
+@enduml

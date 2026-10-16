@@ -1,0 +1,23 @@
+SELECT 
+    BOO_Operation.SeqNum AS OperationSequence,
+    Operation.Name AS OperationName,
+    WorkstationTypes.Name AS WorkstationType
+FROM 
+    Product 
+JOIN 
+    ProductFamily ON Product.PFID = ProductFamily.PFID
+JOIN 
+    BOO ON ProductFamily.PFID = BOO.PFID
+JOIN 
+    BOO_Operation ON BOO.BOOID = BOO_Operation.BOOID
+JOIN 
+    Operation ON BOO_Operation.OPID = Operation.OPID
+JOIN 
+    OperationWorkstationTypes ON Operation.OPID = OperationWorkstationTypes.OPID
+JOIN 
+    WorkstationTypes ON OperationWorkstationTypes.WTID = WorkstationTypes.WTID
+WHERE 
+    Product.PartID = 'AS12945S22'
+
+ORDER BY 
+    BOO_Operation.SeqNum;

@@ -1,0 +1,90 @@
+@startuml
+title US107 — Safety Violation Detection → Report Thread Notification
+
+participant "Main Thread\n(simulator.c)" as M
+participant "Detection Thread\n(safety_violation_detector)" as D
+participant "Report Thread\n(report_thread_main)" as R
+participant "ViolationNotifier\n(mutex + cond + queue)" as N
+
+== Initialization ==
+
+M -> N: notifier_init()
+note right
+    pthread_mutex_init(&mtx)
+    pthread_cond_init(&cond)
+    sim_running = 1
+end note
+
+M -> D: pthread_create(detection_thread)
+M -> R: pthread_create(report_thread)
+
+== Simulation Loop ==
+
+loop each time step
+    M -> M: sem_post(step_go_sem) for each flight
+    M -> M: read positions from pipes
+    M -> M: sem_wait(step_done_sem) for each flight
+
+    == Detection Thread Scan ==
+    D -> D: pthread_mutex_lock(&mtx)
+    D -> D: check_safety_violations(fleet, n, step)
+    note right
+        Haversine distance
+        between all flight pairs
+    end note
+
+    alt violation found (distance < threshold)
+        D -> D: handle_violation()
+        note right
+            kill(flight1, SIGUSR1)
+            kill(flight2, SIGUSR1)
+            log_violation()
+        end note
+        D -> N: notify_violation()
+        note right
+            pthread_mutex_lock(&mtx)
+            enqueue(event)
+            pthread_cond_signal(&cond)
+            pthread_mutex_unlock(&mtx)
+        end note
+
+        == Report Thread wakes up ==
+        R -> N: pthread_cond_wait(&cond, &mtx)
+        note right
+            Blocks efficiently
+            until signal arrives.
+            Spurious wakeup-safe
+            (while loop).
+        end note
+        N --> R: signal received
+        R -> N: dequeue(event)
+        R -> R: accumulate in buffer
+        R --> D: (continues scanning)
+    end
+
+    D -> D: pthread_mutex_unlock(&mtx)
+    M -> M: next time step
+end
+
+== Shutdown ==
+
+M -> N: notifier_signal_finished()
+note right
+    pthread_mutex_lock(&mtx)
+    sim_running = 0
+    pthread_cond_broadcast(&cond)
+    pthread_mutex_unlock(&mtx)
+end note
+
+R -> R: while loop exits (sim_running=0, queue=0)
+R -> R: write_report_file(filename, accumulated)
+note right
+    simulation_report_
+    YYYYMMDD_HHMMSS.txt
+end note
+
+M -> D: pthread_join(detection_thread)
+M -> R: pthread_join(report_thread)
+M -> N: notifier_destroy()
+
+@enduml

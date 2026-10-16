@@ -1,0 +1,83 @@
+@startuml Railway Network Simulator Use Cases
+left to right direction
+skinparam linetype polyline
+actor "Editor" as ED
+actor "Player" as PL
+
+
+rectangle "Railway Network Simulator" {
+  ' Map & Scenario Management
+  usecase "Create Map" as UC1
+  usecase "Add Industry to Map" as UC2
+  usecase "Add City to Map" as UC3
+  usecase "Add Scenario to Map" as UC30
+  usecase "Create Scenario" as UC4
+  usecase "Save Map" as UC19
+  usecase "Load Map" as UC20
+  usecase "Save Scenario" as UC21
+  usecase "Load Scenario" as UC22
+ 
+  ' Station Management
+  usecase "Build Station" as UC5
+  usecase "Upgrade Station" as UC6
+  usecase "List Stations" as UC7
+ 
+  ' Railway & Train Management
+  usecase "Build Railway Line" as UC8
+  usecase "Buy Locomotive" as UC9
+  usecase "Assign Train to Route" as UC10
+  usecase "List Trains" as UC11
+ 
+  ' Simulation & Game Management
+  usecase "Run Simulator" as UC12
+  usecase "Generate Cargo" as UC12A
+  usecase "Start/Pause Simulation" as UC12B
+  usecase "Save Game" as UC23
+  usecase "Load Game" as UC24
+  usecase "View Year Financial Results" as UC25
+  
+  usecase "View Track Maintenance Expenses" as UC26
+  usecase "View Train Maintenance Expenses" as UC27
+  usecase "View Fuel Expenses" as UC28
+  usecase "View Cargo Revenues" as UC29
+  
+}
+
+' Relationships for Editor
+ED --> UC1
+ED --> UC2
+ED --> UC3
+ED --> UC4
+ED --> UC20
+ED --> UC21
+ED --> UC22
+ED --> UC30
+ED --> UC19
+' Relationships for Player
+PL --> UC5
+PL --> UC6
+PL --> UC7
+PL --> UC8
+PL --> UC9
+PL --> UC10
+PL --> UC11
+PL --> UC12
+PL --> UC23
+PL --> UC24
+PL --> UC25
+
+
+' Include relationships
+UC12 ..> UC12A : <<include>>
+UC12 ..> UC12B : <<include>>
+
+' Extensions
+UC5 <.. UC6 : <<extend>>
+UC1 <.. UC19 : <<extend>>
+UC4 <.. UC21 : <<extend>>
+
+UC25 ..> UC26 : <<include>>
+UC25 ..> UC27 : <<include>>
+UC25 ..> UC28 : <<include>>
+UC25 ..> UC29 : <<include>>
+@enduml

@@ -1,0 +1,36 @@
+@startuml US07-DM
+ skinparam classAttributeIconSize 0
+ skinparam classFontStyle bold
+ skinparam classArrowFontStyle italic
+
+
+class Player {
+  id
+  name
+  funds
+}
+
+ class Station {
+     id
+     name
+     location
+
+ }
+
+ class Building {
+     id
+     type
+     level
+ }
+
+ class Cargo {
+     id
+     type
+     quantity
+     demand
+ }
+
+ Player --> "1" Station : lists/selects >
+ Station --> "*" Building : contains >
+ Station --> "*" Cargo : has >
+ @enduml

@@ -1,0 +1,24 @@
+-- README Explanation
+/*
+### Register Workstation Function
+
+The `register_workstation` function adds a new workstation to the system.
+
+#### Parameters:
+- `p_WSID`: Unique ID of the workstation.
+- `p_Name`: Name of the workstation.
+- `p_Description`: Description of the workstation.
+- `p_WTID`: Type ID of the workstation (must exist in `WorkstationTypes`).
+
+#### Function Logic:
+- Inserts a new record into the `Workstations` table.
+- Returns:
+  - `'Success: Workstation registered successfully'` if insert is successful.
+  - `'Error: Workstation with this WSID already exists'` for duplicate ID.
+  - `'Error: Workstation Type (WTID) not found'` for missing `WTID`.
+  - Other SQL errors if applicable.
+
+#### Example Usage:
+- The function is called to register a workstation with ID `1001`.
+- The result is printed using `DBMS_OUTPUT.PUT_LINE`.
+*/

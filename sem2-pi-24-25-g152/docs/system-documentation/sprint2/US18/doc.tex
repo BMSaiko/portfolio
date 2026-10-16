@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{subfig}  % Changed from subfigure to subfig
+\geometry{a4paper, margin=2.5cm}
+
+% Only load pgf-pie if you have it installed
+\IfFileExists{pgf-pie.sty}{
+  \usepackage{pgf-pie}
+}{
+  % Fallback if pgf-pie is not available
+  \usepackage{tikz}
+  \newcommand{\pie}[1]{(Pie chart: #1)}
+}
+
+\title{Distribuição de Dados por Estação}
+\author{US18 - Análise de Dados}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Resumo dos Dados}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Estação} & \textbf{Comboios} & \textbf{Passageiros} & \textbf{Correio (t)} \\
+\midrule
+Berlin & 152447 & 54401142 & 14127.36 \\
+Frankfurt & 90242 & 53823771 & 2890.04 \\
+Hamburg & 244224 & 74362990 & 6807.81 \\
+Hannover & 92244 & 41394661 & 1982.04 \\
+Stuttgart & 217744 & 68289029 & 2350.31 \\
+\bottomrule
+\end{tabular}
+\caption{Resumo de dados por estação}
+\end{table}
+
+\clearpage % Force a page break here
+
+\section{Gráficos de Distribuição}
+
+\begin{figure}[h!] % The ! is important to force it to stay here
+\centering
+\subfloat[Distribuição de Comboios]{
+  \begin{tikzpicture}[scale=0.65]
+    \pie{19.1/Berlin (152447), 11.3/Frankfurt (90242), 30.6/Hamburg (244224), 11.6/Hannover (92244), 27.3/Stuttgart (217744)}
+  \end{tikzpicture}
+}
+
+\vspace{1.5cm} % Vertical space between first and second charts
+
+\subfloat[Distribuição de Passageiros]{
+  \begin{tikzpicture}[scale=0.65]
+    \pie{18.6/Berlin (54401142), 18.4/Frankfurt (53823771), 25.4/Hamburg (74362990), 14.2/Hannover (41394661), 23.4/Stuttgart (68289029)}
+  \end{tikzpicture}
+}
+
+\vspace{1.5cm} % Vertical space between second and third charts
+
+\subfloat[Distribuição de Correio]{
+  \begin{tikzpicture}[scale=0.65]
+    \pie{50.2/Berlin (14127), 10.3/Frankfurt (2890), 24.2/Hamburg (6807), 7.0/Hannover (1982), 8.3/Stuttgart (2350)}
+  \end{tikzpicture}
+}
+\end{figure}
+
+\end{document}

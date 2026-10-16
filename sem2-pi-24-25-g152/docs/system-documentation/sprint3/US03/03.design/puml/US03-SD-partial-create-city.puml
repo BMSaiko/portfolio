@@ -1,0 +1,48 @@
+@startuml US03-SD-partial-create-city
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US03 - Create City - Partial Sequence Diagram
+
+participant ":AddCityUI" as UI
+participant ":AddCityController" as CTRL
+participant ":MapRepository" as MAPREPO
+participant ":CityMapper" as CITYMAPPER
+participant "city:City" as CITY
+participant ":CityService" as CITYSERVICE
+participant ":CityRepository" as CITYREPO
+
+UI -> CTRL : addCity(request)
+activate CTRL
+    group Create City
+    CTRL -> MAPREPO : findById(request.mapId)
+    activate MAPREPO
+        MAPREPO --> CTRL : selectedMap
+    deactivate MAPREPO
+    
+    CTRL -> CITYSERVICE : createCity(request, selectedMap)
+    activate CITYSERVICE
+        CITYSERVICE --> CITY** : create city from request data
+        
+        CITYSERVICE -> CITY : validateData()
+        activate CITY
+            CITY --> CITYSERVICE : validationResult
+        deactivate CITY
+        
+        CITYSERVICE -> CITYREPO : saveCity(city)
+        activate CITYREPO
+            CITYREPO --> CITYSERVICE : success
+        deactivate CITYREPO
+        
+        CITYSERVICE --> CTRL : city
+    deactivate CITYSERVICE
+    
+    CTRL -> CITYMAPPER : toDTO(city)
+    activate CITYMAPPER
+        CITYMAPPER --> CTRL : cityDTO
+    deactivate CITYMAPPER
+    end group
+    CTRL --> UI : cityDTO
+deactivate CTRL
+@enduml

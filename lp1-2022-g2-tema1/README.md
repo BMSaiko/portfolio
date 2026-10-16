@@ -34,3 +34,7 @@ Open `index.html` in a browser.
 
 ## Notes
 - Site content is in Portuguese.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#lp1-2022-g2-tema1) — status and gaps for this project

@@ -33,3 +33,7 @@ mvn compile exec:java -Dexec.mainClass=org.example.Main
 
 ## Notes
 - Work in progress: only “add flight” is implemented in the menu. See the finished version in [`apoo-lp1-companhia-aerea`](../apoo-lp1-companhia-aerea).
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#companhia-aerea) — status and gaps for this project

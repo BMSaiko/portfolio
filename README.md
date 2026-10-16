@@ -56,3 +56,7 @@ Each folder has a `README.md` (English) and `README.pt.md` (Portuguese) with con
 - Projects were imported without their original git history; team projects were built by groups and the READMEs say so.
 - Secrets (`.env`, API tokens, database passwords) were removed or replaced by environment variables/placeholders. Build outputs, IDE folders and archives were left out.
 - Some documentation is in Portuguese, as delivered to the courses.
+
+## Documentation
+
+- [Documentation audit (14 projects)](docs/AUDIT.md)

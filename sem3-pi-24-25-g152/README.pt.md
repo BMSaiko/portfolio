@@ -41,3 +41,8 @@ Java: `cd prodPlanSimulator && mvn test`. Os scripts Oracle precisam de um Oracl
 
 ## Notas
 - Alguns documentos estão em português.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#sem3-pi-24-25-g152) — estado e lacunas deste projeto
+- [Documentação por unidade curricular](documentation/)

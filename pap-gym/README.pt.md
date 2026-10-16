@@ -36,3 +36,8 @@
 
 ## Notas
 - Os textos da interface estão em português.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#pap-gym) — estado e lacunas deste projeto
+- [Capturas, ícones e anexos](img/)

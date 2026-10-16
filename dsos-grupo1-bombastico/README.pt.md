@@ -41,3 +41,8 @@ php artisan serve
 
 ## Notas
 - `vendor/` e `.env` não estão incluídos.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#dsos-grupo1-bombastico) — estado e lacunas deste projeto
+- [Script SQL da base de dados](DB/2023_ERM_DSOS_G1.sql)

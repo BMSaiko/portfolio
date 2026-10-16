@@ -38,3 +38,10 @@ Open the `.pkt` files in Cisco Packet Tracer (e.g. `doc/sprint2/1221514/Terminal
 
 ## Notes
 - Documentation is a mix of English and Portuguese, as delivered.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#rcomp-25-26-de-g2) — status and gaps for this project
+- [Sprint 1 (planning, review, schematics)](doc/sprint1/)
+- [Sprint 2 (planning, review)](doc/sprint2/)
+- [Sprint 3 (planning, review, DNS records)](doc/sprint3/)

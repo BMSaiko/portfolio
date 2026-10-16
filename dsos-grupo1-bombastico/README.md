@@ -41,3 +41,8 @@ php artisan serve
 
 ## Notes
 - `vendor/` and `.env` are not included.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#dsos-grupo1-bombastico) — status and gaps for this project
+- [Database SQL script](DB/2023_ERM_DSOS_G1.sql)

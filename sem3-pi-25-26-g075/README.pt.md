@@ -43,3 +43,9 @@ Java: `cd warehouseMngt && mvn test`. As funcionalidades com base de dados preci
 
 ## Notas
 - A documentação está maioritariamente em inglês.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#sem3-pi-25-26-g075) — estado e lacunas deste projeto
+- [Ponto de entrada da documentação](docs/README.md)
+- [Documentação por unidade curricular](docs/)

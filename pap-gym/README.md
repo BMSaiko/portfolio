@@ -36,3 +36,8 @@
 
 ## Notes
 - UI texts are in Portuguese.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#pap-gym) — status and gaps for this project
+- [Screenshots, icons and attachments](img/)

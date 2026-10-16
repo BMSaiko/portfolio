@@ -37,3 +37,10 @@
 
 ## Notes
 - Tokens and passwords of the original repository were replaced by variables/placeholders; the Jenkins job expects a `bitbucket-token` credential.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#biblioteca-ermesinde) — status and gaps for this project
+- [DOS report (Portuguese)](Relatorio_de_DOS.docx)
+- [Docker Compose setup](docker-compose.yml)
+- [Jenkins pipeline](jenkinsfile)

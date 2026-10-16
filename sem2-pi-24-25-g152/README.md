@@ -43,3 +43,10 @@ mvn compile exec:java -Dexec.mainClass=pt.ipp.isep.dei.Main
 
 ## Notes
 - Docs are in English; see `docs/TeamMembersAndTasks.md` for the full task distribution.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#sem2-pi-24-25-g152) — status and gaps for this project
+- [Documentation entry point](docs/README.md)
+- [System documentation](docs/system-documentation/)
+- [Team members and tasks](docs/TeamMembersAndTasks.md)

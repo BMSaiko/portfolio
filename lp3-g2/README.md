@@ -39,3 +39,12 @@ Requires JDK 17+ and a SQL Server database; set the JDBC URL in `SHEETS_DB_URL` 
 
 ## Notes
 - Project documentation (PDFs) is in Portuguese, as delivered.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#lp3-g2) — status and gaps for this project
+- [Project documentation folder](Docs/)
+- [Database model](Docs/Modelo%20de%20base%20de%20dados.png)
+- [Domain model diagram](Docs/diagramaModeloDominio.png)
+- [UAT test plan](Docs/UAT%20Test%20Plan.pdf)
+- [Sprint plannings and retrospectives](Docs/Sprints/)

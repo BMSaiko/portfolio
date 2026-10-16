@@ -33,3 +33,7 @@ mvn compile exec:java -Dexec.mainClass=org.companhiaaerea.Main
 
 ## Notes
 - Builds on the [early version](../companhia-aerea).
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#apoo-lp1-companhia-aerea) — status and gaps for this project

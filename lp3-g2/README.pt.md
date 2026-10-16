@@ -39,3 +39,12 @@ Requer JDK 17+ e uma base de dados SQL Server; definir o URL JDBC em `SHEETS_DB_
 
 ## Notas
 - A documentação do projeto (PDFs) está em português, tal como entregue.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#lp3-g2) — estado e lacunas deste projeto
+- [Pasta de documentação do projeto](Docs/)
+- [Modelo de base de dados](Docs/Modelo%20de%20base%20de%20dados.png)
+- [Diagrama do modelo de domínio](Docs/diagramaModeloDominio.png)
+- [Plano de testes UAT](Docs/UAT%20Test%20Plan.pdf)
+- [Plannings e retrospetivas de sprint](Docs/Sprints/)

@@ -51,3 +51,11 @@ Ver `docs/readme.md` para o planeamento e a documentação técnica.
 ## Notas
 - Um ficheiro de teste com caminho muito longo (`InsertWeatherDataInFlightPlanUiAcceptanceTest.java`) não pôde ser extraído no Windows e não está incluído.
 - Outputs de build, `libs/*.jar` e pastas de IDE ficaram de fora.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#sem4pi-25-26-2de4) — estado e lacunas deste projeto
+- [Artefactos globais (casos de uso, reuniões, requisitos)](docs/global-artifacts/)
+- [Glossário](docs/global-artifacts/glossary.md)
+- [Testes em cloud](docs/global-artifacts/CLOUD_TESTING.md)
+- [Acesso VPN à cloud](docs/global-artifacts/CLOUD_VPN_ACCESS.md)

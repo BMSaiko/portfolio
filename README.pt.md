@@ -56,3 +56,7 @@ Cada pasta tem `README.md` (inglês) e `README.pt.md` (português) com contexto,
 - Os projetos foram importados sem o histórico git original; os projetos de grupo foram feitos em equipa e os READMEs indicam-no.
 - Segredos (`.env`, tokens de API, passwords de bases de dados) foram removidos ou substituídos por variáveis de ambiente/placeholders. Outputs de build, pastas de IDE e arquivos ficaram de fora.
 - Alguma documentação está em português, tal como entregue às unidades curriculares.
+
+## Documentação
+
+- [Auditoria da documentação (14 projetos)](docs/AUDIT.pt.md)

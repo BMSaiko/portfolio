@@ -34,3 +34,7 @@ Abrir `index.html` num browser.
 
 ## Notas
 - O conteúdo do site está em português.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#lp1-2022-g2-tema1) — estado e lacunas deste projeto

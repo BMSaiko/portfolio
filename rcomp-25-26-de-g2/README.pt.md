@@ -38,3 +38,10 @@ Abrir os ficheiros `.pkt` no Cisco Packet Tracer (p. ex. `doc/sprint2/1221514/Te
 
 ## Notas
 - A documentação mistura inglês e português, tal como entregue.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#rcomp-25-26-de-g2) — estado e lacunas deste projeto
+- [Sprint 1 (planeamento, revisão, esquemas)](doc/sprint1/)
+- [Sprint 2 (planeamento, revisão)](doc/sprint2/)
+- [Sprint 3 (planeamento, revisão, registos DNS)](doc/sprint3/)

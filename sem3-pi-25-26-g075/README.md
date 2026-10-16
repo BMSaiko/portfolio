@@ -43,3 +43,9 @@ Java: `cd warehouseMngt && mvn test`. Database features need a local Oracle inst
 
 ## Notes
 - Docs are mostly in English.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#sem3-pi-25-26-g075) — status and gaps for this project
+- [Documentation entry point](docs/README.md)
+- [Documentation by course unit](docs/)

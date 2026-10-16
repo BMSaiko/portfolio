@@ -34,3 +34,10 @@
 
 ## Notas
 - A password da base de dados do repositório original foi removida.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#rentacar) — estado e lacunas deste projeto
+- [Arquitetura, modelo de dados e problemas conhecidos](docs/ARCHITECTURE.pt.md)
+- [Setup e resolução de problemas](docs/SETUP.pt.md)
+- [ADR 0001 — JavaFX + JDBC + lógica no SQL Server](docs/adr/0001-javafx-jdbc-stored-procedures.pt.md)

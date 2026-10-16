@@ -68,6 +68,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### rentacar
 - Existente: README; SQL em `rentacar/RentACar/src/main/java/olabomdia.sql`.
 - Lacunas: arquitetura, diagrama ER, setup (`RENTACAR_DB_PASSWORD`), ADR, testes.
+- Adicionado (passagem 2): [ARCHITECTURE](../rentacar/docs/ARCHITECTURE.pt.md) (pacotes, fluxo de login/acessos, duas fontes de ER, 7 problemas verificados), [SETUP](../rentacar/docs/SETUP.pt.md) (comandos não testados), [ADR 0001](../rentacar/docs/adr/0001-javafx-jdbc-stored-procedures.pt.md).
+- Achados: o `mainClass` do `build.gradle` aponta para uma `HelloApplication` inexistente; `olabomdia.sql` só tem esquema e não inclui as tabelas/vistas/procedimentos que o código chama; SQL construído por concatenação; sem testes.
 
 ### porto-on-wheels
 - Existente: só README. Sem esquema SQL no repositório (o único `LICENSE` é o do Font Awesome em vendor).

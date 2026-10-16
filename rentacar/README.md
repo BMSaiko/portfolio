@@ -34,3 +34,10 @@
 
 ## Notes
 - The database password from the original repository was removed.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#rentacar) — status and gaps for this project
+- [Architecture, data model and known issues](docs/ARCHITECTURE.md)
+- [Setup and troubleshooting](docs/SETUP.md)
+- [ADR 0001 — JavaFX + JDBC + logic in SQL Server](docs/adr/0001-javafx-jdbc-stored-procedures.md)

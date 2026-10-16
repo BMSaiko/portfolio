@@ -68,6 +68,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### rentacar
 - Existing: README; SQL file `rentacar/RentACar/src/main/java/olabomdia.sql`.
 - Gaps: architecture, ER diagram, setup (`RENTACAR_DB_PASSWORD`), ADR, tests.
+- Added (pass 2): [ARCHITECTURE](../rentacar/docs/ARCHITECTURE.md) (packages, login/access flow, two ER sources, 7 verified issues), [SETUP](../rentacar/docs/SETUP.md) (commands not tested), [ADR 0001](../rentacar/docs/adr/0001-javafx-jdbc-stored-procedures.md).
+- Findings: `build.gradle` `mainClass` points to a non-existent `HelloApplication`; `olabomdia.sql` is schema-only and lacks the tables/views/procedures the code calls; SQL built by concatenation; no tests.
 
 ### porto-on-wheels
 - Existing: README only. No SQL schema in the repository (the only `LICENSE` is the vendored Font Awesome one).

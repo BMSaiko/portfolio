@@ -41,6 +41,9 @@
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#biblioteca-ermesinde) — status and gaps for this project
+- [Architecture, data model and API reference](docs/ARCHITECTURE.md)
+- [Setup and troubleshooting](docs/SETUP.md)
+- [ADR 0001 — Jenkins + SonarQube + Docker Compose](docs/adr/0001-jenkins-sonarqube-docker-compose.md)
 - [DOS report (Portuguese)](Relatorio_de_DOS.docx)
 - [Docker Compose setup](docker-compose.yml)
 - [Jenkins pipeline](jenkinsfile)

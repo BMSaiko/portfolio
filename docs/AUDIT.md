@@ -75,7 +75,9 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 
 ### biblioteca-ermesinde
 - Existing: `Relatorio_de_DOS.docx`, `docker-compose.yml`, `dockerfile`, `jenkinsfile`, EF migrations in `Biblioteca_Ermesinde/Migrations`, 4 test-related files.
-- Gaps: architecture (API/EF/DB layers), endpoint table, pipeline diagram, setup (`SA_PASSWORD`, `SONAR_TOKEN`), ADR for Jenkins + SonarQube + Docker Compose.
+- Gaps found: architecture (API/EF/DB layers), endpoint table, pipeline diagram, setup (`SA_PASSWORD`, `SONAR_TOKEN`), ADR for Jenkins + SonarQube + Docker Compose.
+- Added (pass 2): [ARCHITECTURE](../biblioteca-ermesinde/docs/ARCHITECTURE.md) (layers, ER, API table, pipeline, 10 verified issues), [SETUP](../biblioteca-ermesinde/docs/SETUP.md) (commands not tested), [ADR 0001](../biblioteca-ermesinde/docs/adr/0001-jenkins-sonarqube-docker-compose.md).
+- Security flag: `docker-compose.yml` contains a literal SonarQube admin password; move to an env var and rotate (original file left untouched).
 
 ### rcomp-25-26-de-g2
 - Existing: `rcomp-25-26-de-g2/doc/sprint{1,2,3}/` with per-member READMEs, schematics, `planning.md`, `review.md`, `global-inventory.md`, DNS record captures.

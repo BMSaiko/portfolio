@@ -75,7 +75,9 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 
 ### biblioteca-ermesinde
 - Existente: `Relatorio_de_DOS.docx`, `docker-compose.yml`, `dockerfile`, `jenkinsfile`, migrações EF em `Biblioteca_Ermesinde/Migrations`, 4 ficheiros de testes.
-- Lacunas: arquitetura (camadas API/EF/BD), tabela de endpoints, diagrama do pipeline, setup (`SA_PASSWORD`, `SONAR_TOKEN`), ADR Jenkins + SonarQube + Docker Compose.
+- Lacunas encontradas: arquitetura (camadas API/EF/BD), tabela de endpoints, diagrama do pipeline, setup (`SA_PASSWORD`, `SONAR_TOKEN`), ADR Jenkins + SonarQube + Docker Compose.
+- Adicionado (passagem 2): [ARCHITECTURE](../biblioteca-ermesinde/docs/ARCHITECTURE.pt.md) (camadas, ER, tabela da API, pipeline, 10 problemas verificados), [SETUP](../biblioteca-ermesinde/docs/SETUP.pt.md) (comandos não testados), [ADR 0001](../biblioteca-ermesinde/docs/adr/0001-jenkins-sonarqube-docker-compose.pt.md).
+- Alerta de segurança: `docker-compose.yml` contém uma password de admin do SonarQube em texto simples; passar para variável de ambiente e rodar (ficheiro original intocado).
 
 ### rcomp-25-26-de-g2
 - Existente: `rcomp-25-26-de-g2/doc/sprint{1,2,3}/` com READMEs por membro, esquemas, `planning.md`, `review.md`, `global-inventory.md`, capturas de DNS.

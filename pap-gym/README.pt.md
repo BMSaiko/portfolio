@@ -41,3 +41,6 @@
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#pap-gym) — estado e lacunas deste projeto
 - [Capturas, ícones e anexos](img/)
+- [Arquitetura, modelo de dados e problemas conhecidos](docs/ARCHITECTURE.pt.md)
+- [Setup e resolução de problemas](docs/SETUP.pt.md)
+- [ADR 0001 — WPF, navegação MVVM, SQL direto](docs/adr/0001-wpf-mvvm-navigation-direct-sql.pt.md)

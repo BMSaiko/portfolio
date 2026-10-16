@@ -44,8 +44,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### pap-gym
 - Existing: `pap-gym/img/` (screenshots, icons, logos). README run steps with `GYM_DB_PASSWORD`.
 - Gaps: no architecture, ER diagram, ADR, tests, `.gitignore`.
-- Added (pass 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.md) (files, flows, **inferred** ER, 9 verified issues), [SETUP](../porto-on-wheels/docs/SETUP.md) (reconstructed SQL, commands not tested), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.md).
-- Findings: registration stores the e-mail as the password; `admin/db/*.php` have no authentication; admin redirects without `exit`; profile update trusts a client-supplied id; plain-text passwords; no schema.
+- Added (pass 2): [ARCHITECTURE](../pap-gym/docs/ARCHITECTURE.md) (layers, flows, ER read from the team's diagram, 9 verified issues), [SETUP](../pap-gym/docs/SETUP.md) (reconstructed SQL, commands not tested), [ADR 0001](../pap-gym/docs/adr/0001-wpf-mvvm-navigation-direct-sql.md).
+- Findings: all SQL built from user input; room capacity checked only in the UI; `MySql.Data` not restorable from NuGet as committed; README says .NET Framework 4.7.2 but the project targets 4.8; website registration form is not wired; three tables in the diagram are never used; no schema script.
 
 ### lp1-2022-g2-tema1
 - Existing: README only (static site: `index.html`, `pages/`, `styles/`, `assets/`).
@@ -80,6 +80,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### porto-on-wheels
 - Existing: README only. No SQL schema in the repository (the only `LICENSE` is the vendored Font Awesome one).
 - Gaps: architecture, ER diagram (will be marked **inferred** from queries), setup (`PORTOONWHEELS_DB_*`), ADR, plain-text passwords warning, `.gitignore`.
+- Added (pass 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.md) (files, flows, **inferred** ER, 9 verified issues), [SETUP](../porto-on-wheels/docs/SETUP.md) (reconstructed SQL, commands not tested), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.md).
+- Findings: registration stores the e-mail as the password; `admin/db/*.php` have no authentication; admin redirects without `exit`; profile update trusts a client-supplied id; plain-text passwords; no schema.
 
 ### biblioteca-ermesinde
 - Existing: `Relatorio_de_DOS.docx`, `docker-compose.yml`, `dockerfile`, `jenkinsfile`, EF migrations in `Biblioteca_Ermesinde/Migrations`, 4 test-related files.

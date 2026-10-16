@@ -41,3 +41,6 @@
 
 - [Documentation audit](../docs/AUDIT.md#pap-gym) — status and gaps for this project
 - [Screenshots, icons and attachments](img/)
+- [Architecture, data model and known issues](docs/ARCHITECTURE.md)
+- [Setup and troubleshooting](docs/SETUP.md)
+- [ADR 0001 — WPF, MVVM navigation, direct SQL](docs/adr/0001-wpf-mvvm-navigation-direct-sql.md)

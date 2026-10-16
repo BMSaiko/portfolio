@@ -44,8 +44,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### pap-gym
 - Existente: `pap-gym/img/` (capturas, ícones, logótipos). Passos de execução no README com `GYM_DB_PASSWORD`.
 - Lacunas: sem arquitetura, diagrama ER, ADR, testes, `.gitignore`.
-- Adicionado (passagem 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.pt.md) (ficheiros, fluxos, ER **inferido**, 9 problemas verificados), [SETUP](../porto-on-wheels/docs/SETUP.pt.md) (SQL reconstruído, comandos não testados), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.pt.md).
-- Achados: o registo guarda o e-mail como password; `admin/db/*.php` sem autenticação; redirecionamentos de admin sem `exit`; a atualização de perfil confia num id enviado pelo cliente; passwords em texto simples; sem esquema.
+- Adicionado (passagem 2): [ARCHITECTURE](../pap-gym/docs/ARCHITECTURE.pt.md) (camadas, fluxos, ER lido do diagrama da equipa, 9 problemas verificados), [SETUP](../pap-gym/docs/SETUP.pt.md) (SQL reconstruído, comandos não testados), [ADR 0001](../pap-gym/docs/adr/0001-wpf-mvvm-navigation-direct-sql.pt.md).
+- Achados: todo o SQL é construído a partir de input do utilizador; capacidade da sala verificada só na interface; `MySql.Data` não restaurável pelo NuGet tal como está versionado; o README diz .NET Framework 4.7.2 mas o projeto tem como alvo o 4.8; o formulário de registo do website não está ligado; três tabelas do diagrama nunca são usadas; sem script de esquema.
 
 ### lp1-2022-g2-tema1
 - Existente: só README (site estático: `index.html`, `pages/`, `styles/`, `assets/`).
@@ -80,6 +80,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### porto-on-wheels
 - Existente: só README. Sem esquema SQL no repositório (o único `LICENSE` é o do Font Awesome em vendor).
 - Lacunas: arquitetura, diagrama ER (marcado **inferido** a partir das queries), setup (`PORTOONWHEELS_DB_*`), ADR, aviso de passwords em texto simples, `.gitignore`.
+- Adicionado (passagem 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.pt.md) (ficheiros, fluxos, ER **inferido**, 9 problemas verificados), [SETUP](../porto-on-wheels/docs/SETUP.pt.md) (SQL reconstruído, comandos não testados), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.pt.md).
+- Achados: o registo guarda o e-mail como password; `admin/db/*.php` sem autenticação; redirecionamentos de admin sem `exit`; a atualização de perfil confia num id enviado pelo cliente; passwords em texto simples; sem esquema.
 
 ### biblioteca-ermesinde
 - Existente: `Relatorio_de_DOS.docx`, `docker-compose.yml`, `dockerfile`, `jenkinsfile`, migrações EF em `Biblioteca_Ermesinde/Migrations`, 4 ficheiros de testes.

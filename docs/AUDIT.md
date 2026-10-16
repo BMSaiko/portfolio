@@ -60,6 +60,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### dsos-grupo1-bombastico
 - Existing: `dsos-grupo1-bombastico/DB/2023_ERM_DSOS_G1.sql`; 12 test-related files; `.editorconfig`, `.gitattributes`, 13 `.gitignore`.
 - Gaps: architecture, ER diagram from the SQL, setup, ADR, how to run the tests.
+- Added (pass 2): [ARCHITECTURE](../dsos-grupo1-bombastico/docs/ARCHITECTURE.md) (roles, routes, flows, ER from the dump, 9 verified issues), [SETUP](../dsos-grupo1-bombastico/docs/SETUP.md) (commands not tested), [ADR 0001](../dsos-grupo1-bombastico/docs/adr/0001-laravel-mvc-roles-by-table.md).
+- Findings: no role enforcement on routes (any logged-in user can approve companies/proposals), unauthenticated CSV student import storing unhashed passwords, broken project-delivery code, dump and migrations out of sync, personal data and reset tokens in the dump, `.env.example` with non-empty `DB_PASSWORD`/`APP_KEY` (to rotate if real).
 
 ### lp3-g2
 - Existing: `lp3-g2/Docs/` with use case, sequence and domain model PNGs, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospectives).

@@ -45,4 +45,7 @@ php artisan serve
 ## Documentação
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#dsos-grupo1-bombastico) — estado e lacunas deste projeto
+- [Arquitetura, modelo de dados e problemas conhecidos](docs/ARCHITECTURE.pt.md)
+- [Setup e resolução de problemas](docs/SETUP.pt.md)
+- [ADR 0001 — Laravel MVC, papéis por tabela](docs/adr/0001-laravel-mvc-roles-by-table.pt.md)
 - [Script SQL da base de dados](DB/2023_ERM_DSOS_G1.sql)

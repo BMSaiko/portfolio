@@ -45,4 +45,7 @@ php artisan serve
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#dsos-grupo1-bombastico) — status and gaps for this project
+- [Architecture, data model and known issues](docs/ARCHITECTURE.md)
+- [Setup and troubleshooting](docs/SETUP.md)
+- [ADR 0001 — Laravel MVC, roles by table](docs/adr/0001-laravel-mvc-roles-by-table.md)
 - [Database SQL script](DB/2023_ERM_DSOS_G1.sql)

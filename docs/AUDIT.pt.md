@@ -60,6 +60,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### dsos-grupo1-bombastico
 - Existente: `dsos-grupo1-bombastico/DB/2023_ERM_DSOS_G1.sql`; 12 ficheiros de testes; `.editorconfig`, `.gitattributes`, 13 `.gitignore`.
 - Lacunas: arquitetura, diagrama ER a partir do SQL, setup, ADR, como correr os testes.
+- Adicionado (passagem 2): [ARCHITECTURE](../dsos-grupo1-bombastico/docs/ARCHITECTURE.pt.md) (papéis, rotas, fluxos, ER a partir do dump, 9 problemas verificados), [SETUP](../dsos-grupo1-bombastico/docs/SETUP.pt.md) (comandos não testados), [ADR 0001](../dsos-grupo1-bombastico/docs/adr/0001-laravel-mvc-roles-by-table.pt.md).
+- Achados: sem imposição de papéis nas rotas (qualquer utilizador autenticado aprova empresas/propostas), importação CSV de alunos sem autenticação e com passwords sem hash, código de entrega de projeto quebrado, dump e migrações dessincronizados, dados pessoais e tokens de reposição no dump, `.env.example` com `DB_PASSWORD`/`APP_KEY` não vazios (rodar se forem reais).
 
 ### lp3-g2
 - Existente: `lp3-g2/Docs/` com PNG de casos de uso, sequência e modelo de domínio, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospetivas).

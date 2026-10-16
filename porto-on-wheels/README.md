@@ -36,3 +36,10 @@
 ## Notes
 - Original DB credentials and the Mapbox token (`contact.php`, `<MAPBOX_PUBLIC_TOKEN>`) were removed, so the map needs your own token.
 - Academic version: passwords are stored in plain text — not suitable for production.
+
+## Documentation
+
+- [Documentation audit](../docs/AUDIT.md#porto-on-wheels) — status and gaps for this project
+- [Architecture, inferred data model and known issues](docs/ARCHITECTURE.md)
+- [Setup and troubleshooting](docs/SETUP.md)
+- [ADR 0001 — Framework-less PHP with a custom mysqli wrapper](docs/adr/0001-custom-mysqli-wrapper.md)

@@ -36,3 +36,10 @@
 ## Notas
 - As credenciais originais da BD e o token Mapbox (`contact.php`, `<MAPBOX_PUBLIC_TOKEN>`) foram removidos; o mapa precisa de um token próprio.
 - Versão académica: as passwords estão em texto simples — não adequado a produção.
+
+## Documentação
+
+- [Auditoria da documentação](../docs/AUDIT.pt.md#porto-on-wheels) — estado e lacunas deste projeto
+- [Arquitetura, modelo de dados inferido e problemas conhecidos](docs/ARCHITECTURE.pt.md)
+- [Setup e resolução de problemas](docs/SETUP.pt.md)
+- [ADR 0001 — PHP sem framework com wrapper mysqli próprio](docs/adr/0001-custom-mysqli-wrapper.pt.md)

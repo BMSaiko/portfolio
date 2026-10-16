@@ -44,6 +44,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### pap-gym
 - Existing: `pap-gym/img/` (screenshots, icons, logos). README run steps with `GYM_DB_PASSWORD`.
 - Gaps: no architecture, ER diagram, ADR, tests, `.gitignore`.
+- Added (pass 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.md) (files, flows, **inferred** ER, 9 verified issues), [SETUP](../porto-on-wheels/docs/SETUP.md) (reconstructed SQL, commands not tested), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.md).
+- Findings: registration stores the e-mail as the password; `admin/db/*.php` have no authentication; admin redirects without `exit`; profile update trusts a client-supplied id; plain-text passwords; no schema.
 
 ### lp1-2022-g2-tema1
 - Existing: README only (static site: `index.html`, `pages/`, `styles/`, `assets/`).

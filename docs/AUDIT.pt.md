@@ -44,6 +44,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### pap-gym
 - Existente: `pap-gym/img/` (capturas, ícones, logótipos). Passos de execução no README com `GYM_DB_PASSWORD`.
 - Lacunas: sem arquitetura, diagrama ER, ADR, testes, `.gitignore`.
+- Adicionado (passagem 2): [ARCHITECTURE](../porto-on-wheels/docs/ARCHITECTURE.pt.md) (ficheiros, fluxos, ER **inferido**, 9 problemas verificados), [SETUP](../porto-on-wheels/docs/SETUP.pt.md) (SQL reconstruído, comandos não testados), [ADR 0001](../porto-on-wheels/docs/adr/0001-custom-mysqli-wrapper.pt.md).
+- Achados: o registo guarda o e-mail como password; `admin/db/*.php` sem autenticação; redirecionamentos de admin sem `exit`; a atualização de perfil confia num id enviado pelo cliente; passwords em texto simples; sem esquema.
 
 ### lp1-2022-g2-tema1
 - Existente: só README (site estático: `index.html`, `pages/`, `styles/`, `assets/`).

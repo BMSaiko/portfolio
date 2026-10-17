@@ -50,6 +50,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### lp1-2022-g2-tema1
 - Existing: README only (static site: `index.html`, `pages/`, `styles/`, `assets/`).
 - Gaps: site map, edit/deploy guide, `.gitignore`.
+- Added (pass 2): [ARCHITECTURE](../lp1-2022-g2-tema1/docs/ARCHITECTURE.md) (Mermaid site map, pages/styles table, 9 verified issues), [SETUP](../lp1-2022-g2-tema1/docs/SETUP.md) (local server run and checked; editing and deploy guide), [ADR 0001](../lp1-2022-g2-tema1/docs/adr/0001-static-html-css-no-build.md) (status Inferred).
+- Findings: root-absolute URLs break on `file://` and under a sub-path (the README's "open `index.html`" gives broken links/styles); `/pages/amdvsintel` link without `.html` returns 404 on a plain server; 3 image references differ in case from the tracked files; `socket_strx4` link missing its host; nav duplicated in 5 files; 3 unreferenced assets; 1 `<img>` without `alt`. Still open: `.gitignore`, licence.
 
 ### companhia-aerea
 - Existing: README only (8 tracked files).

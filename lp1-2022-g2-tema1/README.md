@@ -37,4 +37,7 @@ Open `index.html` in a browser.
 
 ## Documentation
 
+- [Architecture](docs/ARCHITECTURE.md) — site map, pages/styles, 9 verified issues
+- [Setup](docs/SETUP.md) — local server, editing guide, deploy constraints
+- [ADR 0001](docs/adr/0001-static-html-css-no-build.md) — why plain static HTML/CSS
 - [Documentation audit](../docs/AUDIT.md#lp1-2022-g2-tema1) — status and gaps for this project

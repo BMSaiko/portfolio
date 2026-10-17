@@ -50,6 +50,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### lp1-2022-g2-tema1
 - Existente: só README (site estático: `index.html`, `pages/`, `styles/`, `assets/`).
 - Lacunas: mapa do site, guia de edição/deploy, `.gitignore`.
+- Adicionado (passagem 2): [ARCHITECTURE](../lp1-2022-g2-tema1/docs/ARCHITECTURE.pt.md) (mapa do site Mermaid, tabela de páginas/estilos, 9 problemas verificados), [SETUP](../lp1-2022-g2-tema1/docs/SETUP.pt.md) (servidor local executado e verificado; guia de edição e deploy), [ADR 0001](../lp1-2022-g2-tema1/docs/adr/0001-static-html-css-no-build.pt.md) (estado Inferido).
+- Achados: URLs absolutos à raiz falham em `file://` e em sub-caminho (o "abrir `index.html`" do README dá ligações/estilos partidos); a ligação `/pages/amdvsintel` sem `.html` devolve 404 num servidor simples; 3 referências a imagens diferem em maiúsculas dos ficheiros versionados; ligação `socket_strx4` sem o host; navegação duplicada em 5 ficheiros; 3 recursos não referenciados; 1 `<img>` sem `alt`. Por resolver: `.gitignore`, licença.
 
 ### companhia-aerea
 - Existente: só README (8 ficheiros versionados).

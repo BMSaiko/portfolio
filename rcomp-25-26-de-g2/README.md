@@ -41,6 +41,9 @@ Open the `.pkt` files in Cisco Packet Tracer (e.g. `doc/sprint2/1221514/Terminal
 
 ## Documentation
 
+- [Index and traceability](docs/INDEX.md) — sprints, task → deliverable → review, findings
+- [Setup](docs/SETUP.md) — Packet Tracer 9.0.0, which file to open, checks (not run)
+- [Glossary](docs/GLOSSARY.md)
 - [Documentation audit](../docs/AUDIT.md#rcomp-25-26-de-g2) — status and gaps for this project
 - [Sprint 1 (planning, review, schematics)](doc/sprint1/)
 - [Sprint 2 (planning, review)](doc/sprint2/)

@@ -41,6 +41,9 @@ Abrir os ficheiros `.pkt` no Cisco Packet Tracer (p. ex. `doc/sprint2/1221514/Te
 
 ## Documentação
 
+- [Índice e rastreabilidade](docs/INDEX.pt.md) — sprints, tarefa → entregável → revisão, achados
+- [Setup](docs/SETUP.pt.md) — Packet Tracer 9.0.0, que ficheiro abrir, verificações (não executadas)
+- [Glossário](docs/GLOSSARY.pt.md)
 - [Auditoria da documentação](../docs/AUDIT.pt.md#rcomp-25-26-de-g2) — estado e lacunas deste projeto
 - [Sprint 1 (planeamento, revisão, esquemas)](doc/sprint1/)
 - [Sprint 2 (planeamento, revisão)](doc/sprint2/)

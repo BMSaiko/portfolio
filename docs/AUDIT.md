@@ -98,6 +98,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### rcomp-25-26-de-g2
 - Existing: `rcomp-25-26-de-g2/doc/sprint{1,2,3}/` with per-member READMEs, schematics, `planning.md`, `review.md`, `global-inventory.md`, DNS record captures.
 - Gaps: index across sprints, ADR, empty-looking folder `sprint2/4444444`, `.gitignore` check.
+- Added (pass 2, improve-not-rewrite): [INDEX](../rcomp-25-26-de-g2/docs/INDEX.md) (sprints, task → deliverable → review traceability, design at a glance, improvement list), [SETUP](../rcomp-25-26-de-g2/docs/SETUP.md) (Packet Tracer 9.0.0, files to open; not tested), [GLOSSARY](../rcomp-25-26-de-g2/docs/GLOSSARY.md). Original `doc/` untouched; no ADR (team decisions are already in the plannings).
+- Findings: README says "group of 3" but Sprint 1 has 4 members and an unfinished Terminal 5; global inventory is partial (T5 missing); Sprint 3 planning gives the T2 DNS server `.129` (the gateway) while the README implements `.130`; `sprint2/4444444` is the course placeholder; mojibake in the T2 Sprint 3 README; 32 running-configs hold password hashes (`password 7` in the ISP router).
 
 ### sem2-pi-24-25-g152
 - Existing: `docs/README.md`, `docs/TeamMembersAndTasks.md`, `docs/auth/`, `docs/datasets/`, `docs/system-documentation/` (523 files, 200 PlantUML), 77 test-related files.

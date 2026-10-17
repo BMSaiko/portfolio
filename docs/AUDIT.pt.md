@@ -98,6 +98,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### rcomp-25-26-de-g2
 - Existente: `rcomp-25-26-de-g2/doc/sprint{1,2,3}/` com READMEs por membro, esquemas, `planning.md`, `review.md`, `global-inventory.md`, capturas de DNS.
 - Lacunas: índice entre sprints, ADR, pasta `sprint2/4444444` com aspeto de placeholder, verificar `.gitignore`.
+- Adicionado (passagem 2, melhorar sem reescrever): [INDEX](../rcomp-25-26-de-g2/docs/INDEX.pt.md) (sprints, rastreabilidade tarefa → entregável → revisão, desenho num relance, lista de melhorias), [SETUP](../rcomp-25-26-de-g2/docs/SETUP.pt.md) (Packet Tracer 9.0.0, ficheiros a abrir; não testado), [GLOSSARY](../rcomp-25-26-de-g2/docs/GLOSSARY.pt.md). `doc/` original intocado; sem ADR (as decisões da equipa já estão nos plannings).
+- Achados: o README diz "grupo de 3" mas o Sprint 1 tem 4 membros e um Terminal 5 por concluir; inventário global parcial (falta T5); o planning do Sprint 3 dá ao DNS do T2 o `.129` (o gateway) e o README implementa `.130`; `sprint2/4444444` é o placeholder da cadeira; mojibake no README do T2 do Sprint 3; 32 running-configs com hashes de passwords (`password 7` no router ISP).
 
 ### sem2-pi-24-25-g152
 - Existente: `docs/README.md`, `docs/TeamMembersAndTasks.md`, `docs/auth/`, `docs/datasets/`, `docs/system-documentation/` (523 ficheiros, 200 PlantUML), 77 ficheiros de testes.

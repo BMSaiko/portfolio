@@ -2,7 +2,7 @@
 
 [🇬🇧 English](README.md) · 🇵🇹 Português
 
-Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 projetos académicos** do meu percurso — curso profissional (PAP), CTESP em Desenvolvimento Ágil de Software e Licenciatura em Engenharia Informática (LEI) — com aplicações backend e desktop, web, bases de dados, DevOps, redes e programação de baixo nível. A maioria foi feita em equipa com Scrum.
+Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 projetos académicos** do meu percurso — curso profissional (PAP), CTESP em Desenvolvimento Ágil de Software e Licenciatura em Engenharia Informática (LEI) — com aplicações backend e desktop, web, bases de dados, DevOps, redes e programação de baixo nível. A maioria foi feita em equipa com Scrum. Inclui ainda uma ligação para um projeto pessoal em evolução, o [FoodLister](#projetos-pessoais), que continua a crescer no seu próprio repositório.
 
 ## Por onde começar
 | Se te interessa… | Vê |
@@ -12,11 +12,12 @@ Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 proj
 | DevOps, CI/CD, testes, contentores | [biblioteca-ermesinde](biblioteca-ermesinde) |
 | Prática ágil (artefactos Scrum, UAT) | [lp3-g2](lp3-g2) |
 | Redes | [rcomp-25-26-de-g2](rcomp-25-26-de-g2) |
+| Um produto full-stack pessoal em evolução (Next.js, Supabase, Stripe, PWA) | [FoodLister](https://github.com/BMSaiko/FoodLister) |
 | Bases de dados (Oracle PL/SQL, SQL Server, MySQL) | [sem3-pi-24-25-g152](sem3-pi-24-25-g152), [lp3-g2](lp3-g2), [dsos-grupo1-bombastico](dsos-grupo1-bombastico) |
 
 ## Competências nos projetos
-- **Linguagens:** Java, C#, C, PHP, SQL/PL-SQL, Python, Assembly RISC-V/x86, JavaScript, HTML/CSS.
-- **Frameworks e ferramentas:** JavaFX, WPF, ASP.NET Core, Laravel, Entity Framework, Maven, Gradle, JUnit, xUnit, ANTLR4, EAPLI.
+- **Linguagens:** Java, C#, C, PHP, SQL/PL-SQL, Python, Assembly RISC-V/x86, JavaScript/TypeScript, HTML/CSS.
+- **Frameworks e ferramentas:** Next.js/React, Supabase, JavaFX, WPF, ASP.NET Core, Laravel, Entity Framework, Maven, Gradle, JUnit, xUnit, ANTLR4, EAPLI.
 - **Práticas:** Scrum, DDD, testes unitários, documentação UML/PlantUML, CI/CD (Jenkins, SonarQube, Docker), Git.
 - **Redes:** VLAN/STP/OSPF, DHCP/DNS/VoIP/NAT/ACLs em Cisco Packet Tracer.
 
@@ -50,7 +51,15 @@ Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 proj
 |---|---|---|---|
 | [pap-gym](pap-gym) | 2021/22 | C# · WPF · MySQL | Aplicação de gestão de ginásio + website |
 
-Cada pasta tem `README.md` (inglês) e `README.pt.md` (português) com contexto, a minha contribuição (quando é distinguível da equipa), funcionalidades, estrutura e como executar.
+### Projetos pessoais
+
+Mantidos nos seus próprios repositórios e atualizados ao longo do tempo, por isso ficam ligados aqui em vez de copiados.
+
+| Projeto | Stack | Resumo |
+|---|---|---|
+| [FoodLister](https://github.com/BMSaiko/FoodLister) · [demo](https://food-lister.vercel.app/) | Next.js 15 · React 19 · TypeScript · Supabase · Stripe · PWA | Descoberta de restaurantes e listas partilhadas com colaboração, avaliações, subscrições, notificações push e marketing assistido por IA; CI com GitHub Actions e suite de testes Jest |
+
+Cada pasta académica tem `README.md` (inglês) e `README.pt.md` (português) com contexto, a minha contribuição (quando é distinguível da equipa), funcionalidades, estrutura e como executar.
 
 ## Notas
 - Os projetos foram importados sem o histórico git original; os projetos de grupo foram feitos em equipa e os READMEs indicam-no.

@@ -15,3 +15,26 @@ obj/
 build/
 target/
 .gradle/
+
+# Segredos
+.env.*
+*.key
+*.pem
+id_rsa*
+*.p12
+*.pfx
+*.kdbx
+secrets.*
+.secrets*
+
+# Builds e dependências
+.next/
+dist/
+out/
+coverage/
+.vscode/
+*.rar
+*.7z
+
+# Ficheiro temporário do fluxo de commits (apagado depois do commit)
+COMMIT_*.md

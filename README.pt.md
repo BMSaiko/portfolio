@@ -7,13 +7,13 @@ Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 proj
 ## Por onde começar
 | Se te interessa… | Vê |
 |---|---|
-| Arquitetura, DDD, processamento de linguagens, programação de sistemas em C | [sem4pi-25-26-2de4](sem4pi-25-26-2de4) |
-| Algoritmos e estruturas de dados com análise de complexidade | [sem3-pi-25-26-g075](sem3-pi-25-26-g075), [sem2-pi-24-25-g152](sem2-pi-24-25-g152) |
+| Arquitetura, DDD, processamento de linguagens, programação de sistemas em C | [aisafe-flight-control](aisafe-flight-control) |
+| Algoritmos e estruturas de dados com análise de complexidade | [railway-logistics](railway-logistics), [railway-network-game](railway-network-game) |
 | DevOps, CI/CD, testes, contentores | [biblioteca-ermesinde](biblioteca-ermesinde) |
-| Prática ágil (artefactos Scrum, UAT) | [lp3-g2](lp3-g2) |
-| Redes | [rcomp-25-26-de-g2](rcomp-25-26-de-g2) |
+| Prática ágil (artefactos Scrum, UAT) | [sheets-and-picks](sheets-and-picks) |
+| Redes | [airport-campus-network](airport-campus-network) |
 | Um produto full-stack pessoal em evolução (Next.js, Supabase, Stripe, PWA) | [FoodLister](https://github.com/BMSaiko/FoodLister) |
-| Bases de dados (Oracle PL/SQL, SQL Server, MySQL) | [sem3-pi-24-25-g152](sem3-pi-24-25-g152), [lp3-g2](lp3-g2), [dsos-grupo1-bombastico](dsos-grupo1-bombastico) |
+| Bases de dados (Oracle PL/SQL, SQL Server, MySQL) | [plant-floor-management](plant-floor-management), [sheets-and-picks](sheets-and-picks), [project-proposals-platform](project-proposals-platform) |
 
 ## Competências nos projetos
 - **Linguagens:** Java, C#, C, PHP, SQL/PL-SQL, Python, Assembly RISC-V/x86, JavaScript/TypeScript, HTML/CSS.
@@ -26,24 +26,24 @@ Estudante de Engenharia Informática no ISEP. Este repositório reúne **14 proj
 
 | Projeto | Ano | Stack | Resumo |
 |---|---|---|---|
-| [sem4pi-25-26-2de4](sem4pi-25-26-2de4) | 2025/26 | Java · DDD · ANTLR · C · TCP/UDP | Plataforma de controlo de voos AISafe |
-| [sem3-pi-25-26-g075](sem3-pi-25-26-g075) | 2025/26 | Java · Oracle · RISC-V · C | Logística ferroviária/armazéns: KD-tree, centralidade em grafos, assembly |
-| [rcomp-25-26-de-g2](rcomp-25-26-de-g2) | 2025/26 | Packet Tracer · OSPF · VLAN · DHCP/DNS/VoIP | Rede de campus aeroportuário, Terminal 2 |
-| [sem3-pi-24-25-g152](sem3-pi-24-25-g152) | 2024/25 | Java · PL/SQL · C · Assembly · Arduino | Gestão de chão de fábrica, PERT/CPM |
-| [sem2-pi-24-25-g152](sem2-pi-24-25-g152) | 2024/25 | Java · graphs · JUnit | Jogo ferroviário com análise de desempenho de algoritmos |
+| [aisafe-flight-control](aisafe-flight-control) | 2025/26 | Java · DDD · ANTLR · C · TCP/UDP | Plataforma de controlo de voos AISafe |
+| [railway-logistics](railway-logistics) | 2025/26 | Java · Oracle · RISC-V · C | Logística ferroviária/armazéns: KD-tree, centralidade em grafos, assembly |
+| [airport-campus-network](airport-campus-network) | 2025/26 | Packet Tracer · OSPF · VLAN · DHCP/DNS/VoIP | Rede de campus aeroportuário, Terminal 2 |
+| [plant-floor-management](plant-floor-management) | 2024/25 | Java · PL/SQL · C · Assembly · Arduino | Gestão de chão de fábrica, PERT/CPM |
+| [railway-network-game](railway-network-game) | 2024/25 | Java · graphs · JUnit | Jogo ferroviário com análise de desempenho de algoritmos |
 
 ### CTESP — Desenvolvimento Ágil de Software (ISEP)
 
 | Projeto | Ano | Stack | Resumo |
 |---|---|---|---|
 | [biblioteca-ermesinde](biblioteca-ermesinde) | 2023/24 | ASP.NET Core · EF Core · Docker · Jenkins · SonarQube | API de biblioteca com pipeline DevOps completo (projeto final) |
-| [lp3-g2](lp3-g2) | 2023/24 | JavaFX · Gradle · SQL Server · XML/XSD | Sheets and Picks: stock/encomendas, Scrum |
-| [dsos-grupo1-bombastico](dsos-grupo1-bombastico) | 2023/24 | PHP · Laravel · MySQL | Plataforma de propostas de estágio/projeto |
+| [sheets-and-picks](sheets-and-picks) | 2023/24 | JavaFX · Gradle · SQL Server · XML/XSD | Sheets and Picks: stock/encomendas, Scrum |
+| [project-proposals-platform](project-proposals-platform) | 2023/24 | PHP · Laravel · MySQL | Plataforma de propostas de estágio/projeto |
 | [rentacar](rentacar) | 2023/24 | JavaFX · Gradle · SQL Server | Aplicação desktop de gestão de aluguer de automóveis |
 | [porto-on-wheels](porto-on-wheels) | 2023/24 | PHP · MySQL · Bootstrap | Website de aluguer de carros/bicicletas/trotinetes + admin |
-| [apoo-lp1-companhia-aerea](apoo-lp1-companhia-aerea) | 2022/23 | Java · Maven | Gestão de companhia aérea, design OO |
-| [companhia-aerea](companhia-aerea) | 2022/23 | Java · Maven | Gestão de companhia aérea, versão inicial |
-| [lp1-2022-g2-tema1](lp1-2022-g2-tema1) | 2022 | HTML · CSS · JS | Website informativo sobre a AMD |
+| [airline-management-oop](airline-management-oop) | 2022/23 | Java · Maven | Gestão de companhia aérea, design OO |
+| [airline-management-v1](airline-management-v1) | 2022/23 | Java · Maven | Gestão de companhia aérea, versão inicial |
+| [amd-static-website](amd-static-website) | 2022 | HTML · CSS · JS | Website informativo sobre a AMD |
 
 ### PAP — Prova de Aptidão Profissional (ensino profissional)
 

@@ -1,5 +1,5 @@
 node_modules/
-/dsos-grupo1-bombastico/DSOS-grupo1-Bombastico/vendor/
+/project-proposals-platform/DSOS-grupo1-Bombastico/vendor/
 .env
 *.log
 *.zip

@@ -1,0 +1,225 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname T2-Router
+!
+!
+!
+enable secret 5 $1$mERr$9KGTUJ5fxWV9TYoQ7c2lc/
+!
+!
+ip dhcp excluded-address 10.61.152.1
+ip dhcp excluded-address 10.61.128.1
+ip dhcp excluded-address 10.61.164.1
+ip dhcp excluded-address 10.61.173.129
+ip dhcp excluded-address 10.61.173.131
+ip dhcp excluded-address 10.61.173.130
+!
+ip dhcp pool t2-outlets-pool
+ network 10.61.152.0 255.255.252.0
+ default-router 10.61.152.1
+ dns-server 10.61.173.130
+ domain-name terminal-2.airport-campus-network
+ip dhcp pool t2-wifi-pool
+ network 10.61.128.0 255.255.248.0
+ default-router 10.61.128.1
+ dns-server 10.61.173.130
+ domain-name terminal-2.airport-campus-network
+ip dhcp pool t2-voip-pool
+ network 10.61.164.0 255.255.254.0
+ default-router 10.61.164.1
+ option 150 ip 10.61.164.1
+ dns-server 10.61.173.130
+ domain-name terminal-2.airport-campus-network
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+username admin privilege 15 password 0 isep2026
+!
+!
+license udi pid CISCO2811/K9 sn FTX10174GBK-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name rcomp.isep.ipp.pt
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description Trunk to T2-MCC Fa9/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.769
+ description Campus Backbone (VLAN 769)
+ encapsulation dot1Q 769
+ ip address 10.61.174.2 255.255.255.0
+ ip nat outside
+ ip access-group 100 in
+!
+interface FastEthernet0/0.771
+ description Terminal 2 Outlets (VLAN 771)
+ encapsulation dot1Q 771
+ ip address 10.61.152.1 255.255.252.0
+ ip nat inside
+!
+interface FastEthernet0/0.772
+ description Terminal 2 Wi-Fi (VLAN 772)
+ encapsulation dot1Q 772
+ ip address 10.61.128.1 255.255.248.0
+ ip nat inside
+!
+interface FastEthernet0/0.773
+ description Terminal 2 VoIP (VLAN 773)
+ encapsulation dot1Q 773
+ ip address 10.61.164.1 255.255.254.0
+ ip nat inside
+!
+interface FastEthernet0/0.774
+ description Terminal 2 Servers DMZ (VLAN 774)
+ encapsulation dot1Q 774
+ ip address 10.61.173.129 255.255.255.128
+ ip nat inside
+!
+interface FastEthernet0/1
+ description Antiga ligao ao MCC - agora desligada
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Ethernet0/0/0
+ description Link to DSL Modem (Internet)
+ ip address 89.73.67.117 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Ethernet0/1/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Ethernet0/2/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Ethernet0/3/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 2.2.2.2
+ log-adjacency-changes
+ network 10.61.174.0 0.0.0.255 area 0
+ network 10.61.152.0 0.0.3.255 area 2
+ network 10.61.128.0 0.0.7.255 area 2
+ network 10.61.164.0 0.0.1.255 area 2
+ network 10.61.173.128 0.0.0.127 area 2
+ default-information originate
+!
+ip nat inside source static tcp 10.61.173.131 80 89.73.67.117 80 
+ip nat inside source static tcp 10.61.173.131 443 89.73.67.117 443 
+ip nat inside source static tcp 10.61.173.131 80 10.61.174.2 80 
+ip nat inside source static tcp 10.61.173.131 443 10.61.174.2 443 
+ip classless
+ip route 0.0.0.0 0.0.0.0 89.73.67.118 
+!
+ip flow-export version 9
+!
+!
+access-list 100 deny ip 10.61.152.0 0.0.3.255 any
+access-list 100 deny ip 10.61.128.0 0.0.7.255 any
+access-list 100 deny ip 10.61.164.0 0.0.1.255 any
+access-list 100 deny ip 10.61.173.128 0.0.0.127 any
+access-list 100 permit icmp any any echo
+access-list 100 permit icmp any any echo-reply
+access-list 100 permit udp any host 10.61.173.130 eq domain
+access-list 100 permit tcp any host 10.61.173.131 eq www
+access-list 100 permit tcp any host 10.61.173.131 eq 443
+access-list 100 permit ospf any any
+access-list 100 permit udp any eq bootpc any eq bootps
+access-list 100 permit udp any any eq tftp
+access-list 100 permit tcp any any eq 2000
+access-list 100 permit ip any any
+!
+!
+!
+!
+!
+dial-peer voice 3 voip
+ destination-pattern 3...
+ session target ipv4:10.61.174.3
+!
+dial-peer voice 4 voip
+ destination-pattern 4...
+ session target ipv4:10.61.174.4
+!
+telephony-service
+ max-ephones 2
+ max-dn 2
+ ip source-address 10.61.164.1 port 2000
+ auto assign 1 to 2
+!
+ephone-dn 1
+ number 2001
+!
+ephone-dn 2
+ number 2002
+!
+ephone 1
+ device-security-mode none
+ mac-address 0040.0B24.3A15
+ type 7960
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 0003.E403.C3EC
+ type 7960
+ button 1:2
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+!
+end
+

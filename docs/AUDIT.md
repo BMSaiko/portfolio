@@ -122,6 +122,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### sem4pi-25-26-2de4
 - Existing: `docs/global-artifacts/` (glossary, group composition, `CLOUD_TESTING.md`, `CLOUD_VPN_ACCESS.md`, meetings, PlantUML use cases, requirements PDFs), `docs/us_*`, `docs/Peer-Assessement/`, CI workflow, `LICENSE`, 129 test-related files.
 - Gaps: index per US, traceability, ADR, one test file omitted (long path), LF→CRLF warnings.
+- Added (pass 2, improve-not-rewrite): [INDEX](../sem4pi-25-26-2de4/docs/INDEX.md) (layout, US family → docs → code → tests, CI, findings, improvement list), [SETUP](../sem4pi-25-26-2de4/docs/SETUP.md) (per component; not tested). Existing glossary and cloud notes are linked, not duplicated; no ADR.
+- Findings: README links to a missing `docs/readme.md`; US100–US112 docs live in two trees (`docs/` and `scomp/docs/`) with different content for US107/111/112; CI builds only `eapli.base` (the example framework), not the AISafe modules, `lprog` or `scomp`; H2 schema re-created on every start (`hbm2ddl.auto=create`); US044 and US086 are cited in code without docs; cloud scripts depend on the ISEP VPN.
 
 ## Next passes
 

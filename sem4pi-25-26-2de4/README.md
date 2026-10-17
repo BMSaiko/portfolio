@@ -55,6 +55,8 @@ See `docs/readme.md` for the planning and technical documentation.
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#sem4pi-25-26-2de4) — status and gaps for this project
+- [Index and traceability](docs/INDEX.md) — US family → docs → code → tests, CI, findings
+- [Setup](docs/SETUP.md) — build and run per component (not tested)
 - [Global artefacts (use cases, meetings, requirements)](docs/global-artifacts/)
 - [Glossary](docs/global-artifacts/glossary.md)
 - [Cloud testing](docs/global-artifacts/CLOUD_TESTING.md)

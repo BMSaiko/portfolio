@@ -55,6 +55,8 @@ Ver `docs/readme.md` para o planeamento e a documentação técnica.
 ## Documentação
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#sem4pi-25-26-2de4) — estado e lacunas deste projeto
+- [Índice e rastreabilidade](docs/INDEX.pt.md) — família de US → docs → código → testes, CI, achados
+- [Setup](docs/SETUP.pt.md) — build e execução por componente (não testado)
 - [Artefactos globais (casos de uso, reuniões, requisitos)](docs/global-artifacts/)
 - [Glossário](docs/global-artifacts/glossary.md)
 - [Testes em cloud](docs/global-artifacts/CLOUD_TESTING.md)

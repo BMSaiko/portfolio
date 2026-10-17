@@ -122,6 +122,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### sem4pi-25-26-2de4
 - Existente: `docs/global-artifacts/` (glossário, composição do grupo, `CLOUD_TESTING.md`, `CLOUD_VPN_ACCESS.md`, reuniões, casos de uso PlantUML, PDFs de requisitos), `docs/us_*`, `docs/Peer-Assessement/`, workflow de CI, `LICENSE`, 129 ficheiros de testes.
 - Lacunas: índice por US, rastreabilidade, ADR, um ficheiro de teste omitido (caminho longo), avisos LF→CRLF.
+- Adicionado (passagem 2, melhorar sem reescrever): [INDEX](../sem4pi-25-26-2de4/docs/INDEX.pt.md) (estrutura, família de US → docs → código → testes, CI, achados, lista de melhorias), [SETUP](../sem4pi-25-26-2de4/docs/SETUP.pt.md) (por componente; não testado). O glossário e as notas de cloud existentes são ligados, não duplicados; sem ADR.
+- Achados: o README liga a um `docs/readme.md` inexistente; a documentação de US100–US112 está em duas árvores (`docs/` e `scomp/docs/`) com conteúdo diferente em US107/111/112; a CI só compila o `eapli.base` (o framework de exemplo), não os módulos AISafe, o `lprog` nem o `scomp`; esquema H2 recriado a cada arranque (`hbm2ddl.auto=create`); US044 e US086 são citadas no código sem docs; os scripts de cloud dependem da VPN do ISEP.
 
 ## Próximas passagens
 

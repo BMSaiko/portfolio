@@ -36,4 +36,7 @@ mvn compile exec:java -Dexec.mainClass=org.example.Main
 
 ## Documentação
 
+- [Arquitetura](docs/ARCHITECTURE.pt.md) — diagrama de classes, fluxo pretendido, problemas verificados (não compila tal como está commitado)
+- [Configuração](docs/SETUP.pt.md) — estado, pré-requisitos, comandos
+- [ADR 0001](docs/adr/0001-keep-early-version-as-unrepaired-snapshot.pt.md) — porque a versão inicial se mantém como está
 - [Auditoria da documentação](../docs/AUDIT.pt.md#companhia-aerea) — estado e lacunas deste projeto

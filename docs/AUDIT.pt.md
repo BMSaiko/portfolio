@@ -54,6 +54,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### companhia-aerea
 - Existente: só README (8 ficheiros versionados).
 - Lacunas: diagrama de classes, setup, nota de evolução v1→v2, `.gitignore`.
+- Adicionado (passagem 2): [ARCHITECTURE](../companhia-aerea/docs/ARCHITECTURE.pt.md) (diagrama de classes Mermaid com as classes em falta, 7 problemas verificados), [SETUP](../companhia-aerea/docs/SETUP.pt.md) (falha de compilação prevista, não executada), [ADR 0001](../companhia-aerea/docs/adr/0001-keep-early-version-as-unrepaired-snapshot.pt.md) (decisão de curadoria, estado Proposto). A evolução v1→v2 está no ADR do projeto irmão.
+- Achados: faltam `Pessoa` e `PilotoTripulante`, logo não compila; `Main.voos` nunca inicializado; tripulação nunca adicionada; o leitor de data-hora não consegue ler um valor válido; o menu corre uma vez e só a opção 1 está implementada. Por resolver: `.gitignore`.
 
 ### apoo-lp1-companhia-aerea
 - Existente: só README (14 ficheiros versionados), `.gitignore`.

@@ -54,6 +54,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### companhia-aerea
 - Existing: README only (8 tracked files).
 - Gaps: class diagram, setup, v1→v2 evolution note, `.gitignore`.
+- Added (pass 2): [ARCHITECTURE](../companhia-aerea/docs/ARCHITECTURE.md) (Mermaid class diagram incl. missing classes, 7 verified issues), [SETUP](../companhia-aerea/docs/SETUP.md) (build failure predicted, not run), [ADR 0001](../companhia-aerea/docs/adr/0001-keep-early-version-as-unrepaired-snapshot.md) (curation decision, status Proposed). The v1→v2 evolution is in the sibling's ADR.
+- Findings: `Pessoa` and `PilotoTripulante` missing so it does not compile; `Main.voos` never initialised; crew never added; date-time reader cannot parse a valid value; menu runs once with only option 1 implemented. Still open: `.gitignore`.
 
 ### apoo-lp1-companhia-aerea
 - Existing: README only (14 tracked files), `.gitignore`.

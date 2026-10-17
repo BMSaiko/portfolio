@@ -110,6 +110,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### sem3-pi-24-25-g152
 - Existing: `documentation/{ARQCP,BDDAD,ESINF,FSIAP,LPRA3}` with SQL per user story (`Create Tables.sql`, `USBD*.sql`), 136 test-related files.
 - Gaps: index, glossary, setup, traceability, ADR, CI. Dev-only local passwords remain (Oracle `sys`, `123456`).
+- Added (pass 2, improve-not-rewrite): [INDEX](../sem3-pi-24-25-g152/docs/INDEX.md) (4 subsystems, US family → docs → code, tests, findings, improvement list), [SETUP](../sem3-pi-24-25-g152/docs/SETUP.md) (per subsystem; not tested). Existing glossaries (LAPR3, BDDAD) are linked, not duplicated; no ADR (decisions are in the course deliverables).
+- Findings: the simulator resolves its CSV paths from the nearest `.git` root, so inside the portfolio they point to a non-existent `portfolio/documentation/ESINF` (predicted, not run); BDDAD Sprint 2 exists as two diverging copies (20 differences); 6 `.o`, 15 `.bak_*`, 2 `.lck` and `.DS_Store` tracked; extension-less story files; physical Arduino machine replaced by an emulator; non-empty local Oracle password in `config.properties`.
 
 ### sem3-pi-25-26-g075
 - Existing: `docs/{ARQCP,BDDAD,ESINF,LAPR3}`, `docs/global-artifacts`, `docs/README.md`, 54 PlantUML files, 40 test-related files.

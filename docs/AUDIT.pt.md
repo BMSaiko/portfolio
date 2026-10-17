@@ -110,6 +110,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### sem3-pi-24-25-g152
 - Existente: `documentation/{ARQCP,BDDAD,ESINF,FSIAP,LPRA3}` com SQL por user story (`Create Tables.sql`, `USBD*.sql`), 136 ficheiros de testes.
 - Lacunas: índice, glossário, setup, rastreabilidade, ADR, CI. Mantêm-se passwords locais de dev (Oracle `sys`, `123456`).
+- Adicionado (passagem 2, melhorar sem reescrever): [INDEX](../sem3-pi-24-25-g152/docs/INDEX.pt.md) (4 subsistemas, família de US → docs → código, testes, achados, lista de melhorias), [SETUP](../sem3-pi-24-25-g152/docs/SETUP.pt.md) (por subsistema; não testado). Os glossários existentes (LAPR3, BDDAD) são ligados, não duplicados; sem ADR (as decisões estão nas entregas das UCs).
+- Achados: o simulador resolve os caminhos dos CSV a partir da raiz `.git` mais próxima, por isso dentro do portfolio apontam para um `portfolio/documentation/ESINF` inexistente (previsto, não executado); o Sprint 2 de BDDAD existe em duas cópias divergentes (20 diferenças); 6 `.o`, 15 `.bak_*`, 2 `.lck` e `.DS_Store` versionados; ficheiros de histórias sem extensão; máquina Arduino física substituída por um emulador; password Oracle local não vazia em `config.properties`.
 
 ### sem3-pi-25-26-g075
 - Existente: `docs/{ARQCP,BDDAD,ESINF,LAPR3}`, `docs/global-artifacts`, `docs/README.md`, 54 PlantUML, 40 ficheiros de testes.

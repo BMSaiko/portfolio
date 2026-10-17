@@ -45,4 +45,6 @@ Java: `cd prodPlanSimulator && mvn test`. Oracle scripts need a local Oracle XE;
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#sem3-pi-24-25-g152) — status and gaps for this project
+- [Index and traceability](docs/INDEX.md) — subsystems, US family → documents → code, tests, findings
+- [Setup](docs/SETUP.md) — per subsystem (not tested)
 - [Documentation by course unit](documentation/)

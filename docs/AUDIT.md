@@ -104,6 +104,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### sem2-pi-24-25-g152
 - Existing: `docs/README.md`, `docs/TeamMembersAndTasks.md`, `docs/auth/`, `docs/datasets/`, `docs/system-documentation/` (523 files, 200 PlantUML), 77 test-related files.
 - Gaps: index per US, traceability US → code → tests, CI.
+- Added (pass 2, improve-not-rewrite): [INDEX](../sem2-pi-24-25-g152/docs/INDEX.md) (US → docs → code table, tests, findings, improvement list), [SETUP](../sem2-pi-24-25-g152/docs/SETUP.md) (not tested). Original docs untouched; the domain glossary already exists and is linked, not duplicated.
+- Findings: `Main` exposes only the connectivity console menu (US13/US14/US27), none of the ten editor/player UIs of US01–US12 is instantiated; no unit tests (only a performance harness and `US29PerformanceTestRunner`); `TeamMembersAndTasks.md` has no Sprint 3 rows and links to non-existent Sprint 2 US02/US03 folders; `AuthLib` resolved from an external Maven repository; POM artifact still `project-template`.
 
 ### sem3-pi-24-25-g152
 - Existing: `documentation/{ARQCP,BDDAD,ESINF,FSIAP,LPRA3}` with SQL per user story (`Create Tables.sql`, `USBD*.sql`), 136 test-related files.

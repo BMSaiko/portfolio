@@ -47,6 +47,8 @@ mvn compile exec:java -Dexec.mainClass=pt.ipp.isep.dei.Main
 ## Documentação
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#sem2-pi-24-25-g152) — estado e lacunas deste projeto
+- [Índice e rastreabilidade](docs/INDEX.pt.md) — US → documentos → código, testes, achados
+- [Setup](docs/SETUP.pt.md) — pré-requisitos, execução, modo de desempenho (não testado)
 - [Ponto de entrada da documentação](docs/README.md)
 - [Documentação do sistema](docs/system-documentation/)
 - [Membros da equipa e tarefas](docs/TeamMembersAndTasks.md)

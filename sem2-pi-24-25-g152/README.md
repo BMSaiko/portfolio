@@ -47,6 +47,8 @@ mvn compile exec:java -Dexec.mainClass=pt.ipp.isep.dei.Main
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#sem2-pi-24-25-g152) — status and gaps for this project
+- [Index and traceability](docs/INDEX.md) — US → documents → code, tests, findings
+- [Setup](docs/SETUP.md) — prerequisites, run, performance mode (not tested)
 - [Documentation entry point](docs/README.md)
 - [System documentation](docs/system-documentation/)
 - [Team members and tasks](docs/TeamMembersAndTasks.md)

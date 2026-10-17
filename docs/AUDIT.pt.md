@@ -104,6 +104,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### sem2-pi-24-25-g152
 - Existente: `docs/README.md`, `docs/TeamMembersAndTasks.md`, `docs/auth/`, `docs/datasets/`, `docs/system-documentation/` (523 ficheiros, 200 PlantUML), 77 ficheiros de testes.
 - Lacunas: índice por US, rastreabilidade US → código → testes, CI.
+- Adicionado (passagem 2, melhorar sem reescrever): [INDEX](../sem2-pi-24-25-g152/docs/INDEX.pt.md) (tabela US → docs → código, testes, achados, lista de melhorias), [SETUP](../sem2-pi-24-25-g152/docs/SETUP.pt.md) (não testado). Docs originais intocados; o glossário do domínio já existe e é ligado, não duplicado.
+- Achados: o `Main` expõe só o menu de conectividade (US13/US14/US27), nenhuma das dez UIs de editor/jogador de US01–US12 é instanciada; sem testes unitários (só harness de desempenho e `US29PerformanceTestRunner`); `TeamMembersAndTasks.md` não tem linhas do Sprint 3 e liga a pastas inexistentes do Sprint 2 (US02/US03); `AuthLib` obtido de um repositório Maven externo; artefacto do POM ainda `project-template`.
 
 ### sem3-pi-24-25-g152
 - Existente: `documentation/{ARQCP,BDDAD,ESINF,FSIAP,LPRA3}` com SQL por user story (`Create Tables.sql`, `USBD*.sql`), 136 ficheiros de testes.

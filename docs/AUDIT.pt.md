@@ -116,6 +116,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### sem3-pi-25-26-g075
 - Existente: `docs/{ARQCP,BDDAD,ESINF,LAPR3}`, `docs/global-artifacts`, `docs/README.md`, 54 PlantUML, 40 ficheiros de testes.
 - Lacunas: índice, glossário, setup, rastreabilidade, ADR, CI.
+- Adicionado (passagem 2, melhorar sem reescrever): [INDEX](../sem3-pi-25-26-g075/docs/INDEX.pt.md) (estrutura, US → docs → código → testes de ESINF/LAPR3/BDDAD/ARQCP, achados, lista de melhorias), [SETUP](../sem3-pi-25-26-g075/docs/SETUP.pt.md) (Java, Oracle, RISC-V; não testado). O glossário, as regras de negócio e o modelo de domínio existentes são ligados, não duplicados; sem ADR.
+- Achados: o `docs/README.md` só detalha USEI01–03 embora existam nove histórias ESINF; USLP07 e USLP10 partilham o título e a USLP10 não tem documento de testes; USAC11–16 têm código mas não docs; URL JDBC fixo em 5 ficheiros Java e passwords literais em 5 (valores não reproduzidos); os Makefiles de Assembly precisam de um toolchain cruzado RISC-V e do QEMU, não referidos no README; sem comando de execução do ponto de entrada Java; os ids das histórias são citados sobretudo nos testes, não no código de produção.
 
 ### sem4pi-25-26-2de4
 - Existente: `docs/global-artifacts/` (glossário, composição do grupo, `CLOUD_TESTING.md`, `CLOUD_VPN_ACCESS.md`, reuniões, casos de uso PlantUML, PDFs de requisitos), `docs/us_*`, `docs/Peer-Assessement/`, workflow de CI, `LICENSE`, 129 ficheiros de testes.

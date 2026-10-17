@@ -47,5 +47,7 @@ Java: `cd warehouseMngt && mvn test`. Database features need a local Oracle inst
 ## Documentation
 
 - [Documentation audit](../docs/AUDIT.md#sem3-pi-25-26-g075) — status and gaps for this project
+- [Index and traceability](docs/INDEX.md) — US → docs → code → tests for ESINF, LAPR3, BDDAD, ARQCP; findings
+- [Setup](docs/SETUP.md) — Java, Oracle scripts, RISC-V toolchain (not tested)
 - [Documentation entry point](docs/README.md)
 - [Documentation by course unit](docs/)

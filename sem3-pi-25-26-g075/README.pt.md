@@ -47,5 +47,7 @@ Java: `cd warehouseMngt && mvn test`. As funcionalidades com base de dados preci
 ## Documentação
 
 - [Auditoria da documentação](../docs/AUDIT.pt.md#sem3-pi-25-26-g075) — estado e lacunas deste projeto
+- [Índice e rastreabilidade](docs/INDEX.pt.md) — US → docs → código → testes de ESINF, LAPR3, BDDAD, ARQCP; achados
+- [Setup](docs/SETUP.pt.md) — Java, scripts Oracle, toolchain RISC-V (não testado)
 - [Ponto de entrada da documentação](docs/README.md)
 - [Documentação por unidade curricular](docs/)

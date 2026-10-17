@@ -116,6 +116,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### sem3-pi-25-26-g075
 - Existing: `docs/{ARQCP,BDDAD,ESINF,LAPR3}`, `docs/global-artifacts`, `docs/README.md`, 54 PlantUML files, 40 test-related files.
 - Gaps: index, glossary, setup, traceability, ADR, CI.
+- Added (pass 2, improve-not-rewrite): [INDEX](../sem3-pi-25-26-g075/docs/INDEX.md) (layout, US → docs → code → tests for ESINF/LAPR3/BDDAD/ARQCP, findings, improvement list), [SETUP](../sem3-pi-25-26-g075/docs/SETUP.md) (Java, Oracle, RISC-V; not tested). The existing glossary, business rules and domain model are linked, not duplicated; no ADR.
+- Findings: `docs/README.md` details only USEI01–03 although nine ESINF stories exist; USLP07 and USLP10 share a title and USLP10 lacks a test document; USAC11–16 have code but no docs; JDBC URL hard-coded in 5 Java files and password literals in 5 (values not reproduced); assembly Makefiles need a RISC-V cross toolchain and QEMU not mentioned in the README; no run command for the Java entry point; story ids are cited mostly in tests, not production code.
 
 ### sem4pi-25-26-2de4
 - Existing: `docs/global-artifacts/` (glossary, group composition, `CLOUD_TESTING.md`, `CLOUD_VPN_ACCESS.md`, meetings, PlantUML use cases, requirements PDFs), `docs/us_*`, `docs/Peer-Assessement/`, CI workflow, `LICENSE`, 129 test-related files.

@@ -36,4 +36,7 @@ mvn compile exec:java -Dexec.mainClass=org.companhiaaerea.Main
 
 ## Documentação
 
+- [Arquitetura](docs/ARCHITECTURE.pt.md) — diagrama de classes, menu, fluxos, formato de persistência, problemas verificados
+- [Configuração](docs/SETUP.pt.md) — pré-requisitos, compilar e executar, resolução de problemas
+- [ADR 0001](docs/adr/0001-v1-to-v2-pessoa-hierarchy-and-utils.pt.md) — da versão inicial para esta refatoração
 - [Auditoria da documentação](../docs/AUDIT.pt.md#apoo-lp1-companhia-aerea) — estado e lacunas deste projeto

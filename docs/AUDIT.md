@@ -58,6 +58,8 @@ Class rule: **NONE** = no technical docs beyond the README; **PARTIAL** = some d
 ### apoo-lp1-companhia-aerea
 - Existing: README only (14 tracked files), `.gitignore`.
 - Gaps: UML class diagram (inheritance), setup, v1→v2 ADR.
+- Added (pass 2): [ARCHITECTURE](../apoo-lp1-companhia-aerea/docs/ARCHITECTURE.md) (Mermaid class + sequence diagrams, menu, file format, 10 verified issues), [SETUP](../apoo-lp1-companhia-aerea/docs/SETUP.md) (commands not tested), [ADR 0001](../apoo-lp1-companhia-aerea/docs/adr/0001-v1-to-v2-pessoa-hierarchy-and-utils.md) (v1→v2).
+- Findings: `;`-separated save format breaks on `;` in text and crashes on malformed files; `NaN` average with no matches; no tests; domain depends on static `Main.voos`. The early version `companhia-aerea` references `Pessoa` and `PilotoTripulante`, which are not in the repository, so it does not compile as committed; its menu lists 11 options but only option 1 is implemented.
 
 ### dsos-grupo1-bombastico
 - Existing: `dsos-grupo1-bombastico/DB/2023_ERM_DSOS_G1.sql`; 12 test-related files; `.editorconfig`, `.gitattributes`, 13 `.gitignore`.

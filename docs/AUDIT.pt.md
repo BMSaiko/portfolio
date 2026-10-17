@@ -58,6 +58,8 @@ Regra: **SEM** = sem docs técnicas além do README; **PARCIAL** = há docs pró
 ### apoo-lp1-companhia-aerea
 - Existente: só README (14 ficheiros versionados), `.gitignore`.
 - Lacunas: diagrama de classes UML (herança), setup, ADR v1→v2.
+- Adicionado (passagem 2): [ARCHITECTURE](../apoo-lp1-companhia-aerea/docs/ARCHITECTURE.pt.md) (diagramas Mermaid de classes e sequência, menu, formato de ficheiro, 10 problemas verificados), [SETUP](../apoo-lp1-companhia-aerea/docs/SETUP.pt.md) (comandos não testados), [ADR 0001](../apoo-lp1-companhia-aerea/docs/adr/0001-v1-to-v2-pessoa-hierarchy-and-utils.pt.md) (v1→v2).
+- Achados: o formato de gravação com `;` quebra com `;` no texto e falha com ficheiros malformados; média `NaN` sem correspondências; sem testes; o domínio depende do estático `Main.voos`. A versão inicial `companhia-aerea` referencia `Pessoa` e `PilotoTripulante`, que não estão no repositório, logo não compila tal como está commitada; o menu lista 11 opções mas só a 1 está implementada.
 
 ### dsos-grupo1-bombastico
 - Existente: `dsos-grupo1-bombastico/DB/2023_ERM_DSOS_G1.sql`; 12 ficheiros de testes; `.editorconfig`, `.gitattributes`, 13 `.gitignore`.

@@ -36,4 +36,7 @@ mvn compile exec:java -Dexec.mainClass=org.companhiaaerea.Main
 
 ## Documentation
 
+- [Architecture](docs/ARCHITECTURE.md) — class diagram, menu, flows, persistence format, verified issues
+- [Setup](docs/SETUP.md) — prerequisites, build and run, troubleshooting
+- [ADR 0001](docs/adr/0001-v1-to-v2-pessoa-hierarchy-and-utils.md) — from the early version to this refactor
 - [Documentation audit](../docs/AUDIT.md#apoo-lp1-companhia-aerea) — status and gaps for this project

@@ -37,7 +37,7 @@ Software engineering student at ISEP. This repository gathers **14 academic proj
 | Project | Year | Stack | Summary |
 |---|---|---|---|
 | [biblioteca-ermesinde](https://github.com/BMSaiko/biblioteca-ermesinde) | 2023/24 | ASP.NET Core · EF Core · Docker · Jenkins · SonarQube | Library API with full DevOps pipeline (final project) |
-| [Feira-And-Office](https://github.com/BMSaiko/Feira-And-Office) | 2023/24 | JavaFX · Gradle · SQL Server · XML/XSD | Sheets and Picks: stock/orders, Scrum |
+| [Feira-And-Office](https://github.com/BMSaiko/Feira-And-Office) | 2023/24 | JavaFX · Gradle · SQL Server · XML/XSD | Feira & Office (formerly Sheets and Picks): stock/orders, Scrum |
 | [project-proposals-platform](https://github.com/BMSaiko/project-proposals-platform) | 2023/24 | PHP · Laravel · MySQL | Internship/project proposals platform |
 | [rentacar](https://github.com/BMSaiko/rentacar) | 2023/24 | JavaFX · Gradle · SQL Server | Car rental management desktop app |
 | [Porto-On-Wheels](https://github.com/BMSaiko/Porto-On-Wheels) | 2023/24 | PHP · MySQL · Bootstrap | Car/bike/scooter rental website + admin |

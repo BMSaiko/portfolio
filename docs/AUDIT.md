@@ -37,7 +37,7 @@ Pass 3 rules (what was applied to each criterion):
 | [airline-management-v1](#airline-management-v1) | 3 | 3 | 2 | – | – | 2 | 0 | 0 | – | 0 | 0 | 0 | 3 | NONE → COMPLETE |
 | [airline-management-oop](#airline-management-oop) | 3 | 3 | 2 | – | – | 2 | 0 | 0 | – | 0 | 0 | 1 | 3 | NONE → COMPLETE |
 | [project-proposals-platform](#project-proposals-platform) | 3 | 3 | 2 | 3 | 1 | 2 | 1 | 0 | 2 | 0 | 0 | 2 | 3 | NONE → COMPLETE |
-| [sheets-and-picks](#sheets-and-picks) | 3 | 3 | 2 | 3 | – | 2 | 2 | 0 | 2 | 2 | 3 | 1 | 3 | PARTIAL → COMPLETE |
+| [Feira-And-Office](#feira-and-office) | 3 | 3 | 2 | 3 | – | 2 | 2 | 0 | 2 | 2 | 3 | 1 | 3 | PARTIAL → COMPLETE |
 | [rentacar](#rentacar) | 3 | 3 | 2 | 2 | – | 2 | 0 | 0 | 2 | 0 | 0 | 1 | 3 | NONE → COMPLETE |
 | [porto-on-wheels](#porto-on-wheels) | 3 | 3 | 2 | 2 | – | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 3 | NONE → COMPLETE |
 | [biblioteca-ermesinde](#biblioteca-ermesinde) | 3 | 3 | 2 | 3 | 2 | 2 | 1 | 2 | 2 | 1 | 0 | 1 | 3 | PARTIAL → COMPLETE |
@@ -86,8 +86,8 @@ Class column: pass 1 → pass 3 (rule in the list above).
 - Findings: no role enforcement on routes (any logged-in user can approve companies/proposals), unauthenticated CSV student import storing unhashed passwords, broken project-delivery code, dump and migrations out of sync, personal data and reset tokens in the dump, `.env.example` with non-empty `DB_PASSWORD`/`APP_KEY` (to rotate if real).
 - Improvements (P1/P2/P3, effort S/M/L; not applied): P1 (S) empty or rotate `DB_PASSWORD`/`APP_KEY` in `.env.example`; P1 (M) clean personal data and reset tokens from the SQL dump; P1 (M) role checks on the routes, and authentication plus hashing on the CSV student import; P2 (S) fix project delivery and resync dump and migrations; P3 (M) GitHub Actions running the existing test files; P3 (S) `LICENSE`. `.editorconfig` and `.gitattributes` already exist.
 
-### sheets-and-picks
-- Existing: `sheets-and-picks/Docs/` with use case, sequence and domain model PNGs, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospectives).
+### Feira-And-Office
+- Existing: `Docs/` in the Feira-And-Office repository (formerly sheets-and-picks) with use case, sequence and domain model PNGs, `Modelo de base de dados.png`, `drawSQL-sqlsrv-export-2023-12-02.sql`, `UAT Test Plan.pdf`, `Sprints/*.pdf` (plannings, retrospectives).
 - Gaps: setup, ADR, written architecture overview, API/contracts.
 - Added (pass 2, in the existing `Docs/` folder because Windows treats `docs` and `Docs` as the same path): [ARCHITECTURE](https://github.com/BMSaiko/Feira-And-Office) (packages, roles, login and XML-import flows, ER from the SQL export, 7 verified issues), [SETUP](https://github.com/BMSaiko/Feira-And-Office) (commands not tested), [ADR 0001](https://github.com/BMSaiko/Feira-And-Office).
 - Findings: hardcoded XSD paths (`C:\Trabalho\...`), `ConfirmarStock` processes only the last id, SQL built by concatenation, missing `app_utilizador_movimentos.fxml`, empty test class, no FK on `Produto.id_Encomenda`, `VARCHAR` without length in the export.

@@ -1,0 +1,40 @@
+node_modules/
+/project-proposals-platform/DSOS-grupo1-Bombastico/vendor/
+.env
+*.log
+*.zip
+.DS_Store
+Thumbs.db
+*.tar
+target/
+SheetsAndPicks-1.0-SNAPSHOT/
+.idea/
+.vs/
+bin/
+obj/
+build/
+target/
+.gradle/
+
+# Segredos
+.env.*
+*.key
+*.pem
+id_rsa*
+*.p12
+*.pfx
+*.kdbx
+secrets.*
+.secrets*
+
+# Builds e dependências
+.next/
+dist/
+out/
+coverage/
+.vscode/
+*.rar
+*.7z
+
+# Ficheiro temporário do fluxo de commits (apagado depois do commit)
+COMMIT_*.md

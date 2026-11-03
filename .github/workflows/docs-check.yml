@@ -1,0 +1,39 @@
+name: docs-check
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - ".github/workflows/docs-check.yml"
+      - ".github/scripts/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Links relativos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Âmbito: docs escritas para o portfolio (README raiz, docs/).
+      # Os .md importados dos projetos académicos têm links partidos de origem e ficam de fora.
+      - name: lychee (offline, só links locais e âncoras)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress 'README*.md' 'docs/**/*.md'
+          fail: true
+
+  mermaid:
+    name: Sintaxe Mermaid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar mermaid-cli
+        run: npm install --no-save --no-audit --no-fund @mermaid-js/mermaid-cli@11
+      - name: Renderizar cada bloco
+        run: node .github/scripts/check-mermaid.mjs
